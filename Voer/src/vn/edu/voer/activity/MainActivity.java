@@ -1,4 +1,4 @@
-package vn.edu.voer.activities;
+package vn.edu.voer.activity;
 
 import vn.edu.voer.R;
 import android.support.v7.app.ActionBarActivity;
