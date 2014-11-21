@@ -1,4 +1,4 @@
 voer
 ====
 
-Voer client project
+Voer project
