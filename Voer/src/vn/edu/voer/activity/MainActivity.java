@@ -2,8 +2,6 @@ package vn.edu.voer.activity;
 
 import vn.edu.voer.R;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 public class MainActivity extends BaseActivity {
 
