@@ -12,13 +12,12 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import vn.edu.voer.object.Category;
 import vn.edu.voer.utility.Constant;
 import android.os.AsyncTask;
-import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * @author sidd
@@ -28,6 +27,7 @@ import android.util.Log;
 public class ServiceController extends AsyncTask<String, Void, String> {
 
 	private static final String TAG = ServiceController.class.getSimpleName();
+	private IServiceListener mListener;
 
 	/* (non-Javadoc)
 	 * @see android.os.AsyncTask#onPreExecute()
@@ -60,15 +60,14 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		ArrayList<Category> cats = new Gson().fromJson(result, new TypeToken<ArrayList<Category>>() {}.getType());
-		for (Category cat: cats) {
-			Log.d(TAG, "ID: " + cat.getId() + ", name: " + cat.getName());
-		}
+		mListener.onLoadCategoriesDone(cats);
 	}
 
 	/**
 	 * 
 	 */
-	public void getCategories() {
+	public void getCategories(IServiceListener listener) {
+		mListener = listener;
 		execute(Constant.URL_CATEGORY);
 	}
 	
