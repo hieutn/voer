@@ -1,4 +1,4 @@
-package vn.edu.voer;
+package vn.edu.voer.utility;
 
 public class PacketUtility {
 
