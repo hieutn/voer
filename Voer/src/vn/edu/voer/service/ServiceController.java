@@ -13,7 +13,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import vn.edu.voer.BuildConfig;
-import vn.edu.voer.database.dao.MaterialDetailDAO;
 import vn.edu.voer.object.Category;
 import vn.edu.voer.object.Material;
 import vn.edu.voer.object.MaterialDetail;

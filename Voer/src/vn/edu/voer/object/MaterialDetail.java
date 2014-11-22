@@ -3,13 +3,21 @@
  */
 package vn.edu.voer.object;
 
+import java.util.ArrayList;
+import org.json.JSONException;
+import org.json.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 /**
  * @author sidd
  *
  *         Nov 22, 2014
  */
 public class MaterialDetail {
-
+	public static final int TYPE_MODULE 		= 1;
+	public static final int TYPE_COLLECTION 	= 2;
+	
 	private String description;
 	private String language;
 	private String title;
@@ -147,6 +155,23 @@ public class MaterialDetail {
 	 */
 	public String getCategories() {
 		return categories;
+	}
+
+	/**
+	 * Get list modules of Collection Type
+	 */
+	public ArrayList<CollectionContent> TableOfContent() {
+		ArrayList<CollectionContent> collectionContent = null;
+		if (material_type == TYPE_COLLECTION) {
+			try {
+				collectionContent = new ArrayList<CollectionContent>();
+				collectionContent = new Gson().fromJson(new JSONObject(text).getString("content"), 
+						new TypeToken<ArrayList<CollectionContent>>() {}.getType());
+			} catch (JSONException e) {
+				collectionContent = null;
+			}
+		}
+		return collectionContent;
 	}
 
 }
