@@ -51,6 +51,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		initUI();
 		initControl();
 		initFragment();
+		setTabSelected(TAB_LIBRARY);
 	}
 
 	private void initUI() {
@@ -143,7 +144,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		case R.id.layoutTabSearch:
 			onClickTabSearch();
 			break;
-
 		}
 	}
 
