@@ -13,10 +13,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import vn.edu.voer.BuildConfig;
+import vn.edu.voer.database.dao.MaterialDAO;
 import vn.edu.voer.object.Category;
 import vn.edu.voer.object.Material;
 import vn.edu.voer.object.MaterialList;
 import vn.edu.voer.utility.Constant;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -38,6 +40,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	
 	private IServiceListener mListener;
 	private int mRequest;
+	private Context mCtx;
 
 	/* (non-Javadoc)
 	 * @see android.os.AsyncTask#onPreExecute()
@@ -139,7 +142,8 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		
 	}
 	
-	public void downloadMaterial(String materialId, IServiceListener listener) {
+	public void downloadMaterial(Context ctx, String materialId, IServiceListener listener) {
+		mCtx = ctx;
 		mListener = listener;
 		mRequest = REQUEST_DOWNLOAD;
 		String materialsUrl = Constant.URL_MATERIAL + "/" + materialId;
@@ -186,7 +190,11 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		if (BuildConfig.DEBUG) {
 			Log.i(TAG, m.getTitle());
 		}
-		mListener.onDownloadMaterialDone(m);
+		
+		// Save material to local database
+		MaterialDAO md = new MaterialDAO(mCtx);
+		boolean isDownloaded = md.insertMaterial(m);
+		mListener.onDownloadMaterialDone(isDownloaded);
 	}
 
 	/**
@@ -195,7 +203,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	public interface IServiceListener {
 		public void onLoadCategoriesDone(ArrayList<Category> categories);
 		public void onLoadMaterialsDone(MaterialList materialList);
-		public void onDownloadMaterialDone(Material material);
+		public void onDownloadMaterialDone(boolean isDownloaded);
 	}
 	
 }
