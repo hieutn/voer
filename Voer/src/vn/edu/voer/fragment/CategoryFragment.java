@@ -6,10 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class SearchFragment extends BaseFragment {
+public class CategoryFragment extends BaseFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_search, container, false);
+		View view = inflater.inflate(R.layout.fragment_category, container, false);
 
 		initUI(view);
 		return view;

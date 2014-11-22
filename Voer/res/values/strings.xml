@@ -5,4 +5,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Main Activity -->
+    <string name="cancel">Cancel</string>
+    <string name="library">Library</string>
+    <string name="category">Category</string>
+    <string name="search">Search</string>
+
 </resources>

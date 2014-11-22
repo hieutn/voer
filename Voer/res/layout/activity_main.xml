@@ -55,91 +55,55 @@
         style="@style/Layout.Weight.HeightFillWidth" >
 
         <fragment
-            android:id="@+id/fragment"
+            android:id="@+id/fragmentLibrary"
             android:name="vn.edu.voer.fragment.LibraryFragment"
             style="@style/Layout.FillWidthHeight" />
 
         <fragment
-            android:id="@+id/fragmentSearch"
-            android:name="vn.edu.voer.fragment.BrowserByCategoryFragment"
+            android:id="@+id/fragmentCategory"
+            android:name="vn.edu.voer.fragment.CategoryFragment"
             style="@style/Layout.FillWidthHeight" />
 
         <fragment
-            android:id="@+id/fragmentShare"
+            android:id="@+id/fragmentSearch"
             android:name="vn.edu.voer.fragment.SearchFragment"
             style="@style/Layout.FillWidthHeight" />
     </RelativeLayout>
 
-    <!-- <LinearLayout -->
-    <!-- android:layout_width="match_parent" -->
-    <!-- android:layout_height="55dp" -->
-    <!-- > -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@android:color/darker_gray" >
 
+        <RelativeLayout
+            android:id="@+id/layoutTabLibrary"
+            style="@style/Layout.Weight.WidthFillHeight" >
 
-    <!-- <RelativeLayout -->
-    <!-- android:id="@+id/layoutTabNotification" -->
-    <!-- style="@style/Layout.Weight.WidthFillHeight" -->
-    <!-- android:background="@drawable/tab_selected" > -->
+            <TextView
+                style="@style/Text.Shadow"
+                android:layout_centerVertical="true"
+                android:text="@string/library" />
+        </RelativeLayout>
 
+        <RelativeLayout
+            android:id="@+id/layoutTabCategory"
+            style="@style/Layout.Weight.WidthFillHeight" >
 
-    <!-- <TextView -->
-    <!-- android:id="@+id/lblNumberNotify" -->
-    <!-- android:layout_width="25dp" -->
-    <!-- android:layout_height="25dp" -->
-    <!-- android:layout_alignParentRight="true" -->
-    <!-- android:layout_margin="2dp" -->
-    <!-- android:background="@drawable/ic_badge" -->
-    <!-- android:gravity="center" -->
-    <!-- android:text="10" -->
-    <!-- android:textColor="@color/orange" -->
-    <!-- android:visibility="gone" /> -->
+            <TextView
+                style="@style/Text.Shadow"
+                android:layout_centerVertical="true"
+                android:text="@string/category" />
+        </RelativeLayout>
 
+        <RelativeLayout
+            android:id="@+id/layoutTabSearch"
+            style="@style/Layout.Weight.WidthFillHeight" >
 
-    <!-- <TextView -->
-    <!-- style="@style/Text.Shadow.Tabbar" -->
-    <!-- android:layout_centerVertical="true" -->
-    <!-- android:drawableTop="@drawable/ic_tab_notification" -->
-    <!-- android:text="@string/notification" /> -->
-    <!-- </RelativeLayout> -->
-
-
-    <!-- <RelativeLayout -->
-    <!-- android:id="@+id/layoutTabSearch" -->
-    <!-- style="@style/Layout.Weight.WidthFillHeight" > -->
-
-
-    <!-- <TextView -->
-    <!-- style="@style/Text.Shadow.Tabbar" -->
-    <!-- android:layout_centerVertical="true" -->
-    <!-- android:drawableTop="@drawable/ic_tab_search" -->
-    <!-- android:text="@string/search" /> -->
-    <!-- </RelativeLayout> -->
-
-
-    <!-- <RelativeLayout -->
-    <!-- android:id="@+id/layoutTabShare" -->
-    <!-- style="@style/Layout.Weight.WidthFillHeight" > -->
-
-
-    <!-- <TextView -->
-    <!-- style="@style/Text.Shadow.Tabbar" -->
-    <!-- android:layout_centerVertical="true" -->
-    <!-- android:drawableTop="@drawable/ic_tab_share" -->
-    <!-- android:text="@string/shareTab" /> -->
-    <!-- </RelativeLayout> -->
-
-
-    <!-- <RelativeLayout -->
-    <!-- android:id="@+id/layoutTabUser" -->
-    <!-- style="@style/Layout.Weight.WidthFillHeight" > -->
-
-
-    <!-- <TextView -->
-    <!-- style="@style/Text.Shadow.Tabbar" -->
-    <!-- android:layout_centerVertical="true" -->
-    <!-- android:drawableTop="@drawable/ic_tab_user" -->
-    <!-- android:text="@string/myPageTab" /> -->
-    <!-- </RelativeLayout> -->
-    <!-- </LinearLayout> -->
+            <TextView
+                style="@style/Text.Shadow"
+                android:layout_centerVertical="true"
+                android:text="@string/search" />
+        </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>
