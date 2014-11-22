@@ -28,6 +28,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	public static final int TAB_CATEGORY = 1;
 	public static final int TAB_SEARCH = 2;
 	public static final int DETAIL_CONTENT = 3;
+	public static final int SEARCH_RESULT = 4;
 
 	protected static final String TAG = MainActivity.class.getSimpleName();
 
@@ -85,6 +86,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 		arrayFragments.add(fm.findFragmentById(R.id.fragmentCategory));
 		arrayFragments.add(fm.findFragmentById(R.id.fragmentSearch));
 		arrayFragments.add(fm.findFragmentById(R.id.fragmentDetailContent));
+		arrayFragments.add(fm.findFragmentById(R.id.fragmentSearchResult));
 
 		FragmentTransaction transaction = fm.beginTransaction();
 		for (Fragment fragment : arrayFragments) {

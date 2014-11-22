@@ -15,4 +15,7 @@
 <!--     Detail Content Fragment -->
 <string name="tableOfContent">Table of content</string>
 
+<!-- Search Fragment -->
+<string name="keyword">Keyword</string>
+
 </resources>

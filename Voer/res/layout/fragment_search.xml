@@ -1,11 +1,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Layout.FillWidthHeight"
-    tools:context="vn.edu.voer.activity.MainActivity" >
+    tools:context=".fragment.SearchFragment" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/search" />
+    <LinearLayout style="@style/Layout.FillWidth" >
+
+        <EditText
+            android:id="@+id/txtKeyword"
+            style="@style/Layout.Weight.Width"
+            android:hint="@string/keyword"
+            android:imeOptions="actionSearch"
+            android:singleLine="true" />
+
+        <Button
+            android:id="@+id/btnSearch"
+            style="@style/Layout.WrapWidthHeight"
+            android:background="@android:drawable/ic_search_category_default" />
+    </LinearLayout>
 
 </RelativeLayout>

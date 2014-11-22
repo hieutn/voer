@@ -4,10 +4,12 @@ import vn.edu.voer.R;
 import vn.edu.voer.activity.MainActivity;
 import vn.edu.voer.listener.DialogListener;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -82,5 +84,15 @@ public class BaseFragment extends Fragment {
 
 	protected void goToFragment(int fragment) {
 		getMainActivity().gotoFragment(fragment);
+	}
+
+	protected void hideKeyBoard() {
+		try {
+			InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
+					Context.INPUT_METHOD_SERVICE);
+			inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+					InputMethodManager.HIDE_NOT_ALWAYS);
+		} catch (Exception e) {
+		}
 	}
 }
