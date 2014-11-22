@@ -1,6 +1,7 @@
 package vn.edu.voer.fragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import vn.edu.voer.R;
 import vn.edu.voer.database.dao.MaterialDAO;
@@ -60,7 +61,7 @@ public class DetailContentFragment extends BaseFragment {
 					public void onLoadMaterialsDone(MaterialList materialList) {}
 					
 					@Override
-					public void onLoadCategoriesDone(ArrayList<Category> categories) {}
+					public void onLoadCategoriesDone(List<Category> categories) {}
 					
 					@Override
 					public void onDownloadMaterialDone(boolean isDownloaded) {
