@@ -5,6 +5,7 @@ package vn.edu.voer.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -201,7 +202,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 * Interface listener service request
 	 */
 	public interface IServiceListener {
-		public void onLoadCategoriesDone(ArrayList<Category> categories);
+		public void onLoadCategoriesDone(List<Category> categories);
 		public void onLoadMaterialsDone(MaterialList materialList);
 		public void onDownloadMaterialDone(boolean isDownloaded);
 	}

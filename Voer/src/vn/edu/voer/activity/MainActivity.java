@@ -42,8 +42,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	private FragmentManager fm;
 	public List<Fragment> arrayFragments;
 	public int currentFragment;
-	
+
 	public Material currentMaterial;
+	public Category currentCategory;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +59,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout);
 		mDrawerLayout.closeDrawers();
-
-		 
 
 		initUI();
 		initControl();

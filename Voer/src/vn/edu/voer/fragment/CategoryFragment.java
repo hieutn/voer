@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vn.edu.voer.R;
+import vn.edu.voer.activity.MainActivity;
 import vn.edu.voer.adapter.CategoryAdapter;
 import vn.edu.voer.object.Category;
 import vn.edu.voer.object.MaterialList;
@@ -15,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.GridView;
 import android.widget.ListView;
 
 public class CategoryFragment extends BaseFragment {
@@ -36,7 +36,7 @@ public class CategoryFragment extends BaseFragment {
 		super.onHiddenChanged(hidden);
 		if (!hidden) {
 			if (listCategories.size() == 0) {
-//				initData();
+				fillData();
 			}
 		}
 	}
@@ -46,32 +46,34 @@ public class CategoryFragment extends BaseFragment {
 	}
 
 	private void initControl() {
-		
-		ServiceController sc = new ServiceController();
-		sc.getCategories(new IServiceListener() {
-			
-			@Override
-			public void onLoadMaterialsDone(MaterialList materialList) {}
-			
-			@Override
-			public void onLoadCategoriesDone(ArrayList<Category> categories) {
-				listCategories = categories;
-				fillData();
-			}
-			
-			@Override
-			public void onDownloadMaterialDone(boolean isDownloaded) {}
-		});
-		
-		
-	}
-	
-	private void fillData() {
+		listCategories = new ArrayList<Category>();
 		adapter = new CategoryAdapter(getActivity(), listCategories);
 		lsvCategory.setAdapter(adapter);
 		lsvCategory.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				getMainActivity().currentCategory = listCategories.get(position);
+				goToFragment(MainActivity.SEARCH_RESULT);
+			}
+		});
+	}
+
+	private void fillData() {
+		ServiceController sc = new ServiceController();
+		sc.getCategories(new IServiceListener() {
+			@Override
+			public void onLoadMaterialsDone(MaterialList materialList) {
+			}
+
+			@Override
+			public void onLoadCategoriesDone(List<Category> categories) {
+				listCategories.clear();
+				listCategories.addAll(categories);
+				adapter.notifyDataSetChanged();
+			}
+
+			@Override
+			public void onDownloadMaterialDone(boolean isDownloaded) {
 			}
 		});
 	}
