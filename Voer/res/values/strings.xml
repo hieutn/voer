@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Voer</string>
-    <string name="db_name">voer.sqlite</string>
+    <string name="db_name">voer2.sqlite</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 

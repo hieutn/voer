@@ -3,7 +3,7 @@ package vn.edu.voer.adapter;
 import java.util.List;
 
 import vn.edu.voer.R;
-import vn.edu.voer.object.Book;
+import vn.edu.voer.object.Material;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,17 +13,17 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 public class SearchResultAdapter extends BaseAdapter {
-	private List<Book> listBooks;
+	private List<Material> listMaterials;
 	private LayoutInflater mInflater = null;
 
-	public SearchResultAdapter(Context context, List<Book> listBooks) {
-		this.listBooks = listBooks;
+	public SearchResultAdapter(Context context, List<Material> listMaterials) {
+		this.listMaterials = listMaterials;
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 	@Override
 	public int getCount() {
-		return listBooks.size();
+		return listMaterials.size();
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class SearchResultAdapter extends BaseAdapter {
 
 	@Override
 	public Object getItem(int position) {
-		return listBooks.get(position);
+		return listMaterials.get(position);
 	}
 
 	@SuppressLint("InflateParams")
@@ -48,10 +48,10 @@ public class SearchResultAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		Book book = listBooks.get(position);
-		if (book != null) {
-			holder.lblBookName = detail(convertView, R.id.lblName, book.getName());
-			holder.lbl = detail(convertView, R.id.lblAuthor, book.getau);
+		Material material = listMaterials.get(position);
+		if (material != null) {
+			holder.lblTitle = detail(convertView, R.id.lblTitle, material.getTitle());
+			holder.lblAuthor = detail(convertView, R.id.lblAuthor, material.getAuthor());
 		}
 
 		return convertView;
@@ -64,7 +64,7 @@ public class SearchResultAdapter extends BaseAdapter {
 	}
 
 	static class ViewHolder {
-		TextView lblBookName;
+		TextView lblTitle;
 		TextView lblAuthor;
 	}
 }
