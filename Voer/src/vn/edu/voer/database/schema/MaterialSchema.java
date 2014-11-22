@@ -11,7 +11,7 @@ import vn.edu.voer.database.AbstractDatabaseManager.SQLPair;;
  *
  * Nov 22, 2014
  */
-public class MaterialDetailSchema {
+public class MaterialSchema {
 	
 	public static final String TABLE_NAME = "Material";
 	

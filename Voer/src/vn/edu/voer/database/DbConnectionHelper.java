@@ -2,8 +2,8 @@ package vn.edu.voer.database;
 
 import java.util.ArrayList;
 
-import vn.edu.voer.database.schema.MaterialDetailSchema;
-import vn.edu.voer.object.MaterialDetail;
+import vn.edu.voer.database.schema.MaterialSchema;
+import vn.edu.voer.object.Material;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -23,38 +23,38 @@ public class DbConnectionHelper {
 
 		return mInstance;
 	}
-
-	public synchronized ArrayList<MaterialDetail> getAllMaterialDetail() {
-		ArrayList<MaterialDetail> result = new ArrayList<MaterialDetail>();
+	
+	public synchronized ArrayList<Material> getMaterials(String condition) {
+		ArrayList<Material> result = new ArrayList<Material>();
 		mDbManager.open();
-		Cursor cur = mDbManager.fetchAll(MaterialDetailSchema.TABLE_NAME);
+		Cursor cur = mDbManager.fetch(MaterialSchema.TABLE_NAME, condition);
 		if (cur == null) {
 			return null;
 		}
 		
 		while (cur.moveToNext()) {
-			result.add(new MaterialDetail(
-					cur.getString(cur.getColumnIndex(MaterialDetailSchema.DESCRIPTION)),
-					cur.getString(cur.getColumnIndex(MaterialDetailSchema.LANGUAGE)), 
-					cur.getString(cur.getColumnIndex(MaterialDetailSchema.TITLE)), 
-					cur.getString(cur.getColumnIndex(MaterialDetailSchema.TEXT)),
-					cur.getString(cur.getColumnIndex(MaterialDetailSchema.IMAGE)), 
-					cur.getInt(cur.getColumnIndex(MaterialDetailSchema.TYPE)),
-					cur.getString(cur.getColumnIndex(MaterialDetailSchema.MODIFIED)),
-					cur.getString(cur.getColumnIndex(MaterialDetailSchema.ID)), 
-					cur.getInt(cur.getColumnIndex(MaterialDetailSchema.VERSION)),
-					cur.getString(cur.getColumnIndex(MaterialDetailSchema.EDITOR)),
-					cur.getString(cur.getColumnIndex(MaterialDetailSchema.DERIVED_FROM)),
-					cur.getString(cur.getColumnIndex(MaterialDetailSchema.KEYWORD)), 
-					cur.getString(cur.getColumnIndex(MaterialDetailSchema.LICENSE_ID)), 
-					cur.getString(cur.getColumnIndex(MaterialDetailSchema.AUTHOR)), 
-					cur.getString(cur.getColumnIndex(MaterialDetailSchema.CATEGORIES))));
+			result.add(new Material(
+					cur.getString(cur.getColumnIndex(MaterialSchema.DESCRIPTION)),
+					cur.getString(cur.getColumnIndex(MaterialSchema.LANGUAGE)), 
+					cur.getString(cur.getColumnIndex(MaterialSchema.TITLE)), 
+					cur.getString(cur.getColumnIndex(MaterialSchema.TEXT)),
+					cur.getString(cur.getColumnIndex(MaterialSchema.IMAGE)), 
+					cur.getInt(cur.getColumnIndex(MaterialSchema.TYPE)),
+					cur.getString(cur.getColumnIndex(MaterialSchema.MODIFIED)),
+					cur.getString(cur.getColumnIndex(MaterialSchema.ID)), 
+					cur.getInt(cur.getColumnIndex(MaterialSchema.VERSION)),
+					cur.getString(cur.getColumnIndex(MaterialSchema.EDITOR)),
+					cur.getString(cur.getColumnIndex(MaterialSchema.DERIVED_FROM)),
+					cur.getString(cur.getColumnIndex(MaterialSchema.KEYWORD)), 
+					cur.getString(cur.getColumnIndex(MaterialSchema.LICENSE_ID)), 
+					cur.getString(cur.getColumnIndex(MaterialSchema.AUTHOR)), 
+					cur.getString(cur.getColumnIndex(MaterialSchema.CATEGORIES))));
 		}
 		cur.close();
 		mDbManager.close();
 		return result;
 	}
-	
+
 	public synchronized long insert(String table, String[] columns,
 			Object[] values) {
 		mDbManager.open();
