@@ -1,12 +1,12 @@
 package vn.edu.voer.fragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import vn.edu.voer.R;
 import vn.edu.voer.activity.MainActivity;
-import vn.edu.voer.adapter.BookAdapter;
-import vn.edu.voer.object.Book;
+import vn.edu.voer.adapter.LibraryAdapter;
+import vn.edu.voer.database.dao.MaterialDAO;
+import vn.edu.voer.object.Material;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +17,8 @@ import android.widget.ListView;
 
 public class LibraryFragment extends BaseFragment {
 	private ListView lsvBook;
-	private List<Book> listBooks;
-	private BookAdapter adapter;
+	private ArrayList<Material> mMaterials;
+	private LibraryAdapter mAdapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class LibraryFragment extends BaseFragment {
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);
 		if (!hidden) {
-			if (listBooks.size() == 0) {
+			if (mMaterials.size() == 0) {
 				initData();
 			}
 		}
@@ -44,9 +44,9 @@ public class LibraryFragment extends BaseFragment {
 	}
 
 	private void initControl() {
-		listBooks = new ArrayList<Book>();
-		adapter = new BookAdapter(getActivity(), listBooks);
-		lsvBook.setAdapter(adapter);
+		initData();
+		mAdapter = new LibraryAdapter(getActivity(), R.layout.library_item, mMaterials);
+		lsvBook.setAdapter(mAdapter);
 		lsvBook.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -54,14 +54,9 @@ public class LibraryFragment extends BaseFragment {
 			}
 		});
 	}
-
+	
 	private void initData() {
-		listBooks.add(new Book(0, "Chi oi Anh yeu em"));
-		listBooks.add(new Book(1, "Nhat ky chan rau"));
-		listBooks.add(new Book(2, "Thep da toi the day"));
-		listBooks.add(new Book(3, "Gio lanh dau mua"));
-		listBooks.add(new Book(4, "Ngoi nha nho tren thao nguyen"));
-		listBooks.add(new Book(4, "Tieng chim hot trong bui man gai"));
-		adapter.notifyDataSetChanged();
+		MaterialDAO md = new MaterialDAO(getActivity());
+		mMaterials = md.getAllMaterial();
 	}
 }

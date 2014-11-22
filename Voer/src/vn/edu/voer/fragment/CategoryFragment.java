@@ -6,6 +6,9 @@ import java.util.List;
 import vn.edu.voer.R;
 import vn.edu.voer.adapter.CategoryAdapter;
 import vn.edu.voer.object.Category;
+import vn.edu.voer.object.MaterialList;
+import vn.edu.voer.service.ServiceController;
+import vn.edu.voer.service.ServiceController.IServiceListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +35,7 @@ public class CategoryFragment extends BaseFragment {
 		super.onHiddenChanged(hidden);
 		if (!hidden) {
 			if (listCategories.size() == 0) {
-				initData();
+//				initData();
 			}
 		}
 	}
@@ -42,7 +45,27 @@ public class CategoryFragment extends BaseFragment {
 	}
 
 	private void initControl() {
-		listCategories = new ArrayList<Category>();
+		
+		ServiceController sc = new ServiceController();
+		sc.getCategories(new IServiceListener() {
+			
+			@Override
+			public void onLoadMaterialsDone(MaterialList materialList) {}
+			
+			@Override
+			public void onLoadCategoriesDone(ArrayList<Category> categories) {
+				listCategories = categories;
+				fillData();
+			}
+			
+			@Override
+			public void onDownloadMaterialDone(boolean isDownloaded) {}
+		});
+		
+		
+	}
+	
+	private void fillData() {
 		adapter = new CategoryAdapter(getActivity(), listCategories);
 		grvCategory.setAdapter(adapter);
 		grvCategory.setOnItemClickListener(new OnItemClickListener() {
@@ -50,16 +73,5 @@ public class CategoryFragment extends BaseFragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			}
 		});
-	}
-
-	private void initData() {
-		listCategories.clear();
-		listCategories.add(new Category(0, "Bussiness", 0, "description"));
-		listCategories.add(new Category(1, "Story", 0, "description"));
-		listCategories.add(new Category(2, "Music", 0, "description"));
-		listCategories.add(new Category(3, "JAV", 0, "description"));
-		listCategories.add(new Category(4, "Model", 0, "description"));
-		listCategories.add(new Category(5, "Fashion", 0, "description"));
-		adapter.notifyDataSetChanged();
 	}
 }
