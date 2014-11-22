@@ -22,7 +22,7 @@ public class LibraryFragment extends BaseFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_library, container, false);
+		View view = inflater.inflate(R.layout.fragment_list_view, container, false);
 
 		initUI(view);
 		initControl();
@@ -40,7 +40,7 @@ public class LibraryFragment extends BaseFragment {
 	}
 
 	private void initUI(View view) {
-		lsvBook = (ListView) view.findViewById(R.id.lsvBook);
+		lsvBook = (ListView) view.findViewById(R.id.listView);
 	}
 
 	private void initControl() {
@@ -50,6 +50,7 @@ public class LibraryFragment extends BaseFragment {
 		lsvBook.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				getMainActivity().currentMaterial = mMaterials.get(position);
 				goToFragment(MainActivity.DETAIL_CONTENT);
 			}
 		});

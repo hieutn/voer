@@ -30,6 +30,7 @@ public class DetailContentFragment extends BaseFragment {
 	}
 
 	private void initData() {
+//		getMainActivity().currentFragment;
 		webViewContent.loadUrl("file:///android_asset/TermsAndConditions.html");
 	}
 }

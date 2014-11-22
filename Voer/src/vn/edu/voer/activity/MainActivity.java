@@ -7,6 +7,7 @@ import vn.edu.voer.R;
 import vn.edu.voer.fragment.NavigationDrawerFragment;
 import vn.edu.voer.fragment.NavigationDrawerFragment.NavigationDrawerCallbacks;
 import vn.edu.voer.object.Category;
+import vn.edu.voer.object.Material;
 import vn.edu.voer.object.MaterialList;
 import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.IServiceListener;
@@ -41,6 +42,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	private FragmentManager fm;
 	public List<Fragment> arrayFragments;
 	public int currentFragment;
+	
+	public Material currentMaterial;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

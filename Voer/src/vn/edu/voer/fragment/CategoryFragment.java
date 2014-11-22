@@ -25,7 +25,7 @@ public class CategoryFragment extends BaseFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_category, container, false);
+		View view = inflater.inflate(R.layout.fragment_list_view, container, false);
 		initUI(view);
 		initControl();
 		return view;
@@ -42,7 +42,7 @@ public class CategoryFragment extends BaseFragment {
 	}
 
 	private void initUI(View view) {
-		lsvCategory = (ListView) view.findViewById(R.id.lsvCategory);
+		lsvCategory = (ListView) view.findViewById(R.id.listView);
 	}
 
 	private void initControl() {

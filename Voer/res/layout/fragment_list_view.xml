@@ -1,0 +1,8 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Layout.FillWidthHeight" >
+
+    <ListView
+        android:id="@+id/listView"
+        style="@style/Layout.FillWidthHeight" />
+
+</RelativeLayout>
