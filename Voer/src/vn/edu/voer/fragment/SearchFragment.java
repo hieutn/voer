@@ -3,6 +3,7 @@ package vn.edu.voer.fragment;
 import vn.edu.voer.R;
 import vn.edu.voer.activity.MainActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,5 +54,6 @@ public class SearchFragment extends BaseFragment {
 		hideKeyBoard();
 		String keyword = txtKeyword.getText().toString();
 		goToFragment(MainActivity.SEARCH_RESULT);
+		Log.e("", "search: "+ keyword);
 	}
 }

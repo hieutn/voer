@@ -16,9 +16,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import android.widget.ListView;
 
 public class CategoryFragment extends BaseFragment {
-	private GridView grvCategory;
+	private ListView lsvCategory;
 	private List<Category> listCategories;
 	private CategoryAdapter adapter;
 
@@ -41,7 +42,7 @@ public class CategoryFragment extends BaseFragment {
 	}
 
 	private void initUI(View view) {
-		grvCategory = (GridView) view.findViewById(R.id.grvCategory);
+		lsvCategory = (ListView) view.findViewById(R.id.lsvCategory);
 	}
 
 	private void initControl() {
@@ -67,8 +68,8 @@ public class CategoryFragment extends BaseFragment {
 	
 	private void fillData() {
 		adapter = new CategoryAdapter(getActivity(), listCategories);
-		grvCategory.setAdapter(adapter);
-		grvCategory.setOnItemClickListener(new OnItemClickListener() {
+		lsvCategory.setAdapter(adapter);
+		lsvCategory.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			}

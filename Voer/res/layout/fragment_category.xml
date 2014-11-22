@@ -1,11 +1,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Layout.FillWidthHeight"
-    tools:context="vn.edu.voer.activity.MainActivity" >
+    tools:context=".fragment.CategoryFragment" >
 
-    <GridView
-        android:id="@+id/grvCategory"
+    <ListView
+        android:id="@+id/lsvCategory"
         style="@style/Layout.FillWidthHeight"
-        android:numColumns="2" />
+        />
 
 </RelativeLayout>
