@@ -1,13 +1,11 @@
 package vn.edu.voer.fragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import vn.edu.voer.R;
 import vn.edu.voer.activity.MainActivity;
 import vn.edu.voer.adapter.LibraryAdapter;
 import vn.edu.voer.database.dao.MaterialDAO;
-import vn.edu.voer.object.Book;
 import vn.edu.voer.object.Material;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -50,11 +48,11 @@ public class LibraryFragment extends BaseFragment {
 		mMaterials = md.getAllMaterial();
 		mAdapter = new LibraryAdapter(getActivity(), R.layout.library_item, mMaterials);
 		lsvBook.setAdapter(mAdapter);
-//		lsvBook.setOnItemClickListener(new OnItemClickListener() {
-//			@Override
-//			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//				goToFragment(MainActivity.DETAIL_CONTENT);
-//			}
-//		});
+		lsvBook.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				goToFragment(MainActivity.DETAIL_CONTENT);
+			}
+		});
 	}
 }
