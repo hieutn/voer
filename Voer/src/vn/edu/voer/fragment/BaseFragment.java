@@ -1,7 +1,6 @@
 package vn.edu.voer.fragment;
 
 import vn.edu.voer.R;
-import vn.edu.voer.activity.BaseActivity;
 import vn.edu.voer.activity.MainActivity;
 import vn.edu.voer.listener.DialogListener;
 import android.app.AlertDialog;
@@ -31,10 +30,6 @@ public class BaseFragment extends Fragment {
 		return (MainActivity) getActivity();
 	}
 
-	public BaseActivity getBaseActivity() {
-		return (BaseActivity) getActivity();
-	}
-
 	public void showDialogNoNetwork() {
 		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 			@Override
@@ -54,10 +49,10 @@ public class BaseFragment extends Fragment {
 			}
 		};
 
-//		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//		builder.setTitle(R.string.app_name).setMessage(R.string.noNetwork)
-//				.setPositiveButton(R.string.yes, dialogClickListener)
-//				.setNegativeButton(R.string.no, dialogClickListener).show();
+		// AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		// builder.setTitle(R.string.app_name).setMessage(R.string.noNetwork)
+		// .setPositiveButton(R.string.yes, dialogClickListener)
+		// .setNegativeButton(R.string.no, dialogClickListener).show();
 	}
 
 	protected void showDialog(int idString, final DialogListener listener) {

@@ -183,21 +183,11 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 * @param result Material detail json content from service
 	 */
 	private void responseMaterialDetail(String result) {
-		if (BuildConfig.DEBUG) {
-			Log.i(TAG, result);
-		}
-		
 		MaterialDetail md = new Gson().fromJson(result, MaterialDetail.class);
-		
-		Log.i(TAG, "Name: " + md.getTitle());
-		
-//		MaterialList ml = new Gson().fromJson(result, MaterialList.class);
-//		if (BuildConfig.DEBUG) {
-//			for (Material m: ml.getMaterials()) {
-//				Log.d(TAG, "MaterialsID: " + m.getMaterialID() + ", Title:" +  m.getTitle());
-//			}
-//		}
-//		mListener.onLoadMaterialsDone(ml);
+		if (BuildConfig.DEBUG) {
+			Log.i(TAG, md.getTitle());
+		}
+		mListener.onDownloadMaterialDetailDone(md);
 	}
 
 	/**
@@ -206,6 +196,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	public interface IServiceListener {
 		public void onLoadCategoriesDone(ArrayList<Category> categories);
 		public void onLoadMaterialsDone(MaterialList materialList);
+		public void onDownloadMaterialDetailDone(MaterialDetail detail);
 	}
 	
 }

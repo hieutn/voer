@@ -2,6 +2,7 @@ package vn.edu.voer.activity;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import vn.edu.voer.R;
 import vn.edu.voer.fragment.NavigationDrawerFragment;
 import vn.edu.voer.fragment.NavigationDrawerFragment.NavigationDrawerCallbacks;
@@ -54,17 +55,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout);
 		mDrawerLayout.closeDrawers();
 
-		// Example request api get materials
-		new ServiceController().downloadMaterial("65db7ac1", new IServiceListener() {
-
-			@Override
-			public void onLoadMaterialsDone(MaterialList materialList) {
-			}
-
-			@Override
-			public void onLoadCategoriesDone(ArrayList<Category> categories) {
-			}
-		});
+		 
 
 		initUI();
 		initControl();
