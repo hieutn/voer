@@ -32,11 +32,11 @@ public class LibraryFragment extends BaseFragment {
 	@Override
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);
-//		if (!hidden) {
-//			if (mMaterials.size() == 0) {
-//				initData();
-//			}
-//		}
+		if (!hidden) {
+			if (mMaterials.size() == 0) {
+				initData();
+			}
+		}
 	}
 
 	private void initUI(View view) {
@@ -44,8 +44,7 @@ public class LibraryFragment extends BaseFragment {
 	}
 
 	private void initControl() {
-		MaterialDAO md = new MaterialDAO(getActivity());
-		mMaterials = md.getAllMaterial();
+		initData();
 		mAdapter = new LibraryAdapter(getActivity(), R.layout.library_item, mMaterials);
 		lsvBook.setAdapter(mAdapter);
 		lsvBook.setOnItemClickListener(new OnItemClickListener() {
@@ -54,5 +53,10 @@ public class LibraryFragment extends BaseFragment {
 				goToFragment(MainActivity.DETAIL_CONTENT);
 			}
 		});
+	}
+	
+	private void initData() {
+		MaterialDAO md = new MaterialDAO(getActivity());
+		mMaterials = md.getAllMaterial();
 	}
 }
