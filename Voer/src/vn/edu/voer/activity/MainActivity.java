@@ -8,7 +8,6 @@ import vn.edu.voer.object.Category;
 import vn.edu.voer.object.MaterialList;
 import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.IServiceListener;
-import vn.edu.voer.utility.Constant;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -38,19 +37,17 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		setContentView(R.layout.activity_main);
 
 		// Example request api get materials
-		ServiceController sc = new ServiceController();
-		sc.getMaterials(Constant.URL_MATERIAL, new IServiceListener() {
+		new ServiceController().downloadMaterial("65db7ac1", new IServiceListener() {
 
 			@Override
 			public void onLoadMaterialsDone(MaterialList materialList) {
-
 			}
 
 			@Override
 			public void onLoadCategoriesDone(ArrayList<Category> categories) {
-
 			}
 		});
+
 		initUI();
 		initControl();
 		initFragment();

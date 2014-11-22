@@ -15,6 +15,7 @@ import org.apache.http.util.EntityUtils;
 import vn.edu.voer.BuildConfig;
 import vn.edu.voer.object.Category;
 import vn.edu.voer.object.Material;
+import vn.edu.voer.object.MaterialDetail;
 import vn.edu.voer.object.MaterialList;
 import vn.edu.voer.utility.Constant;
 import android.os.AsyncTask;
@@ -31,8 +32,10 @@ import com.google.gson.reflect.TypeToken;
 public class ServiceController extends AsyncTask<String, Void, String> {
 
 	private static final String TAG = ServiceController.class.getSimpleName();
-	private static final int REQUEST_CATEGORIES = 0;
-	private static final int REQUEST_MATERIALS = 1;
+	private static final int REQUEST_CATEGORIES 	= 0;
+	private static final int REQUEST_MATERIALS 		= 1;
+	private static final int REQUEST_SEARCH 		= 2;
+	private static final int REQUEST_DOWNLOAD 		= 3;
 	
 	private IServiceListener mListener;
 	private int mRequest;
@@ -52,7 +55,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	@Override
 	protected String doInBackground(String... params) {
 		if (BuildConfig.DEBUG) {
-			Log.i(TAG, "URL request service: " + params[0]);
+			Log.i(TAG, params[0]);
 		}
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpGet httpGet = new HttpGet(params[0]);
@@ -77,6 +80,10 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 
 		case REQUEST_MATERIALS:
 			responseMaterials(result);
+			break;
+			
+		case REQUEST_DOWNLOAD:
+			responseMaterialDetail(result);
 			break;
 			
 		default:
@@ -109,6 +116,36 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		mRequest = REQUEST_MATERIALS;
 		execute(url);
 	}
+	
+	/**
+	 * Get materials with categories. Using for request first page, if request next/previous page using above method with getNextLink()/getPreviousLink() in instance of MaterialList class
+	 * @param url
+	 * @param catId
+	 * @param listener
+	 */
+	public void getMaterials(String url, int catId, IServiceListener listener) {
+		mListener = listener;
+		String materialsUrl = url + "?categories=" + catId;
+		getMaterials(materialsUrl, listener);
+	}
+	
+	/**
+	 * Search materials with keyword
+	 * 
+	 * @param keyword The keyword to search Material
+	 */
+	public void searchMaterials(String keyword, IServiceListener listener) {
+		mListener = listener;
+		mRequest = REQUEST_SEARCH;
+		
+	}
+	
+	public void downloadMaterial(String materialId, IServiceListener listener) {
+		mListener = listener;
+		mRequest = REQUEST_DOWNLOAD;
+		String materialsUrl = Constant.URL_MATERIAL + "/" + materialId;
+		execute(materialsUrl);
+	}
 
 	/**
 	 * Parse Categories json content to list Category
@@ -134,10 +171,33 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		MaterialList ml = new Gson().fromJson(result, MaterialList.class);
 		if (BuildConfig.DEBUG) {
 			for (Material m: ml.getMaterials()) {
-				Log.d(TAG, m.getTitle());
+				Log.d(TAG, "MaterialsID: " + m.getMaterialID() + ", Title:" +  m.getTitle());
 			}
 		}
 		mListener.onLoadMaterialsDone(ml);
+	}
+	
+	/**
+	 * Parse Material detail json content and save to database local
+	 * 
+	 * @param result Material detail json content from service
+	 */
+	private void responseMaterialDetail(String result) {
+		if (BuildConfig.DEBUG) {
+			Log.i(TAG, result);
+		}
+		
+		MaterialDetail md = new Gson().fromJson(result, MaterialDetail.class);
+		
+		Log.i(TAG, "Name: " + md.getTitle());
+		
+//		MaterialList ml = new Gson().fromJson(result, MaterialList.class);
+//		if (BuildConfig.DEBUG) {
+//			for (Material m: ml.getMaterials()) {
+//				Log.d(TAG, "MaterialsID: " + m.getMaterialID() + ", Title:" +  m.getTitle());
+//			}
+//		}
+//		mListener.onLoadMaterialsDone(ml);
 	}
 
 	/**
