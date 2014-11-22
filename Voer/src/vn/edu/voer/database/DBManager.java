@@ -1,7 +1,7 @@
 package vn.edu.voer.database;
 
 import vn.edu.voer.R;
-import vn.edu.voer.database.schema.MaterialDetailSchema;
+import vn.edu.voer.database.schema.MaterialSchema;
 import android.content.Context;
 
 public class DBManager extends AbstractDatabaseManager {
@@ -29,13 +29,13 @@ public class DBManager extends AbstractDatabaseManager {
 	@Override
 	protected String[] getSQLCreateTables() {
 
-		return new String[] { getSQLCreateTable(MaterialDetailSchema.TABLE_NAME, MaterialDetailSchema.params) };
+		return new String[] { getSQLCreateTable(MaterialSchema.TABLE_NAME, MaterialSchema.params) };
 	}
 
 	@Override
 	protected String[] getTableNames() {
 
-		return new String[] { MaterialDetailSchema.TABLE_NAME };
+		return new String[] { MaterialSchema.TABLE_NAME };
 	}
 
 }

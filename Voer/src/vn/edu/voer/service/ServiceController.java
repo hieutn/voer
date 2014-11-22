@@ -15,7 +15,6 @@ import org.apache.http.util.EntityUtils;
 import vn.edu.voer.BuildConfig;
 import vn.edu.voer.object.Category;
 import vn.edu.voer.object.Material;
-import vn.edu.voer.object.MaterialDetail;
 import vn.edu.voer.object.MaterialList;
 import vn.edu.voer.utility.Constant;
 import android.os.AsyncTask;
@@ -183,11 +182,11 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 * @param result Material detail json content from service
 	 */
 	private void responseMaterialDetail(String result) {
-		MaterialDetail md = new Gson().fromJson(result, MaterialDetail.class);
+		Material m = new Gson().fromJson(result, Material.class);
 		if (BuildConfig.DEBUG) {
-			Log.i(TAG, md.getTitle());
+			Log.i(TAG, m.getTitle());
 		}
-		mListener.onDownloadMaterialDetailDone(md);
+		mListener.onDownloadMaterialDone(m);
 	}
 
 	/**
@@ -196,7 +195,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	public interface IServiceListener {
 		public void onLoadCategoriesDone(ArrayList<Category> categories);
 		public void onLoadMaterialsDone(MaterialList materialList);
-		public void onDownloadMaterialDetailDone(MaterialDetail detail);
+		public void onDownloadMaterialDone(Material material);
 	}
 	
 }

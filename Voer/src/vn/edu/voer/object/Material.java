@@ -14,7 +14,7 @@ import com.google.gson.reflect.TypeToken;
  *
  *         Nov 22, 2014
  */
-public class MaterialDetail {
+public class Material {
 	public static final int TYPE_MODULE 		= 1;
 	public static final int TYPE_COLLECTION 	= 2;
 	
@@ -34,7 +34,7 @@ public class MaterialDetail {
 	private String author;
 	private String categories;
 
-	public MaterialDetail(String des, String lan, String title, String text, String image, int type, String modified, String id, int version, String editor, String derived, String keyword, String license, String author, String cat) {
+	public Material(String des, String lan, String title, String text, String image, int type, String modified, String id, int version, String editor, String derived, String keyword, String license, String author, String cat) {
 		this.description = des;
 		this.language = lan;
 		this.title = title;
