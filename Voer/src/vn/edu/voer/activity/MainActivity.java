@@ -2,29 +2,38 @@ package vn.edu.voer.activity;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import vn.edu.voer.R;
+import vn.edu.voer.fragment.NavigationDrawerFragment;
+import vn.edu.voer.fragment.NavigationDrawerFragment.NavigationDrawerCallbacks;
 import vn.edu.voer.object.Category;
 import vn.edu.voer.object.MaterialList;
 import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.IServiceListener;
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
-public class MainActivity extends BaseActivity implements OnClickListener {
+public class MainActivity extends ActionBarActivity implements OnClickListener, NavigationDrawerCallbacks {
 	public static final int TAB_LIBRARY = 0;
 	public static final int TAB_CATEGORY = 1;
 	public static final int TAB_SEARCH = 2;
+	public static final int DETAIL_CONTENT = 3;
 
 	protected static final String TAG = MainActivity.class.getSimpleName();
 
-	private TextView lblHeader;
+	private DrawerLayout mDrawerLayout;
+	private NavigationDrawerFragment mNavigationDrawerFragment;
+
+	private TextView lblHeader, lblHeaderLeft;
 	private View layoutTabLibrary, layoutTabCategory, layoutTabSearch;
 
 	private FragmentManager fm;
@@ -35,6 +44,15 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(
+				R.id.navigation_drawer);
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		// mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+		// Set up the drawer.
+		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout);
+		mDrawerLayout.closeDrawers();
 
 		// Example request api get materials
 		new ServiceController().downloadMaterial("65db7ac1", new IServiceListener() {
@@ -56,6 +74,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 	private void initUI() {
 		lblHeader = (TextView) findViewById(R.id.lblHeader);
+		lblHeaderLeft = (TextView) findViewById(R.id.lblHeaderLeft);
 		layoutTabLibrary = findViewById(R.id.layoutTabLibrary);
 		layoutTabCategory = findViewById(R.id.layoutTabCategory);
 		layoutTabSearch = findViewById(R.id.layoutTabSearch);
@@ -65,6 +84,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		layoutTabLibrary.setOnClickListener(this);
 		layoutTabCategory.setOnClickListener(this);
 		layoutTabSearch.setOnClickListener(this);
+		lblHeaderLeft.setOnClickListener(this);
 	}
 
 	private void initFragment() {
@@ -73,6 +93,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		arrayFragments.add(fm.findFragmentById(R.id.fragmentLibrary));
 		arrayFragments.add(fm.findFragmentById(R.id.fragmentCategory));
 		arrayFragments.add(fm.findFragmentById(R.id.fragmentSearch));
+		arrayFragments.add(fm.findFragmentById(R.id.fragmentDetailContent));
 
 		FragmentTransaction transaction = fm.beginTransaction();
 		for (Fragment fragment : arrayFragments) {
@@ -89,6 +110,22 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		}
 		transaction.show(arrayFragments.get(fragmentIndex));
 		transaction.commit();
+	}
+
+	public void gotoFragment(int fragment) {
+		FragmentTransaction transaction = fm.beginTransaction();
+		// transaction.setCustomAnimations(
+		// R.anim.fragment_out_right,R.anim.fragment_in_left);
+		transaction.show(arrayFragments.get(fragment));
+		transaction.hide(arrayFragments.get(currentFragment));
+
+		// transaction.setCustomAnimations(R.anim.slide_in_left,
+		// R.anim.slide_out_right);
+		// transaction.replace(R.id.layoutFragment,
+		// arrayFragments.get(fragment));
+
+		transaction.commit();
+		currentFragment = fragment;
 	}
 
 	public void setTabSelected(int tabSelected) {
@@ -144,6 +181,10 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		case R.id.layoutTabSearch:
 			onClickTabSearch();
 			break;
+
+		case R.id.lblHeaderLeft:
+			onClickHeaderLeft();
+			break;
 		}
 	}
 
@@ -157,6 +198,18 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 	private void onClickTabSearch() {
 		setTabSelected(TAB_SEARCH);
+	}
+
+	@SuppressLint("RtlHardcoded")
+	private void onClickHeaderLeft() {
+		if (currentFragment == DETAIL_CONTENT) {
+			mDrawerLayout.openDrawer(Gravity.LEFT);
+		}
+	}
+
+	@Override
+	public void onNavigationDrawerItemSelected(int position) {
+
 	}
 
 }

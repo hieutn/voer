@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vn.edu.voer.R;
+import vn.edu.voer.activity.MainActivity;
 import vn.edu.voer.adapter.BookAdapter;
 import vn.edu.voer.object.Book;
 import android.os.Bundle;
@@ -31,7 +32,7 @@ public class LibraryFragment extends BaseFragment {
 	@Override
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);
-		if (hidden) {
+		if (!hidden) {
 			if (listBooks.size() == 0) {
 				initData();
 			}
@@ -49,7 +50,7 @@ public class LibraryFragment extends BaseFragment {
 		lsvBook.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+				goToFragment(MainActivity.DETAIL_CONTENT);
 			}
 		});
 	}
@@ -60,6 +61,7 @@ public class LibraryFragment extends BaseFragment {
 		listBooks.add(new Book(2, "Thep da toi the day"));
 		listBooks.add(new Book(3, "Gio lanh dau mua"));
 		listBooks.add(new Book(4, "Ngoi nha nho tren thao nguyen"));
+		listBooks.add(new Book(4, "Tieng chim hot trong bui man gai"));
 		adapter.notifyDataSetChanged();
 	}
 }

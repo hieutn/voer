@@ -1,0 +1,10 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Layout.FillWidthHeight"
+    tools:context="vn.edu.voer.activity.MainActivity" >
+
+    <WebView
+        android:id="@+id/webViewContent"
+        style="@style/Layout.FillWidthHeight" />
+
+</RelativeLayout>

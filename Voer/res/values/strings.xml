@@ -11,5 +11,8 @@
     <string name="library">Library</string>
     <string name="category">Category</string>
     <string name="search">Search</string>
+    
+<!--     Detail Content Fragment -->
+<string name="tableOfContent">Table of content</string>
 
 </resources>
