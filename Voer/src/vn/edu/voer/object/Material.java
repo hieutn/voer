@@ -160,7 +160,7 @@ public class Material {
 	/**
 	 * Get list modules of Collection Type
 	 */
-	public ArrayList<CollectionContent> TableOfContent() {
+	public ArrayList<CollectionContent> getCollectionContent() {
 		ArrayList<CollectionContent> collectionContent = null;
 		if (material_type == TYPE_COLLECTION) {
 			try {

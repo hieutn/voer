@@ -6,7 +6,11 @@ import vn.edu.voer.R;
 import vn.edu.voer.activity.MainActivity;
 import vn.edu.voer.adapter.LibraryAdapter;
 import vn.edu.voer.database.dao.MaterialDAO;
+import vn.edu.voer.object.Category;
 import vn.edu.voer.object.Material;
+import vn.edu.voer.object.MaterialList;
+import vn.edu.voer.service.ServiceController;
+import vn.edu.voer.service.ServiceController.IServiceListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +27,6 @@ public class LibraryFragment extends BaseFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_list_view, container, false);
-
 		initUI(view);
 		initControl();
 		return view;
