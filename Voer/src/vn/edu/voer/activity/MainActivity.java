@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vn.edu.voer.R;
+import vn.edu.voer.database.dao.MaterialDetailDAO;
 import vn.edu.voer.object.Category;
+import vn.edu.voer.object.MaterialDetail;
 import vn.edu.voer.object.MaterialList;
 import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.IServiceListener;
@@ -13,6 +15,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
@@ -35,18 +38,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		// Example request api get materials
-		new ServiceController().downloadMaterial("65db7ac1", new IServiceListener() {
-
-			@Override
-			public void onLoadMaterialsDone(MaterialList materialList) {
-			}
-
-			@Override
-			public void onLoadCategoriesDone(ArrayList<Category> categories) {
-			}
-		});
 
 		initUI();
 		initControl();

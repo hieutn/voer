@@ -6,7 +6,7 @@ package vn.edu.voer.object;
 /**
  * @author sidd
  *
- * Nov 22, 2014
+ *         Nov 22, 2014
  */
 public class MaterialDetail {
 
@@ -25,7 +25,25 @@ public class MaterialDetail {
 	private String license_id;
 	private String author;
 	private String categories;
-	
+
+	public MaterialDetail(String des, String lan, String title, String text, String image, int type, String modified, String id, int version, String editor, String derived, String keyword, String license, String author, String cat) {
+		this.description = des;
+		this.language = lan;
+		this.title = title;
+		this.text = text;
+		this.image = image;
+		this.material_type = type;
+		this.modified = modified;
+		this.material_id = id;
+		this.version = version;
+		this.editor = editor;
+		this.derived_from = derived;
+		this.keywords = keyword;
+		this.license_id = license;
+		this.author = author;
+		this.categories = cat;
+	}
+
 	/**
 	 * @return the description
 	 */
@@ -130,5 +148,5 @@ public class MaterialDetail {
 	public String getCategories() {
 		return categories;
 	}
-	
+
 }
