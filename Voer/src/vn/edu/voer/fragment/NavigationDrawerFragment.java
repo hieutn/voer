@@ -76,8 +76,6 @@ public class NavigationDrawerFragment extends BaseFragment {
 	}
 
 	public void setDataTableContent() {
-		Log.e("", "Hoang ping");
-		
 		mCollectionContent = getMainActivity().currentCollectionContent;
 		if (mCollectionContent != null && mCollectionContent.size() > 0) {
 			mAdapter = new MenuAdapter(getMainActivity(), R.layout.drawer_item, mCollectionContent);
