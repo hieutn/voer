@@ -76,7 +76,7 @@ public class DetailContentFragment extends BaseFragment {
 			getMainActivity().currentCollectionContent = mCollectionContents;
 			final String id = mCollectionContents.get(getMainActivity().currentModuleIndex).getId();
 			Log.i("SDD", "Current index: " + getMainActivity().currentModuleIndex);
-
+			Log.i("SDD", "ID: " + id);
 			if (md.isDownloadedMaterial(id)) {
 				fillContentWebview(id);
 			} else {
@@ -96,5 +96,6 @@ public class DetailContentFragment extends BaseFragment {
 	private void fillContentWebview(String materialId) {
 		mMaterial = md.getMaterialById(materialId);
 		mWebViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");
+		mWebViewContent.reload();
 	}
 }
