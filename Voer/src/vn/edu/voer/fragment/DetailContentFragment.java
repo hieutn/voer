@@ -9,6 +9,7 @@ import vn.edu.voer.object.Material;
 import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.IDownloadListener;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +32,14 @@ public class DetailContentFragment extends BaseFragment {
 		return view;
 	}
 
+	@Override
+	public void onHiddenChanged(boolean hidden) {
+		super.onHiddenChanged(hidden);
+		if (hidden) {
+			clearData();
+		}
+	}
+
 	private void initUI(View view) {
 		mWebViewContent = (WebView) view.findViewById(R.id.webViewContent);
 		progressBar = view.findViewById(R.id.progressBar);
@@ -47,6 +56,15 @@ public class DetailContentFragment extends BaseFragment {
 				progressBar.setVisibility(View.GONE);
 			}
 		});
+	}
+
+	@SuppressWarnings("deprecation")
+	public void clearData() {
+		if (Build.VERSION.SDK_INT < 18) {
+			mWebViewContent.clearView();
+		} else {
+			mWebViewContent.loadUrl("about:blank");
+		}
 	}
 
 	public void setData() {
