@@ -58,16 +58,10 @@ public class DetailContentFragment extends BaseFragment {
 				sc.downloadMaterial(getMainActivity(), id, new IServiceListener() {
 					
 					@Override
-					public void onLoadMaterialsDone(MaterialList materialList) {
-						// TODO Auto-generated method stub
-						
-					}
+					public void onLoadMaterialsDone(MaterialList materialList) {}
 					
 					@Override
-					public void onLoadCategoriesDone(List<Category> categories) {
-						// TODO Auto-generated method stub
-						
-					}
+					public void onLoadCategoriesDone(List<Category> categories) {}
 					
 					@Override
 					public void onDownloadMaterialDone(boolean isDownloaded) {
