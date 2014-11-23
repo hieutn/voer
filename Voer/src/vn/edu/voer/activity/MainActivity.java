@@ -56,11 +56,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 		navigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(
 				R.id.navigation_drawer);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		// mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+		mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
 		// Set up the drawer.
 		navigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout);
-		mDrawerLayout.closeDrawers();
 
 		initUI();
 		initControl();
@@ -107,6 +106,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 		}
 		transaction.show(arrayFragments.get(fragmentIndex));
 		transaction.commit();
+		onChangeFragment();
 	}
 
 	public void gotoFragment(int fragment) {
@@ -123,12 +123,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 
 		transaction.commit();
 		currentFragment = fragment;
-
-		if (currentFragment == DETAIL_CONTENT) {
-			btnTableContent.setVisibility(View.VISIBLE);
-		} else {
-			btnTableContent.setVisibility(View.GONE);
-		}
+		onChangeFragment();
 	}
 
 	public void backFragment(int fragment) {
@@ -139,6 +134,15 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 		transaction.hide(arrayFragments.get(currentFragment));
 		transaction.commit();
 		currentFragment = fragment;
+		onChangeFragment();
+	}
+
+	private void onChangeFragment() {
+		if (currentFragment == DETAIL_CONTENT) {
+			btnTableContent.setVisibility(View.VISIBLE);
+		} else {
+			btnTableContent.setVisibility(View.GONE);
+		}
 	}
 
 	public void setTabSelected(int tabSelected) {

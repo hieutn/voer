@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/Layout.FillWidth"
-    android:padding="@dimen/default_padding" >
+    android:padding="@dimen/default_padding"
+    tools:context=".fragment.LibraryFragment" >
 
     <TextView
         android:id="@+id/frm_library_item_title"
