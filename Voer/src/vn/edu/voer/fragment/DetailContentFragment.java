@@ -9,7 +9,6 @@ import vn.edu.voer.object.Material;
 import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.IDownloadListener;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +41,7 @@ public class DetailContentFragment extends BaseFragment {
 	}
 
 	private void initData() {
+		getMainActivity().test = 10;
 		mMaterial = getMainActivity().currentMaterial;
 		if (mMaterial.getMaterialType() == Material.TYPE_MODULE) {
 			webViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");

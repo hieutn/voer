@@ -80,6 +80,8 @@ public class NavigationDrawerFragment extends BaseFragment {
 			}
 		});
 		
+		Log.i("SDD", "Test: " + getMainActivity().test);
+		
 		mCollectionContent = getMainActivity().currentCollectionContent;
 		if (mCollectionContent != null && mCollectionContent.size() > 0) {
 			mAdapter = new MenuAdapter(getMainActivity(), R.layout.drawer_item, mCollectionContent);

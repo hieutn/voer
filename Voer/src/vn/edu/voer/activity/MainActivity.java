@@ -44,6 +44,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	public Material currentMaterial;
 	public Category currentCategory;
 	public ArrayList<CollectionContent> currentCollectionContent = null;
+	public int test;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

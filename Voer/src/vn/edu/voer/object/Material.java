@@ -172,8 +172,6 @@ public class Material {
 				collectionContent = new ArrayList<CollectionContent>();
 				collectionContent = new Gson().fromJson(new JSONObject(text).getString("content"), 
 						new TypeToken<ArrayList<CollectionContent>>() {}.getType());
-				Log.i("SDD", new JSONObject(text).getString("content"));
-				
 			} catch (JSONException e) {
 				collectionContent = null;
 			} catch (JsonSyntaxException e) {
