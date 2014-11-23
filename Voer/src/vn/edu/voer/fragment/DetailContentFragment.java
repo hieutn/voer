@@ -32,14 +32,6 @@ public class DetailContentFragment extends BaseFragment {
 		return view;
 	}
 
-	@Override
-	public void onHiddenChanged(boolean hidden) {
-		super.onHiddenChanged(hidden);
-		if (hidden) {
-			clearData();
-		}
-	}
-
 	private void initUI(View view) {
 		mWebViewContent = (WebView) view.findViewById(R.id.webViewContent);
 		progressBar = view.findViewById(R.id.progressBar);
@@ -68,10 +60,15 @@ public class DetailContentFragment extends BaseFragment {
 	}
 
 	public void setData() {
+		clearData();
 		mMaterial = getMainActivity().currentMaterial;
 		if (mMaterial.getMaterialType() == Material.TYPE_MODULE) {
+			getMainActivity().setButtonTableContent(false);
+			getMainActivity().setHeaderTitle(mMaterial.getTitle());
 			mWebViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");
+			mWebViewContent.reload();
 		} else {
+			getMainActivity().setButtonTableContent(true);
 			mCollectionContents = mMaterial.getCollectionContent();
 			getMainActivity().currentCollectionContent = mCollectionContents;
 			final String id = mCollectionContents.get(getMainActivity().currentModuleIndex).getId();
@@ -95,6 +92,7 @@ public class DetailContentFragment extends BaseFragment {
 
 	private void fillContentWebview(String materialId) {
 		mMaterial = md.getMaterialById(materialId);
+		getMainActivity().setHeaderTitle(mMaterial.getTitle());
 		mWebViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");
 		mWebViewContent.reload();
 	}

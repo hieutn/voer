@@ -77,6 +77,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	}
 
 	private void initControl() {
+		lblHeader.setSelected(true);
 		lblTabLibrary.setOnClickListener(this);
 		lblTabCategory.setOnClickListener(this);
 		lblTabSearch.setOnClickListener(this);
@@ -140,10 +141,22 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 
 	private void onChangeFragment() {
 		if (currentFragment == DETAIL_CONTENT) {
+			setButtonTableContent(true);
+		} else {
+			setButtonTableContent(false);
+		}
+	}
+
+	public void setButtonTableContent(boolean isVisible) {
+		if (isVisible) {
 			btnTableContent.setVisibility(View.VISIBLE);
 		} else {
 			btnTableContent.setVisibility(View.GONE);
 		}
+	}
+
+	public void setHeaderTitle(String title) {
+		lblHeader.setText(title);
 	}
 
 	public void changeCurrentModelIndex(int currentModuleIndex) {

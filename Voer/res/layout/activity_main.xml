@@ -20,6 +20,8 @@
             android:id="@+id/lblHeader"
             style="@style/Text.Shadow"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
             android:text="@string/app_name"
             android:textSize="18sp" />
     </RelativeLayout>
