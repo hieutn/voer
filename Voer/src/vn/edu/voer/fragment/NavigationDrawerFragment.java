@@ -15,13 +15,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-/**
- * Fragment used for managing interactions for and presentation of a navigation
- * drawer. See the <a href=
- * "https://developer.android.com/design/patterns/navigation-drawer.html#Interaction"
- * > design guidelines</a> for a complete explanation of the behaviors
- * implemented here.
- */
 public class NavigationDrawerFragment extends BaseFragment {
 
 	/**
@@ -44,7 +37,7 @@ public class NavigationDrawerFragment extends BaseFragment {
 	private View mFragmentContainerView;
 
 	private int mCurrentSelectedPosition = 0;
-	
+
 	private ArrayList<CollectionContent> mCollectionContent;
 	private MenuAdapter mAdapter;
 
@@ -79,8 +72,11 @@ public class NavigationDrawerFragment extends BaseFragment {
 				selectItem(position);
 			}
 		});
-		
-		Log.i("SDD", "Test: " + getMainActivity().test);
+		return mDrawerListView;
+	}
+
+	public void setDataTableContent() {
+		Log.e("", "Hoang ping");
 		
 		mCollectionContent = getMainActivity().currentCollectionContent;
 		if (mCollectionContent != null && mCollectionContent.size() > 0) {
@@ -88,7 +84,6 @@ public class NavigationDrawerFragment extends BaseFragment {
 			mDrawerListView.setAdapter(mAdapter);
 			mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 		}
-		return mDrawerListView;
 	}
 
 	public boolean isDrawerOpen() {
@@ -114,9 +109,9 @@ public class NavigationDrawerFragment extends BaseFragment {
 		// GravityCompat.START);
 		// set up the drawer's list view with items and click listener
 
-//		ActionBar actionBar = getActionBar();
-//		actionBar.setDisplayHomeAsUpEnabled(true);
-//		actionBar.setHomeButtonEnabled(true);
+		// ActionBar actionBar = getActionBar();
+		// actionBar.setDisplayHomeAsUpEnabled(true);
+		// actionBar.setHomeButtonEnabled(true);
 	}
 
 	private void selectItem(int position) {
@@ -153,7 +148,6 @@ public class NavigationDrawerFragment extends BaseFragment {
 		super.onSaveInstanceState(outState);
 		outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
 	}
-
 
 	/**
 	 * Callbacks interface that all activities using this fragment must

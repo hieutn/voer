@@ -34,7 +34,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	protected static final String TAG = MainActivity.class.getSimpleName();
 
 	private DrawerLayout mDrawerLayout;
-	private NavigationDrawerFragment mNavigationDrawerFragment;
+	public NavigationDrawerFragment navigationDrawerFragment;
 
 	private TextView lblHeader, lblTabLibrary, lblTabCategory, lblTabSearch;
 	private View btnTableContent;
@@ -46,20 +46,19 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	public Material currentMaterial;
 	public Category currentCategory;
 	public ArrayList<CollectionContent> currentCollectionContent = null;
-	public int test;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(
+		navigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(
 				R.id.navigation_drawer);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		// mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
 		// Set up the drawer.
-		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout);
+		navigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout);
 		mDrawerLayout.closeDrawers();
 
 		initUI();
@@ -175,19 +174,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 			break;
 		}
 	}
-
-	// private void quitApp() {
-	// showQuestionDialog(getString(R.string.quitApp), new DialogListener() {
-	// @Override
-	// public void onOk(Object object) {
-	// finish();
-	// }
-	//
-	// @Override
-	// public void onCancel(Object object) {
-	// }
-	// });
-	// }
 
 	@Override
 	public void onClick(View v) {

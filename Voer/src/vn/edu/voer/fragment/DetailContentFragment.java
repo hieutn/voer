@@ -30,14 +30,6 @@ public class DetailContentFragment extends BaseFragment {
 		return view;
 	}
 
-	@Override
-	public void onHiddenChanged(boolean hidden) {
-		super.onHiddenChanged(hidden);
-		if (!hidden) {
-			initData();
-		}
-	}
-
 	private void initUI(View view) {
 		mWebViewContent = (WebView) view.findViewById(R.id.webViewContent);
 		progressBar = view.findViewById(R.id.progressBar);
@@ -56,8 +48,7 @@ public class DetailContentFragment extends BaseFragment {
 		});
 	}
 
-	private void initData() {
-		getMainActivity().test = 10;
+	public void initData() {
 		mMaterial = getMainActivity().currentMaterial;
 		if (mMaterial.getMaterialType() == Material.TYPE_MODULE) {
 			mWebViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");
@@ -71,7 +62,6 @@ public class DetailContentFragment extends BaseFragment {
 			} else {
 				ServiceController sc = new ServiceController();
 				sc.downloadMaterial(getMainActivity(), id, new IDownloadListener() {
-
 					@Override
 					public void onDownloadMaterialDone(boolean isDownloaded) {
 						if (isDownloaded) {

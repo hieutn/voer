@@ -28,25 +28,25 @@ public class LibraryFragment extends BaseFragment {
 		View view = inflater.inflate(R.layout.fragment_list_view, container, false);
 		initUI(view);
 		initControl();
-		
+
 		new ServiceController().downloadMaterial(getMainActivity(), "c6628b9e", new IDownloadListener() {
-			
+
 			@Override
 			public void onDownloadMaterialDone(boolean isDownloaded) {
-				
+
 			}
 		});
-		
+
 		return view;
 	}
-	
+
 	@Override
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);
 		if (!hidden) {
-//			if (mMaterials.size() == 0) {
-				initData();
-//			}
+			// if (mMaterials.size() == 0) {
+			initData();
+			// }
 		}
 	}
 
@@ -63,10 +63,12 @@ public class LibraryFragment extends BaseFragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				getMainActivity().currentMaterial = mMaterials.get(position);
 				goToFragment(MainActivity.DETAIL_CONTENT);
+				((DetailContentFragment) getMainActivity().arrayFragments.get(MainActivity.DETAIL_CONTENT)).initData();
+				getMainActivity().navigationDrawerFragment.setDataTableContent();
 			}
 		});
 	}
-	
+
 	private void initData() {
 		MaterialDAO md = new MaterialDAO(getActivity());
 		mMaterials = md.getAllMaterial();
