@@ -72,8 +72,6 @@ public class DetailContentFragment extends BaseFragment {
 			mCollectionContents = mMaterial.getCollectionContent();
 			getMainActivity().currentCollectionContent = mCollectionContents;
 			final String id = mCollectionContents.get(getMainActivity().currentModuleIndex).getId();
-			Log.i("SDD", "Current index: " + getMainActivity().currentModuleIndex);
-			Log.i("SDD", "ID: " + id);
 			if (md.isDownloadedMaterial(id)) {
 				fillContentWebview(id);
 			} else {
