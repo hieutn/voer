@@ -45,7 +45,7 @@ public class LibraryFragment extends BaseFragment {
 
 	private void initControl() {
 		initData();
-		mAdapter = new LibraryAdapter(getActivity(), R.layout.library_item, mMaterials);
+		mAdapter = new LibraryAdapter(getActivity(), R.layout.layout_item_library, mMaterials);
 		lsvBook.setAdapter(mAdapter);
 		lsvBook.setOnItemClickListener(new OnItemClickListener() {
 			@Override

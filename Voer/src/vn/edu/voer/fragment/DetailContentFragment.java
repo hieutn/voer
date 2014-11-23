@@ -8,19 +8,21 @@ import vn.edu.voer.object.CollectionContent;
 import vn.edu.voer.object.Material;
 import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.IDownloadListener;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 public class DetailContentFragment extends BaseFragment {
-	
-	private WebView webViewContent;
+	private WebView mWebViewContent;
+	private View progressBar;
 	private Material mMaterial;
 	private ArrayList<CollectionContent> mCollectionContents;
 	MaterialDAO md = new MaterialDAO(getMainActivity());
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_detail_content, container, false);
@@ -37,25 +39,39 @@ public class DetailContentFragment extends BaseFragment {
 	}
 
 	private void initUI(View view) {
-		webViewContent = (WebView) view.findViewById(R.id.webViewContent);
+		mWebViewContent = (WebView) view.findViewById(R.id.webViewContent);
+		progressBar = view.findViewById(R.id.progressBar);
+		mWebViewContent.setWebViewClient(new WebViewClient() {
+			@Override
+			public void onPageStarted(WebView view, String url, Bitmap favicon) {
+				super.onPageStarted(view, url, favicon);
+				progressBar.setVisibility(View.VISIBLE);
+			}
+
+			@Override
+			public void onPageFinished(WebView view, String url) {
+				super.onPageFinished(view, url);
+				progressBar.setVisibility(View.GONE);
+			}
+		});
 	}
 
 	private void initData() {
 		getMainActivity().test = 10;
 		mMaterial = getMainActivity().currentMaterial;
 		if (mMaterial.getMaterialType() == Material.TYPE_MODULE) {
-			webViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");
+			mWebViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");
 		} else {
 			mCollectionContents = mMaterial.getCollectionContent();
 			getMainActivity().currentCollectionContent = mCollectionContents;
 			final String id = mCollectionContents.get(0).getId();
-			
+
 			if (md.isDownloadedMaterial(id)) {
 				fillContentWebview(id);
 			} else {
 				ServiceController sc = new ServiceController();
 				sc.downloadMaterial(getMainActivity(), id, new IDownloadListener() {
-					
+
 					@Override
 					public void onDownloadMaterialDone(boolean isDownloaded) {
 						if (isDownloaded) {
@@ -66,9 +82,9 @@ public class DetailContentFragment extends BaseFragment {
 			}
 		}
 	}
-	
+
 	private void fillContentWebview(String materialId) {
 		mMaterial = md.getMaterialById(materialId);
-		webViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");
+		mWebViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");
 	}
 }

@@ -10,6 +10,8 @@ import vn.edu.voer.object.Category;
 import vn.edu.voer.object.CollectionContent;
 import vn.edu.voer.object.Material;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -34,8 +36,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	private DrawerLayout mDrawerLayout;
 	private NavigationDrawerFragment mNavigationDrawerFragment;
 
-	private TextView lblHeader, lblHeaderLeft;
-	private View layoutTabLibrary, layoutTabCategory, layoutTabSearch;
+	private TextView lblHeader, lblTabLibrary, lblTabCategory, lblTabSearch;
+	private View btnTableContent;
 
 	private FragmentManager fm;
 	public List<Fragment> arrayFragments;
@@ -68,17 +70,17 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 
 	private void initUI() {
 		lblHeader = (TextView) findViewById(R.id.lblHeader);
-		lblHeaderLeft = (TextView) findViewById(R.id.lblHeaderLeft);
-		layoutTabLibrary = findViewById(R.id.layoutTabLibrary);
-		layoutTabCategory = findViewById(R.id.layoutTabCategory);
-		layoutTabSearch = findViewById(R.id.layoutTabSearch);
+		lblTabLibrary = (TextView) findViewById(R.id.lblTabLibrary);
+		lblTabCategory = (TextView) findViewById(R.id.lblTabCategory);
+		lblTabSearch = (TextView) findViewById(R.id.lblTabSearch);
+		btnTableContent = findViewById(R.id.btnTableContent);
 	}
 
 	private void initControl() {
-		layoutTabLibrary.setOnClickListener(this);
-		layoutTabCategory.setOnClickListener(this);
-		layoutTabSearch.setOnClickListener(this);
-		lblHeaderLeft.setOnClickListener(this);
+		lblTabLibrary.setOnClickListener(this);
+		lblTabCategory.setOnClickListener(this);
+		lblTabSearch.setOnClickListener(this);
+		btnTableContent.setOnClickListener(this);
 	}
 
 	private void initFragment() {
@@ -121,29 +123,54 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 
 		transaction.commit();
 		currentFragment = fragment;
+
+		if (currentFragment == DETAIL_CONTENT) {
+			btnTableContent.setVisibility(View.VISIBLE);
+		} else {
+			btnTableContent.setVisibility(View.GONE);
+		}
+	}
+
+	public void backFragment(int fragment) {
+		FragmentTransaction transaction = fm.beginTransaction();
+		// transaction.setCustomAnimations(R.anim.fragment_in_left,
+		// R.anim.fragment_out_left);
+		transaction.show(arrayFragments.get(fragment));
+		transaction.hide(arrayFragments.get(currentFragment));
+		transaction.commit();
+		currentFragment = fragment;
 	}
 
 	public void setTabSelected(int tabSelected) {
 		showFragment(tabSelected);
 		switch (tabSelected) {
 		case TAB_LIBRARY:
-			layoutTabLibrary.setBackgroundColor(Color.MAGENTA);
-			layoutTabCategory.setBackgroundColor(Color.TRANSPARENT);
-			layoutTabSearch.setBackgroundColor(Color.TRANSPARENT);
+			lblTabLibrary.setTextColor(getResources().getColor(R.color.orange));
+			lblTabCategory.setTextColor(Color.DKGRAY);
+			lblTabSearch.setTextColor(Color.DKGRAY);
+			lblTabLibrary.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.tab_library_orange, 0, 0);
+			lblTabCategory.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.tab_category_gray, 0, 0);
+			lblTabSearch.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.tab_search_gray, 0, 0);
 			lblHeader.setText(R.string.library);
 			break;
 
 		case TAB_CATEGORY:
-			layoutTabLibrary.setBackgroundColor(Color.TRANSPARENT);
-			layoutTabCategory.setBackgroundColor(Color.MAGENTA);
-			layoutTabSearch.setBackgroundColor(Color.TRANSPARENT);
+			lblTabLibrary.setTextColor(Color.DKGRAY);
+			lblTabCategory.setTextColor(getResources().getColor(R.color.orange));
+			lblTabSearch.setTextColor(Color.DKGRAY);
+			lblTabLibrary.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.tab_library_gray, 0, 0);
+			lblTabCategory.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.tab_category_orange, 0, 0);
+			lblTabSearch.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.tab_search_gray, 0, 0);
 			lblHeader.setText(R.string.category);
 			break;
 
 		default:
-			layoutTabLibrary.setBackgroundColor(Color.TRANSPARENT);
-			layoutTabCategory.setBackgroundColor(Color.TRANSPARENT);
-			layoutTabSearch.setBackgroundColor(Color.MAGENTA);
+			lblTabLibrary.setTextColor(Color.DKGRAY);
+			lblTabCategory.setTextColor(Color.DKGRAY);
+			lblTabSearch.setTextColor(getResources().getColor(R.color.orange));
+			lblTabLibrary.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.tab_library_gray, 0, 0);
+			lblTabCategory.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.tab_category_gray, 0, 0);
+			lblTabSearch.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.tab_search_orange, 0, 0);
 			lblHeader.setText(R.string.search);
 			break;
 		}
@@ -165,20 +192,20 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.layoutTabLibrary:
+		case R.id.lblTabLibrary:
 			onClickTabLibrary();
 			break;
 
-		case R.id.layoutTabCategory:
+		case R.id.lblTabCategory:
 			onClickTabCategory();
 			break;
 
-		case R.id.layoutTabSearch:
+		case R.id.lblTabSearch:
 			onClickTabSearch();
 			break;
 
-		case R.id.lblHeaderLeft:
-			onClickHeaderLeft();
+		case R.id.btnTableContent:
+			onClickTableContent();
 			break;
 		}
 	}
@@ -196,7 +223,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	}
 
 	@SuppressLint("RtlHardcoded")
-	private void onClickHeaderLeft() {
+	private void onClickTableContent() {
 		if (currentFragment == DETAIL_CONTENT) {
 			mDrawerLayout.openDrawer(Gravity.LEFT);
 		}
@@ -207,4 +234,27 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 
 	}
 
+	@Override
+	public void onBackPressed() {
+		switch (currentFragment) {
+		case DETAIL_CONTENT:
+			backFragment(TAB_LIBRARY);
+			break;
+
+		default:
+			quitApp();
+			break;
+		}
+	}
+
+	@SuppressLint("InflateParams")
+	private void quitApp() {
+		new AlertDialog.Builder(this).setView(getLayoutInflater().inflate(R.layout.dialog_quit_app, null))
+				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						finish();
+					}
+				}).setNegativeButton(R.string.no, null).show();
+	}
 }

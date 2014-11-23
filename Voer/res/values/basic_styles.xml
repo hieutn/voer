@@ -138,7 +138,6 @@
     <style name="Text.Shadow" parent="Layout.FillWidth">
         <item name="android:gravity">center</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:shadowColor">#7F000000</item>
         <item name="android:shadowDx">-1</item>
         <item name="android:shadowDy">-1</item>
@@ -157,8 +156,8 @@
 
     <!-- ProgressBar -->
     <style name="ProgressBar" parent="android:attr/progressBarStyleInverse">
-        <item name="android:layout_width">30dp</item>
-        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">50dp</item>
         <item name="android:layout_centerInParent">true</item>
     </style>
 

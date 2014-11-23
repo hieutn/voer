@@ -1,8 +1,14 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <item name="windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="Tabbar" parent="@style/Layout.Weight.WidthFillHeight">
+        <item name="android:background">@drawable/bg_white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">5dp</item>
     </style>
 
 </resources>
