@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vn.edu.voer.R;
+import vn.edu.voer.fragment.DetailContentFragment;
 import vn.edu.voer.fragment.NavigationDrawerFragment;
 import vn.edu.voer.fragment.NavigationDrawerFragment.NavigationDrawerCallbacks;
 import vn.edu.voer.object.Category;
@@ -40,7 +41,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	private View btnTableContent;
 
 	private FragmentManager fm;
-	public List<Fragment> arrayFragments;
+	public List<Fragment> listFragments;
 	public int currentFragment;
 
 	public Material currentMaterial;
@@ -84,15 +85,15 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 
 	private void initFragment() {
 		fm = getSupportFragmentManager();
-		arrayFragments = new ArrayList<Fragment>();
-		arrayFragments.add(fm.findFragmentById(R.id.fragmentLibrary));
-		arrayFragments.add(fm.findFragmentById(R.id.fragmentCategory));
-		arrayFragments.add(fm.findFragmentById(R.id.fragmentSearch));
-		arrayFragments.add(fm.findFragmentById(R.id.fragmentDetailContent));
-		arrayFragments.add(fm.findFragmentById(R.id.fragmentSearchResult));
+		listFragments = new ArrayList<Fragment>();
+		listFragments.add(fm.findFragmentById(R.id.fragmentLibrary));
+		listFragments.add(fm.findFragmentById(R.id.fragmentCategory));
+		listFragments.add(fm.findFragmentById(R.id.fragmentSearch));
+		listFragments.add(fm.findFragmentById(R.id.fragmentDetailContent));
+		listFragments.add(fm.findFragmentById(R.id.fragmentSearchResult));
 
 		FragmentTransaction transaction = fm.beginTransaction();
-		for (Fragment fragment : arrayFragments) {
+		for (Fragment fragment : listFragments) {
 			transaction.hide(fragment);
 		}
 		transaction.commit();
@@ -101,10 +102,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	private void showFragment(int fragmentIndex) {
 		currentFragment = fragmentIndex;
 		FragmentTransaction transaction = fm.beginTransaction();
-		for (Fragment fragment : arrayFragments) {
+		for (Fragment fragment : listFragments) {
 			transaction.hide(fragment);
 		}
-		transaction.show(arrayFragments.get(fragmentIndex));
+		transaction.show(listFragments.get(fragmentIndex));
 		transaction.commit();
 		onChangeFragment();
 	}
@@ -113,13 +114,13 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 		FragmentTransaction transaction = fm.beginTransaction();
 		// transaction.setCustomAnimations(
 		// R.anim.fragment_out_right,R.anim.fragment_in_left);
-		transaction.show(arrayFragments.get(fragment));
-		transaction.hide(arrayFragments.get(currentFragment));
+		transaction.show(listFragments.get(fragment));
+		transaction.hide(listFragments.get(currentFragment));
 
 		// transaction.setCustomAnimations(R.anim.slide_in_left,
 		// R.anim.slide_out_right);
 		// transaction.replace(R.id.layoutFragment,
-		// arrayFragments.get(fragment));
+		// listFragments.get(fragment));
 
 		transaction.commit();
 		currentFragment = fragment;
@@ -130,8 +131,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 		FragmentTransaction transaction = fm.beginTransaction();
 		// transaction.setCustomAnimations(R.anim.fragment_in_left,
 		// R.anim.fragment_out_left);
-		transaction.show(arrayFragments.get(fragment));
-		transaction.hide(arrayFragments.get(currentFragment));
+		transaction.show(listFragments.get(fragment));
+		transaction.hide(listFragments.get(currentFragment));
 		transaction.commit();
 		currentFragment = fragment;
 		onChangeFragment();
@@ -143,6 +144,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 		} else {
 			btnTableContent.setVisibility(View.GONE);
 		}
+	}
+
+	public void changeCurrentModelIndex(int currentModuleIndex) {
+		this.currentModuleIndex = currentModuleIndex;
+		((DetailContentFragment) listFragments.get(DETAIL_CONTENT)).setData();
 	}
 
 	public void setTabSelected(int tabSelected) {

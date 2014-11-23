@@ -53,7 +53,7 @@ public class NavigationDrawerFragment extends BaseFragment {
 		}
 
 		// Select either the default item (0) or the last selected item.
-		selectItem(mCurrentSelectedPosition);
+//		selectItem(mCurrentSelectedPosition);
 	}
 
 	@Override
@@ -114,7 +114,8 @@ public class NavigationDrawerFragment extends BaseFragment {
 	}
 
 	private void selectItem(int position) {
-		getMainActivity().currentModuleIndex = position;
+		getMainActivity().changeCurrentModelIndex(position);
+
 		mCurrentSelectedPosition = position;
 		if (mDrawerListView != null) {
 			mDrawerListView.setItemChecked(position, true);
@@ -125,11 +126,12 @@ public class NavigationDrawerFragment extends BaseFragment {
 		if (mCallbacks != null) {
 			mCallbacks.onNavigationDrawerItemSelected(position);
 		}
-		
-//		getMainActivity().currentMaterial = mMaterials.get(position);
-//		goToFragment(MainActivity.DETAIL_CONTENT);
-//		((DetailContentFragment) getMainActivity().arrayFragments.get(MainActivity.DETAIL_CONTENT)).initData();
-//		getMainActivity().navigationDrawerFragment.setDataTableContent();
+
+		// getMainActivity().currentMaterial = mMaterials.get(position);
+		// goToFragment(MainActivity.DETAIL_CONTENT);
+		// ((DetailContentFragment)
+		// getMainActivity().arrayFragments.get(MainActivity.DETAIL_CONTENT)).initData();
+		// getMainActivity().navigationDrawerFragment.setDataTableContent();
 	}
 
 	@Override
