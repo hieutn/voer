@@ -45,13 +45,32 @@ public class MaterialDAO {
 	 * @return
 	 */
 	public boolean insertMaterial(Material material) {
+		return insertMaterial(material, false);
+	}
+	
+	/**
+	 * 
+	 * @param material
+	 * @return
+	 */
+	public boolean insertSubMaterial(Material material) {
+		return insertMaterial(material, true);
+	}
+	
+	/**
+	 * 
+	 * @param material
+	 * @param isSubMaterial
+	 * @return
+	 */
+	private boolean insertMaterial(Material material, boolean isSubMaterial) {
 		try {
 			String[] columns = MaterialSchema.columns;
 			Object[] values = { material.getMaterialID(), material.getTitle(), material.getDescription(),
 					material.getText(), material.getLanguage(), material.getImage(), material.getMaterialType(),
 					material.getModified(), material.getVersion(), material.getEditor(), material.getDerivedFrom(),
 					material.getKeywords(), material.getLicenseID(), material.getAuthor(), material.getCategories(),
-					DateTimeHelper.getCurrentDateTime() };
+					DateTimeHelper.getCurrentDateTime(), isSubMaterial ? 1 : 0 };
 			long res = mDBHelper.insert(MaterialSchema.TABLE_NAME, columns, values);
 			if (res < 0) {
 				return false;
@@ -69,11 +88,16 @@ public class MaterialDAO {
 	 * @return
 	 */
 	public ArrayList<Material> getAllMaterial() {
+		StringBuilder condition = new StringBuilder();
+		condition.append(MaterialSchema.SUB_MATERIAL);
+		condition.append("=");
+		condition.append("0");
+		
 		StringBuilder orderBy = new StringBuilder();
-		orderBy.append("date_created");
+		orderBy.append(MaterialSchema.DATE_CREATED);
 		orderBy.append(" ");
 		orderBy.append("DESC");
-		return mDBHelper.getMaterials("", orderBy.toString());
+		return mDBHelper.getMaterials(condition.toString(), orderBy.toString());
 	}
 
 	/**

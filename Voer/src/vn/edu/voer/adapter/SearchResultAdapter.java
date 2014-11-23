@@ -23,9 +23,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class SearchResultAdapter extends BaseAdapter {
-	
+
 	protected static final String TAG = SearchResultAdapter.class.getSimpleName();
-	
+
 	private List<Material> listMaterials;
 	private LayoutInflater mInflater = null;
 	private Context mCtx;
@@ -78,9 +78,7 @@ public class SearchResultAdapter extends BaseAdapter {
 			} else {
 				holder.imgDownload.setImageResource(R.drawable.downloaded);
 			}
-			
-			holder.lblAuthor.setText(material.getAuthor());
-			
+
 			if (mPersonDAO.isDownloadedPerson(material.getAuthor())) {
 				holder.lblAuthor.setText(mPersonDAO.getPersonById(material.getAuthor()).getFullname());
 			} else {
@@ -89,7 +87,7 @@ public class SearchResultAdapter extends BaseAdapter {
 					@Override
 					public void onLoadPersonDone(Person person) {
 						if (person != null) {
-							if (mPersonDAO.insertPerson(person)) {
+							if (!mPersonDAO.isDownloadedPerson(String.valueOf(person.getId())) && mPersonDAO.insertPerson(person)) {
 								if (BuildConfig.DEBUG) Log.i(TAG, "Insert " + person.getFullname() + " to db local success");
 							}
 							holder.lblAuthor.setText(person.getFullname());
@@ -98,7 +96,7 @@ public class SearchResultAdapter extends BaseAdapter {
 				});
 			}
 		}
-		
+
 		if (mMaterialDAO.isDownloadedMaterial(material.getMaterialID())) {
 			holder.imgDownload.setClickable(false);
 		} else {
@@ -110,7 +108,7 @@ public class SearchResultAdapter extends BaseAdapter {
 				}
 			});
 		}
-		
+
 		return convertView;
 	}
 
@@ -119,16 +117,16 @@ public class SearchResultAdapter extends BaseAdapter {
 		TextView lblAuthor;
 		ImageButton imgDownload;
 	}
-	
+
 	/**
 	 * Download material with material id
+	 * 
 	 * @param id
 	 */
 	private void downloadMaterial(String id) {
 		if (!mMaterialDAO.isDownloadedMaterial(id)) {
 			ServiceController sc = new ServiceController();
 			sc.downloadMaterial(mCtx, id, new IDownloadListener() {
-				
 				@Override
 				public void onDownloadMaterialDone(boolean isDownloaded) {
 					notifyDataSetChanged();
