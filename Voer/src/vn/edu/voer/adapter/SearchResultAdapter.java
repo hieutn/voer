@@ -86,26 +86,31 @@ public class SearchResultAdapter extends BaseAdapter {
 			} else {
 				// Get author from service
 				new ServiceController().getAuthors(material.getAuthor(), new IPersonListener() {
-					
 					@Override
 					public void onLoadPersonDone(Person person) {
-						if (mPersonDAO.insertPerson(person)) {
-							if (BuildConfig.DEBUG) Log.i(TAG, "Insert " + person.getFullname() + " to db local success");
+						if (person != null) {
+							if (mPersonDAO.insertPerson(person)) {
+								if (BuildConfig.DEBUG) Log.i(TAG, "Insert " + person.getFullname() + " to db local success");
+							}
+							holder.lblAuthor.setText(person.getFullname());
 						}
-						holder.lblAuthor.setText(person.getFullname());
 					}
 				});
 			}
 		}
 		
-		holder.imgDownload.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				downloadMaterial(material.getMaterialID());
-			}
-		});
-
+		if (mMaterialDAO.isDownloadedMaterial(material.getMaterialID())) {
+			holder.imgDownload.setClickable(false);
+		} else {
+			holder.imgDownload.setClickable(true);
+			holder.imgDownload.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					downloadMaterial(material.getMaterialID());
+				}
+			});
+		}
+		
 		return convertView;
 	}
 
