@@ -49,7 +49,7 @@ public class DetailContentFragment extends BaseFragment {
 		});
 	}
 
-	public void initData() {
+	public void setData() {
 		mMaterial = getMainActivity().currentMaterial;
 		if (mMaterial.getMaterialType() == Material.TYPE_MODULE) {
 			mWebViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");

@@ -62,7 +62,7 @@ public class LibraryFragment extends BaseFragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				getMainActivity().currentMaterial = mMaterials.get(position);
 				goToFragment(MainActivity.DETAIL_CONTENT);
-				((DetailContentFragment) getMainActivity().arrayFragments.get(MainActivity.DETAIL_CONTENT)).initData();
+				((DetailContentFragment) getMainActivity().listFragments.get(MainActivity.DETAIL_CONTENT)).setData();
 				getMainActivity().navigationDrawerFragment.setDataTableContent();
 			}
 		});
