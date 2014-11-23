@@ -3,6 +3,7 @@
 
     <color name="pink">#ce204e</color>
     <color name="orange">#f83e3e</color>
-    <color name="orange_light">#fb9e9e</color>
+    <color name="light_orange">#fb9e9e</color>
+    <color name="dark_pink">#7f2c3a</color>
 
 </resources>

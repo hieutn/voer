@@ -1,6 +1,6 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Layout.FillWidthHeight"
+    style="@style/Layout.FillWidthHeight.Vertical"
     tools:context=".fragment.SearchFragment" >
 
     <LinearLayout
@@ -27,4 +27,12 @@
             android:background="@drawable/tab_search_orange" />
     </LinearLayout>
 
-</RelativeLayout>
+    <Button
+        style="@style/Text.Shadow"
+        android:layout_height="40dp"
+        android:layout_marginLeft="@dimen/default_padding"
+        android:layout_marginRight="@dimen/default_padding"
+        android:background="@drawable/btn_pink"
+        android:text="@string/search" />
+
+</LinearLayout>
