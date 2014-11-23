@@ -1,0 +1,20 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <TextView
+        style="@style/Text.Shadow"
+        android:background="@color/pink"
+        android:drawableLeft="@drawable/ic_launcher"
+        android:drawablePadding="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
+
+    <TextView
+        style="@style/Text.Content.Black"
+        android:layout_margin="20dp"
+        android:hint="@string/quitApp"
+        android:textSize="18sp" />
+
+</LinearLayout>
