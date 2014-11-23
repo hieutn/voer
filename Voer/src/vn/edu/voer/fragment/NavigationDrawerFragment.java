@@ -3,6 +3,7 @@ package vn.edu.voer.fragment;
 import java.util.ArrayList;
 
 import vn.edu.voer.R;
+import vn.edu.voer.activity.MainActivity;
 import vn.edu.voer.adapter.MenuAdapter;
 import vn.edu.voer.object.CollectionContent;
 import android.app.Activity;
@@ -76,8 +77,6 @@ public class NavigationDrawerFragment extends BaseFragment {
 	}
 
 	public void setDataTableContent() {
-		Log.e("", "Hoang ping");
-		
 		mCollectionContent = getMainActivity().currentCollectionContent;
 		if (mCollectionContent != null && mCollectionContent.size() > 0) {
 			mAdapter = new MenuAdapter(getMainActivity(), R.layout.drawer_item, mCollectionContent);
@@ -115,6 +114,7 @@ public class NavigationDrawerFragment extends BaseFragment {
 	}
 
 	private void selectItem(int position) {
+		getMainActivity().currentModuleIndex = position;
 		mCurrentSelectedPosition = position;
 		if (mDrawerListView != null) {
 			mDrawerListView.setItemChecked(position, true);
@@ -125,6 +125,11 @@ public class NavigationDrawerFragment extends BaseFragment {
 		if (mCallbacks != null) {
 			mCallbacks.onNavigationDrawerItemSelected(position);
 		}
+		
+//		getMainActivity().currentMaterial = mMaterials.get(position);
+//		goToFragment(MainActivity.DETAIL_CONTENT);
+//		((DetailContentFragment) getMainActivity().arrayFragments.get(MainActivity.DETAIL_CONTENT)).initData();
+//		getMainActivity().navigationDrawerFragment.setDataTableContent();
 	}
 
 	@Override

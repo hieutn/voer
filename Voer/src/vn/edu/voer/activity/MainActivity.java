@@ -44,6 +44,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	public int currentFragment;
 
 	public Material currentMaterial;
+	public int currentModuleIndex = 0;
 	public Category currentCategory;
 	public ArrayList<CollectionContent> currentCollectionContent = null;
 

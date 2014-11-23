@@ -10,6 +10,7 @@ import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.IDownloadListener;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,13 +56,14 @@ public class DetailContentFragment extends BaseFragment {
 		} else {
 			mCollectionContents = mMaterial.getCollectionContent();
 			getMainActivity().currentCollectionContent = mCollectionContents;
-			final String id = mCollectionContents.get(0).getId();
+			final String id = mCollectionContents.get(getMainActivity().currentModuleIndex).getId();
+			Log.i("SDD", "Current index: " + getMainActivity().currentModuleIndex);
 
 			if (md.isDownloadedMaterial(id)) {
 				fillContentWebview(id);
 			} else {
 				ServiceController sc = new ServiceController();
-				sc.downloadMaterial(getMainActivity(), id, new IDownloadListener() {
+				sc.downloadSubMaterial(getMainActivity(), id, new IDownloadListener() {
 					@Override
 					public void onDownloadMaterialDone(boolean isDownloaded) {
 						if (isDownloaded) {

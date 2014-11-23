@@ -48,6 +48,8 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 
 	private int mRequest;
 	private Context mCtx;
+	
+	private boolean mSubMaterial = false;
 
 	/*
 	 * (non-Javadoc)
@@ -98,7 +100,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 			break;
 
 		case REQUEST_DOWNLOAD:
-			responseMaterialDetail(result);
+			responseDownloadMaterial(result);
 			break;
 
 		case REQUEST_AUTHOR:
@@ -183,6 +185,11 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		String materialsUrl = Constant.URL_MATERIAL + "/" + materialId;
 		execute(materialsUrl);
 	}
+	
+	public void downloadSubMaterial(Context ctx, String materialId, IDownloadListener listener) {
+		mSubMaterial = true;
+		downloadMaterial(ctx, materialId, listener);
+	}
 
 	/**
 	 * Get all author from service
@@ -258,7 +265,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 * @param result
 	 *            Material detail json content from service
 	 */
-	private void responseMaterialDetail(String result) {
+	private void responseDownloadMaterial(String result) {
 		Material m = null;
 		boolean isDownloaded = false;
 		try {
@@ -268,7 +275,12 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 			}
 			// Save material to local database
 			MaterialDAO md = new MaterialDAO(mCtx);
-			isDownloaded = md.insertMaterial(m);
+			if (!mSubMaterial) {
+				isDownloaded = md.insertMaterial(m);
+			} else {
+				isDownloaded = md.insertSubMaterial(m);
+			}
+			
 		} catch (JsonSyntaxException e) {
 			if (BuildConfig.DEBUG)
 				Log.e(TAG, e.toString());

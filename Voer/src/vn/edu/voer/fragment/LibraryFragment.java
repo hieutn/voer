@@ -29,12 +29,12 @@ public class LibraryFragment extends BaseFragment {
 		initUI(view);
 		initControl();
 
-		new ServiceController().downloadMaterial(getMainActivity(), "c6628b9e", new IDownloadListener() {
-			@Override
-			public void onDownloadMaterialDone(boolean isDownloaded) {
-
-			}
-		});
+//		new ServiceController().downloadMaterial(getMainActivity(), "c6628b9e", new IDownloadListener() {
+//			@Override
+//			public void onDownloadMaterialDone(boolean isDownloaded) {
+//
+//			}
+//		});
 
 		return view;
 	}
