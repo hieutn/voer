@@ -24,6 +24,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 /**
@@ -185,12 +186,19 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 * @param result Categories json content from service
 	 */
 	private void responseCategories(String result) {
-		ArrayList<Category> cats = new Gson().fromJson(result, new TypeToken<ArrayList<Category>>() {}.getType());
-		if (BuildConfig.DEBUG) {
-			for (Category cat: cats) {
-				Log.i(TAG, "CatID: " + cat.getId() + ", name: " + cat.getName());
+		ArrayList<Category> cats = null;
+		try {
+			cats = new Gson().fromJson(result, new TypeToken<ArrayList<Category>>() {}.getType());
+			if (BuildConfig.DEBUG) {
+				for (Category cat: cats) {
+					Log.i(TAG, "CatID: " + cat.getId() + ", name: " + cat.getName());
+				}
 			}
+		} catch (JsonSyntaxException e) {
+			cats = null;
+			if (BuildConfig.DEBUG) Log.e(TAG, e.toString());
 		}
+		
 		mCategoryListener.onLoadCategoryDone(cats);
 	}
 	
@@ -200,12 +208,19 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 * @param result Categories json content from service
 	 */
 	private void responseMaterials(String result) {
-		MaterialList ml = new Gson().fromJson(result, MaterialList.class);
-		if (BuildConfig.DEBUG) {
-			for (Material m: ml.getMaterials()) {
-				Log.i(TAG, "MaterialsID: " + m.getMaterialID() + ", Title:" +  m.getTitle());
+		MaterialList ml = null;
+		try {
+			ml = new Gson().fromJson(result, MaterialList.class);
+			if (BuildConfig.DEBUG) {
+				for (Material m: ml.getMaterials()) {
+					Log.i(TAG, "MaterialsID: " + m.getMaterialID() + ", Title:" +  m.getTitle());
+				}
 			}
+		} catch (JsonSyntaxException e) {
+			ml = null;
+			if (BuildConfig.DEBUG) Log.e(TAG, e.toString());
 		}
+		
 		mMaterialListener.onLoadMaterialsDone(ml);
 	}
 	
@@ -215,14 +230,21 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 * @param result Material detail json content from service
 	 */
 	private void responseMaterialDetail(String result) {
-		Material m = new Gson().fromJson(result, Material.class);
-		if (BuildConfig.DEBUG) {
-			Log.i(TAG, m.getTitle());
+		Material m = null;
+		boolean isDownloaded = false;
+		try {
+			m = new Gson().fromJson(result, Material.class);
+			if (BuildConfig.DEBUG) {
+				Log.i(TAG, m.getTitle());
+			}
+			// Save material to local database
+			MaterialDAO md = new MaterialDAO(mCtx);
+			isDownloaded = md.insertMaterial(m);
+		} catch (JsonSyntaxException e) {
+			m = null;
+			if (BuildConfig.DEBUG) Log.e(TAG, e.toString());
 		}
 		
-		// Save material to local database
-		MaterialDAO md = new MaterialDAO(mCtx);
-		boolean isDownloaded = md.insertMaterial(m);
 		mDownloadListener.onDownloadMaterialDone(isDownloaded);
 	}
 	
@@ -231,9 +253,13 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 * @param result
 	 */
 	private void responseAuthor(String result) {
-		Person person = new Gson().fromJson(result, Person.class);
-		if (BuildConfig.DEBUG) {
-			Log.i(TAG, "Author name: " + person.getFullname());
+		Person person = null;
+		try{
+			person = new Gson().fromJson(result, Person.class);
+			if (BuildConfig.DEBUG) Log.i(TAG, "Author name: " + person.getFullname());
+		} catch (JsonSyntaxException e) {
+			person = null;
+			if (BuildConfig.DEBUG) Log.e(TAG, e.toString());
 		}
 		mPersonListener.onLoadPersonDone(person);
 	}

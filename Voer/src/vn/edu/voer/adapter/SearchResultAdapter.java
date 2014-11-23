@@ -30,7 +30,6 @@ public class SearchResultAdapter extends BaseAdapter {
 	private LayoutInflater mInflater = null;
 	private Context mCtx;
 	private MaterialDAO mMaterialDAO;
-	private ServiceController mSC;
 	private PersonDAO mPersonDAO;
 
 	public SearchResultAdapter(Context context, List<Material> listMaterials) {
@@ -38,7 +37,6 @@ public class SearchResultAdapter extends BaseAdapter {
 		this.listMaterials = listMaterials;
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mMaterialDAO = new MaterialDAO(context);
-		mSC = new ServiceController();
 		mPersonDAO = new PersonDAO(context);
 	}
 
@@ -83,20 +81,21 @@ public class SearchResultAdapter extends BaseAdapter {
 			
 			holder.lblAuthor.setText(material.getAuthor());
 			
-//			// Get author from service
-//			mSC.getAuthors(material.getAuthor(), new IPersonListener() {
-//				
-//				@Override
-//				public void onLoadPersonDone(Person person) {
-//					if (mPersonDAO.insertPerson(person)) {
-//						if (BuildConfig.DEBUG) {
-//							Log.i(TAG, "Insert " + person.getFullname() + " to db local success");
-//						}
-//					}
-//					holder.lblAuthor.setText(person.getFullname());
-//				}
-//			});
-			
+			if (mPersonDAO.isDownloadedPerson(material.getAuthor())) {
+				holder.lblAuthor.setText(mPersonDAO.getPersonById(material.getAuthor()).getFullname());
+			} else {
+				// Get author from service
+				new ServiceController().getAuthors(material.getAuthor(), new IPersonListener() {
+					
+					@Override
+					public void onLoadPersonDone(Person person) {
+						if (mPersonDAO.insertPerson(person)) {
+							if (BuildConfig.DEBUG) Log.i(TAG, "Insert " + person.getFullname() + " to db local success");
+						}
+						holder.lblAuthor.setText(person.getFullname());
+					}
+				});
+			}
 		}
 		
 		holder.imgDownload.setOnClickListener(new OnClickListener() {

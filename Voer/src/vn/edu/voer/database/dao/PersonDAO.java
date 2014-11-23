@@ -28,6 +28,19 @@ public class PersonDAO {
 	}
 	
 	/**
+	 * Check person saved local database with person id
+	 * @param id
+	 * @return
+	 */
+	public boolean isDownloadedPerson(String id) {
+		if (getPersonById(id) != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
 	 * 
 	 * @param person
 	 * @return
