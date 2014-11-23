@@ -6,12 +6,9 @@ import vn.edu.voer.R;
 import vn.edu.voer.activity.MainActivity;
 import vn.edu.voer.adapter.LibraryAdapter;
 import vn.edu.voer.database.dao.MaterialDAO;
-import vn.edu.voer.object.Category;
 import vn.edu.voer.object.Material;
-import vn.edu.voer.object.MaterialList;
-import vn.edu.voer.service.ServiceController;
-import vn.edu.voer.service.ServiceController.IServiceListener;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,14 +28,14 @@ public class LibraryFragment extends BaseFragment {
 		initControl();
 		return view;
 	}
-
+	
 	@Override
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);
 		if (!hidden) {
-			if (mMaterials.size() == 0) {
+//			if (mMaterials.size() == 0) {
 				initData();
-			}
+//			}
 		}
 	}
 
@@ -62,5 +59,10 @@ public class LibraryFragment extends BaseFragment {
 	private void initData() {
 		MaterialDAO md = new MaterialDAO(getActivity());
 		mMaterials = md.getAllMaterial();
+		try {
+			mAdapter.setMaterials(mMaterials);
+		} catch (NullPointerException e) {
+			Log.e("SDD", e.toString());
+		}
 	}
 }

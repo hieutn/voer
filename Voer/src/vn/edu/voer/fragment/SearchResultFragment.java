@@ -1,20 +1,20 @@
 package vn.edu.voer.fragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import vn.edu.voer.R;
 import vn.edu.voer.adapter.SearchResultAdapter;
-import vn.edu.voer.object.Category;
 import vn.edu.voer.object.Material;
 import vn.edu.voer.object.MaterialList;
 import vn.edu.voer.service.ServiceController;
-import vn.edu.voer.service.ServiceController.IServiceListener;
+import vn.edu.voer.service.ServiceController.IMaterialListener;
 import vn.edu.voer.utility.Constant;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -22,7 +22,9 @@ import android.widget.ListView;
 public class SearchResultFragment extends BaseFragment {
 	private ListView mListView;
 	private ArrayList<Material> mListMaterials;
+	private MaterialList mMaterialList;
 	private SearchResultAdapter mAdapter;
+	private boolean isLoading = true;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class SearchResultFragment extends BaseFragment {
 
 	private void initUI(View view) {
 		mListView = (ListView) view.findViewById(R.id.listView);
+		mPrbLoading = (View) view.findViewById(R.id.frm_category_loading);
 	}
 
 	private void initControl() {
@@ -53,25 +56,55 @@ public class SearchResultFragment extends BaseFragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			}
 		});
+		
+		mListView.setOnScrollListener(new OnScrollListener() {
+			
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				
+			}
+			
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				if (firstVisibleItem + visibleItemCount >= totalItemCount) {
+					if (!isLoading) {
+						isLoading = true;
+						loadMore();
+					}
+				}
+			}
+		});
 	}
 
 	private void fillData() {
+		mPrbLoading.setVisibility(View.VISIBLE);
 		ServiceController sc = new ServiceController();
-		sc.getMaterials(Constant.URL_MATERIAL, getMainActivity().currentCategory.getId(), new IServiceListener() {
+		sc.getMaterials(Constant.URL_MATERIAL, getMainActivity().currentCategory.getId(), new IMaterialListener() {
+			
 			@Override
 			public void onLoadMaterialsDone(MaterialList materialList) {
+				isLoading = false;
+				mMaterialList = materialList;
 				mListMaterials.clear();
-				mListMaterials.addAll(materialList.getMaterials());
+				mListMaterials.addAll(mMaterialList.getMaterials());
 				mAdapter.notifyDataSetChanged();
+				mPrbLoading.setVisibility(View.GONE);
 			}
-
+		});
+	}
+	
+	private void loadMore() {
+		mPrbLoading.setVisibility(View.VISIBLE);
+		ServiceController sc = new ServiceController();
+		sc.getMaterials(mMaterialList.getNextLink(), new IMaterialListener() {
+			
 			@Override
-			public void onLoadCategoriesDone(List<Category> categories) {
-				fillData();
-			}
-
-			@Override
-			public void onDownloadMaterialDone(boolean isDownloaded) {
+			public void onLoadMaterialsDone(MaterialList materialList) {
+				isLoading = false;
+				mMaterialList = materialList;
+				mListMaterials.addAll(mMaterialList.getMaterials());
+				mAdapter.notifyDataSetChanged();
+				mPrbLoading.setVisibility(View.GONE);
 			}
 		});
 	}

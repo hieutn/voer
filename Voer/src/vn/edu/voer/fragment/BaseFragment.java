@@ -9,11 +9,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class BaseFragment extends Fragment {
+	
+	protected View mPrbLoading;
+	
 	@Override
 	public void startActivity(Intent intent) {
 		super.startActivity(intent);

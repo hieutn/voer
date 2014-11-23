@@ -1,16 +1,13 @@
 package vn.edu.voer.fragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import vn.edu.voer.R;
 import vn.edu.voer.database.dao.MaterialDAO;
-import vn.edu.voer.object.Category;
 import vn.edu.voer.object.CollectionContent;
 import vn.edu.voer.object.Material;
-import vn.edu.voer.object.MaterialList;
 import vn.edu.voer.service.ServiceController;
-import vn.edu.voer.service.ServiceController.IServiceListener;
+import vn.edu.voer.service.ServiceController.IDownloadListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,13 +52,7 @@ public class DetailContentFragment extends BaseFragment {
 				fillContentWebview(id);
 			} else {
 				ServiceController sc = new ServiceController();
-				sc.downloadMaterial(getMainActivity(), id, new IServiceListener() {
-					
-					@Override
-					public void onLoadMaterialsDone(MaterialList materialList) {}
-					
-					@Override
-					public void onLoadCategoriesDone(List<Category> categories) {}
+				sc.downloadMaterial(getMainActivity(), id, new IDownloadListener() {
 					
 					@Override
 					public void onDownloadMaterialDone(boolean isDownloaded) {

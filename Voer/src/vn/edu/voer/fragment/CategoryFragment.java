@@ -7,9 +7,8 @@ import vn.edu.voer.R;
 import vn.edu.voer.activity.MainActivity;
 import vn.edu.voer.adapter.CategoryAdapter;
 import vn.edu.voer.object.Category;
-import vn.edu.voer.object.MaterialList;
 import vn.edu.voer.service.ServiceController;
-import vn.edu.voer.service.ServiceController.IServiceListener;
+import vn.edu.voer.service.ServiceController.ICategoryListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +42,7 @@ public class CategoryFragment extends BaseFragment {
 
 	private void initUI(View view) {
 		lsvCategory = (ListView) view.findViewById(R.id.listView);
+		mPrbLoading = (View) view.findViewById(R.id.frm_category_loading);
 	}
 
 	private void initControl() {
@@ -59,21 +59,16 @@ public class CategoryFragment extends BaseFragment {
 	}
 
 	private void fillData() {
+		mPrbLoading.setVisibility(View.VISIBLE);
 		ServiceController sc = new ServiceController();
-		sc.getCategories(new IServiceListener() {
+		sc.getCategories(new ICategoryListener() {
+			
 			@Override
-			public void onLoadMaterialsDone(MaterialList materialList) {
-			}
-
-			@Override
-			public void onLoadCategoriesDone(List<Category> categories) {
+			public void onLoadCategoryDone(ArrayList<Category> categories) {
 				listCategories.clear();
 				listCategories.addAll(categories);
 				adapter.notifyDataSetChanged();
-			}
-
-			@Override
-			public void onDownloadMaterialDone(boolean isDownloaded) {
+				mPrbLoading.setVisibility(View.GONE);
 			}
 		});
 	}

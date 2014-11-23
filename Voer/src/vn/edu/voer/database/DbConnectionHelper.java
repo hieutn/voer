@@ -3,7 +3,9 @@ package vn.edu.voer.database;
 import java.util.ArrayList;
 
 import vn.edu.voer.database.schema.MaterialSchema;
+import vn.edu.voer.database.schema.PersonSchema;
 import vn.edu.voer.object.Material;
+import vn.edu.voer.object.Person;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -24,10 +26,10 @@ public class DbConnectionHelper {
 		return mInstance;
 	}
 	
-	public synchronized ArrayList<Material> getMaterials(String condition) {
+	public synchronized ArrayList<Material> getMaterials(String condition, String orderBy) {
 		ArrayList<Material> result = new ArrayList<Material>();
 		mDbManager.open();
-		Cursor cur = mDbManager.fetch(MaterialSchema.TABLE_NAME, condition);
+		Cursor cur = mDbManager.fetchAndSort(MaterialSchema.TABLE_NAME, condition, orderBy);
 		if (cur == null) {
 			return null;
 		}
@@ -49,6 +51,31 @@ public class DbConnectionHelper {
 					cur.getString(cur.getColumnIndex(MaterialSchema.LICENSE_ID)), 
 					cur.getString(cur.getColumnIndex(MaterialSchema.AUTHOR)), 
 					cur.getString(cur.getColumnIndex(MaterialSchema.CATEGORIES))));
+		}
+		cur.close();
+		mDbManager.close();
+		return result;
+	}
+	
+	
+	public ArrayList<Person> getPersons(String condition, String orderBy) {
+		ArrayList<Person> result = new ArrayList<Person>();
+		mDbManager.open();
+		Cursor cur = mDbManager.fetchAndSort(PersonSchema.TABLE_NAME, condition, orderBy);
+		if (cur == null) {
+			return null;
+		}
+		
+		while (cur.moveToNext()) {
+			result.add(new Person(
+					cur.getInt(cur.getColumnIndex(PersonSchema.ID)),
+					cur.getString(cur.getColumnIndex(PersonSchema.FIRST_NAME)),
+					cur.getString(cur.getColumnIndex(PersonSchema.LAST_NAME)),
+					cur.getString(cur.getColumnIndex(PersonSchema.USER_ID)),
+					cur.getString(cur.getColumnIndex(PersonSchema.TITLE)),
+					cur.getInt(cur.getColumnIndex(PersonSchema.CLIENT_ID)),
+					cur.getString(cur.getColumnIndex(PersonSchema.FULLNAME)), 
+					cur.getString(cur.getColumnIndex(PersonSchema.EMAIL))));
 		}
 		cur.close();
 		mDbManager.close();

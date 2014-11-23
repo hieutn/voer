@@ -37,6 +37,11 @@ public class LibraryAdapter extends ArrayAdapter<Material> {
 		mMaterials = materials;
 	}
 	
+	public void setMaterials(ArrayList<Material> materials) throws NullPointerException{
+		mMaterials = materials;
+		notifyDataSetChanged();
+	}
+	
 	/* (non-Javadoc)
 	 * @see android.widget.ArrayAdapter#getCount()
 	 */

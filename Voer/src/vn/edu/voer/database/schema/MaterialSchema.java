@@ -30,8 +30,9 @@ public class MaterialSchema {
 	public static final String LICENSE_ID = "license_id";
 	public static final String AUTHOR = "author";
 	public static final String CATEGORIES = "categories";
+	public static final String DATE_CREATED = "date_created";
 	
-	public static final String[] columns = {ID, TITLE, DESCRIPTION, TEXT, LANGUAGE, IMAGE, TYPE, MODIFIED, VERSION, EDITOR, DERIVED_FROM, KEYWORD, LICENSE_ID, AUTHOR, CATEGORIES};
+	public static final String[] columns = {ID, TITLE, DESCRIPTION, TEXT, LANGUAGE, IMAGE, TYPE, MODIFIED, VERSION, EDITOR, DERIVED_FROM, KEYWORD, LICENSE_ID, AUTHOR, CATEGORIES, DATE_CREATED};
 	
 	public static final AbstractDatabaseManager.SQLPair[] params = new SQLPair[] {
 		new SQLPair(ID, "VARCHAR PRIMARY KEY NOT NULL"),
@@ -48,6 +49,7 @@ public class MaterialSchema {
 		new SQLPair(KEYWORD, "VARCHAR"),
 		new SQLPair(LICENSE_ID, "VARCHAR"),
 		new SQLPair(AUTHOR, "VARCHAR"),
-		new SQLPair(CATEGORIES, "VARCHAR")
+		new SQLPair(CATEGORIES, "VARCHAR"),
+		new SQLPair(DATE_CREATED, "DATETIME")
 	};
 }

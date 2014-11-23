@@ -5,7 +5,6 @@ package vn.edu.voer.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -18,6 +17,7 @@ import vn.edu.voer.database.dao.MaterialDAO;
 import vn.edu.voer.object.Category;
 import vn.edu.voer.object.Material;
 import vn.edu.voer.object.MaterialList;
+import vn.edu.voer.object.Person;
 import vn.edu.voer.utility.Constant;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -38,8 +38,13 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	private static final int REQUEST_MATERIALS 		= 1;
 	private static final int REQUEST_SEARCH 		= 2;
 	private static final int REQUEST_DOWNLOAD 		= 3;
+	private static final int REQUEST_AUTHOR 		= 4;
 	
-	private IServiceListener mListener;
+	private ICategoryListener mCategoryListener;
+	private IMaterialListener mMaterialListener;
+	private IDownloadListener mDownloadListener;
+	private IPersonListener mPersonListener;
+	
 	private int mRequest;
 	private Context mCtx;
 
@@ -89,6 +94,10 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 			responseMaterialDetail(result);
 			break;
 			
+		case REQUEST_AUTHOR:
+			responseAuthor(result);
+			break;
+			
 		default:
 			break;
 		}
@@ -99,8 +108,8 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 * 
 	 * @param listener The listener event to handle when load data done
 	 */
-	public void getCategories(IServiceListener listener) {
-		mListener = listener;
+	public void getCategories(ICategoryListener listener) {
+		mCategoryListener = listener;
 		mRequest = REQUEST_CATEGORIES;
 		execute(Constant.URL_CATEGORY);
 	}
@@ -114,8 +123,8 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 * 			  To request next page, using getNextLink method in instance of MaterialList class
 	 * @param listener The listener event to handle when load data done
 	 */
-	public void getMaterials(String url, IServiceListener listener) {
-		mListener = listener;
+	public void getMaterials(String url, IMaterialListener listener) {
+		mMaterialListener = listener;
 		mRequest = REQUEST_MATERIALS;
 		execute(url);
 	}
@@ -126,8 +135,8 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 * @param catId
 	 * @param listener
 	 */
-	public void getMaterials(String url, int catId, IServiceListener listener) {
-		mListener = listener;
+	public void getMaterials(String url, int catId, IMaterialListener listener) {
+		mMaterialListener = listener;
 		String materialsUrl = url + "?categories=" + catId;
 		getMaterials(materialsUrl, listener);
 	}
@@ -137,18 +146,37 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 * 
 	 * @param keyword The keyword to search Material
 	 */
-	public void searchMaterials(String keyword, IServiceListener listener) {
-		mListener = listener;
+	public void searchMaterials(String keyword, IMaterialListener listener) {
+		mMaterialListener = listener;
 		mRequest = REQUEST_SEARCH;
 		
 	}
 	
-	public void downloadMaterial(Context ctx, String materialId, IServiceListener listener) {
+	/**
+	 * Download material with material id
+	 * @param ctx
+	 * @param materialId
+	 * @param listener
+	 */
+	public void downloadMaterial(Context ctx, String materialId, IDownloadListener listener) {
 		mCtx = ctx;
-		mListener = listener;
+		mDownloadListener = listener;
 		mRequest = REQUEST_DOWNLOAD;
 		String materialsUrl = Constant.URL_MATERIAL + "/" + materialId;
 		execute(materialsUrl);
+	}
+	
+	/**
+	 * Get all author from service
+	 */
+	public void getAuthors(String id, IPersonListener listener) {
+		mRequest = REQUEST_AUTHOR;
+		mPersonListener = listener;
+		StringBuilder authorUrl = new StringBuilder();
+		authorUrl.append(Constant.URL_AUTHOR);
+		authorUrl.append("/");
+		authorUrl.append(id);
+		execute(authorUrl.toString());
 	}
 
 	/**
@@ -163,7 +191,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 				Log.i(TAG, "CatID: " + cat.getId() + ", name: " + cat.getName());
 			}
 		}
-		mListener.onLoadCategoriesDone(cats);
+		mCategoryListener.onLoadCategoryDone(cats);
 	}
 	
 	/**
@@ -175,10 +203,10 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		MaterialList ml = new Gson().fromJson(result, MaterialList.class);
 		if (BuildConfig.DEBUG) {
 			for (Material m: ml.getMaterials()) {
-				Log.d(TAG, "MaterialsID: " + m.getMaterialID() + ", Title:" +  m.getTitle());
+				Log.i(TAG, "MaterialsID: " + m.getMaterialID() + ", Title:" +  m.getTitle());
 			}
 		}
-		mListener.onLoadMaterialsDone(ml);
+		mMaterialListener.onLoadMaterialsDone(ml);
 	}
 	
 	/**
@@ -195,16 +223,41 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		// Save material to local database
 		MaterialDAO md = new MaterialDAO(mCtx);
 		boolean isDownloaded = md.insertMaterial(m);
-		mListener.onDownloadMaterialDone(isDownloaded);
+		mDownloadListener.onDownloadMaterialDone(isDownloaded);
+	}
+	
+	/**
+	 * Parse Author json content and save to database local
+	 * @param result
+	 */
+	private void responseAuthor(String result) {
+		Person person = new Gson().fromJson(result, Person.class);
+		if (BuildConfig.DEBUG) {
+			Log.i(TAG, "Author name: " + person.getFullname());
+		}
+		mPersonListener.onLoadPersonDone(person);
 	}
 
-	/**
-	 * Interface listener service request
-	 */
-	public interface IServiceListener {
-		public void onLoadCategoriesDone(List<Category> categories);
+	//
+	// ===== Interface listener service request ====
+	//
+	public interface ICategoryListener {
+		public void onLoadCategoryDone(ArrayList<Category> categories);
+	}
+	
+	public interface IMaterialListener {
 		public void onLoadMaterialsDone(MaterialList materialList);
+	}
+	
+	public interface IDownloadListener {
 		public void onDownloadMaterialDone(boolean isDownloaded);
 	}
+	
+	public interface IPersonListener {
+		public void onLoadPersonDone(Person person);
+	}
+	//
+	//====
+	//
 	
 }

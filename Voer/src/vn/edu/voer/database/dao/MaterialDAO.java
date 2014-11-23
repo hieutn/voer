@@ -9,6 +9,7 @@ import android.content.Context;
 import vn.edu.voer.database.DbConnectionHelper;
 import vn.edu.voer.database.schema.MaterialSchema;
 import vn.edu.voer.object.Material;
+import vn.edu.voer.utility.DateTimeHelper;
 
 /**
  * @author sidd
@@ -17,10 +18,10 @@ import vn.edu.voer.object.Material;
  */
 public class MaterialDAO {
 
-	private DbConnectionHelper materialDBHelper;
+	private DbConnectionHelper mDBHelper;
 
 	public MaterialDAO(Context ctx) {
-		materialDBHelper = DbConnectionHelper.getInstance(ctx);
+		mDBHelper = DbConnectionHelper.getInstance(ctx);
 	}
 	
 	/**
@@ -58,8 +59,9 @@ public class MaterialDAO {
 				material.getKeywords(), 
 				material.getLicenseID(), 
 				material.getAuthor(),
-				material.getCategories() };
-		long res = materialDBHelper.insert(MaterialSchema.TABLE_NAME, columns, values);
+				material.getCategories(),
+				DateTimeHelper.getCurrentDateTime()};
+		long res = mDBHelper.insert(MaterialSchema.TABLE_NAME, columns, values);
 		if (res < 0) {
 			return false;
 		} else {
@@ -72,7 +74,11 @@ public class MaterialDAO {
 	 * @return
 	 */
 	public ArrayList<Material> getAllMaterial() {
-		return materialDBHelper.getMaterials("");
+		StringBuilder orderBy = new StringBuilder();
+		orderBy.append("date_created");
+		orderBy.append(" ");
+		orderBy.append("DESC");
+		return mDBHelper.getMaterials("", orderBy.toString());
 	}
 	
 	/**
@@ -87,7 +93,7 @@ public class MaterialDAO {
 		condition.append("'");
 		condition.append(id);
 		condition.append("'");
-		ArrayList<Material> materials = materialDBHelper.getMaterials(condition.toString());
+		ArrayList<Material> materials = mDBHelper.getMaterials(condition.toString(), "");
 		if (materials != null && materials.size() > 0) {
 			return materials.get(0);
 		} else {

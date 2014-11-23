@@ -14,5 +14,6 @@ public class Constant {
 	public static final String URL_CATEGORY = URL + "categories";
 	public static final String URL_MATERIAL = URL + "materials";
 	public static final String URL_SEARCH = URL + "search";
+	public static final String URL_AUTHOR = URL + "authors";
 	
 }
