@@ -1,6 +1,7 @@
 package vn.edu.voer.fragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import vn.edu.voer.R;
 import vn.edu.voer.database.dao.MaterialDAO;
@@ -57,10 +58,16 @@ public class DetailContentFragment extends BaseFragment {
 				sc.downloadMaterial(getMainActivity(), id, new IServiceListener() {
 					
 					@Override
-					public void onLoadMaterialsDone(MaterialList materialList) {}
+					public void onLoadMaterialsDone(MaterialList materialList) {
+						// TODO Auto-generated method stub
+						
+					}
 					
 					@Override
-					public void onLoadCategoriesDone(ArrayList<Category> categories) {}
+					public void onLoadCategoriesDone(List<Category> categories) {
+						// TODO Auto-generated method stub
+						
+					}
 					
 					@Override
 					public void onDownloadMaterialDone(boolean isDownloaded) {
