@@ -7,6 +7,8 @@ import vn.edu.voer.activity.MainActivity;
 import vn.edu.voer.adapter.LibraryAdapter;
 import vn.edu.voer.database.dao.MaterialDAO;
 import vn.edu.voer.object.Material;
+import vn.edu.voer.service.ServiceController;
+import vn.edu.voer.service.ServiceController.IDownloadListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +28,15 @@ public class LibraryFragment extends BaseFragment {
 		View view = inflater.inflate(R.layout.fragment_list_view, container, false);
 		initUI(view);
 		initControl();
+		
+		new ServiceController().downloadMaterial(getMainActivity(), "c6628b9e", new IDownloadListener() {
+			
+			@Override
+			public void onDownloadMaterialDone(boolean isDownloaded) {
+				
+			}
+		});
+		
 		return view;
 	}
 	
