@@ -53,12 +53,11 @@ public class DetailContentFragment extends BaseFragment {
 		mMaterial = getMainActivity().currentMaterial;
 		if (mMaterial.getMaterialType() == Material.TYPE_MODULE) {
 			mWebViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");
+			mWebViewContent.reload();
 		} else {
 			mCollectionContents = mMaterial.getCollectionContent();
 			getMainActivity().currentCollectionContent = mCollectionContents;
 			final String id = mCollectionContents.get(getMainActivity().currentModuleIndex).getId();
-			Log.i("SDD", "Current index: " + getMainActivity().currentModuleIndex);
-			Log.i("SDD", "ID: " + id);
 			if (md.isDownloadedMaterial(id)) {
 				fillContentWebview(id);
 			} else {
