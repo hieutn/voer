@@ -26,31 +26,39 @@ public class PersonDAO {
 	public PersonDAO(Context ctx) {
 		mDBHelper = DbConnectionHelper.getInstance(ctx);
 	}
-	
+
+	/**
+	 * Check person saved local database with person id
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public boolean isDownloadedPerson(String id) {
+		if (getPersonById(id) != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	/**
 	 * 
 	 * @param person
 	 * @return
 	 */
 	public boolean insertPerson(Person person) {
-		
-		String[] columns = PersonSchema.columns;
-		Object[] values = {
-				person.getId(),
-				person.getFirstName(),
-				person.getLastName(),
-				person.getUserID(),
-				person.getTitle(),
-				person.getClientID(),
-				person.getFullname(),
-				person.getEmail()
-		};
-
-		long res = mDBHelper.insert(PersonSchema.TABLE_NAME, columns, values);
-		if (res < 0) {
+		try {
+			String[] columns = PersonSchema.columns;
+			Object[] values = { person.getId(), person.getFirstName(), person.getLastName(), person.getUserID(),
+					person.getTitle(), person.getClientID(), person.getFullname(), person.getEmail() };
+			long res = mDBHelper.insert(PersonSchema.TABLE_NAME, columns, values);
+			if (res < 0) {
+				return false;
+			} else {
+				return true;
+			}
+		} catch (NullPointerException e) {
 			return false;
-		} else {
-			return true;
 		}
 	}
 
@@ -73,5 +81,5 @@ public class PersonDAO {
 			return null;
 		}
 	}
-	
+
 }

@@ -4,9 +4,14 @@
 package vn.edu.voer.object;
 
 import java.util.ArrayList;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.util.Log;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 /**
@@ -168,6 +173,8 @@ public class Material {
 				collectionContent = new Gson().fromJson(new JSONObject(text).getString("content"), 
 						new TypeToken<ArrayList<CollectionContent>>() {}.getType());
 			} catch (JSONException e) {
+				collectionContent = null;
+			} catch (JsonSyntaxException e) {
 				collectionContent = null;
 			}
 		}

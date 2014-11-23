@@ -7,6 +7,7 @@ import vn.edu.voer.R;
 import vn.edu.voer.fragment.NavigationDrawerFragment;
 import vn.edu.voer.fragment.NavigationDrawerFragment.NavigationDrawerCallbacks;
 import vn.edu.voer.object.Category;
+import vn.edu.voer.object.CollectionContent;
 import vn.edu.voer.object.Material;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -44,6 +45,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 
 	public Material currentMaterial;
 	public Category currentCategory;
+	public ArrayList<CollectionContent> currentCollectionContent = null;
+	public int test;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -23,14 +23,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class SearchResultAdapter extends BaseAdapter {
-	
+
 	protected static final String TAG = SearchResultAdapter.class.getSimpleName();
-	
+
 	private List<Material> listMaterials;
 	private LayoutInflater mInflater = null;
 	private Context mCtx;
 	private MaterialDAO mMaterialDAO;
-	private ServiceController mSC;
 	private PersonDAO mPersonDAO;
 
 	public SearchResultAdapter(Context context, List<Material> listMaterials) {
@@ -38,7 +37,6 @@ public class SearchResultAdapter extends BaseAdapter {
 		this.listMaterials = listMaterials;
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mMaterialDAO = new MaterialDAO(context);
-		mSC = new ServiceController();
 		mPersonDAO = new PersonDAO(context);
 	}
 
@@ -80,32 +78,36 @@ public class SearchResultAdapter extends BaseAdapter {
 			} else {
 				holder.imgDownload.setImageResource(R.drawable.downloaded);
 			}
-			
-			holder.lblAuthor.setText(material.getAuthor());
-			
-//			// Get author from service
-//			mSC.getAuthors(material.getAuthor(), new IPersonListener() {
-//				
-//				@Override
-//				public void onLoadPersonDone(Person person) {
-//					if (mPersonDAO.insertPerson(person)) {
-//						if (BuildConfig.DEBUG) {
-//							Log.i(TAG, "Insert " + person.getFullname() + " to db local success");
-//						}
-//					}
-//					holder.lblAuthor.setText(person.getFullname());
-//				}
-//			});
-			
-		}
-		
-		holder.imgDownload.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				downloadMaterial(material.getMaterialID());
+
+			if (mPersonDAO.isDownloadedPerson(material.getAuthor())) {
+				holder.lblAuthor.setText(mPersonDAO.getPersonById(material.getAuthor()).getFullname());
+			} else {
+				// Get author from service
+				new ServiceController().getAuthors(material.getAuthor(), new IPersonListener() {
+					@Override
+					public void onLoadPersonDone(Person person) {
+						if (person != null) {
+							if (!mPersonDAO.isDownloadedPerson(String.valueOf(person.getId())) && mPersonDAO.insertPerson(person)) {
+								if (BuildConfig.DEBUG) Log.i(TAG, "Insert " + person.getFullname() + " to db local success");
+							}
+							holder.lblAuthor.setText(person.getFullname());
+						}
+					}
+				});
 			}
-		});
+		}
+
+		if (mMaterialDAO.isDownloadedMaterial(material.getMaterialID())) {
+			holder.imgDownload.setClickable(false);
+		} else {
+			holder.imgDownload.setClickable(true);
+			holder.imgDownload.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					downloadMaterial(material.getMaterialID());
+				}
+			});
+		}
 
 		return convertView;
 	}
@@ -115,16 +117,16 @@ public class SearchResultAdapter extends BaseAdapter {
 		TextView lblAuthor;
 		ImageButton imgDownload;
 	}
-	
+
 	/**
 	 * Download material with material id
+	 * 
 	 * @param id
 	 */
 	private void downloadMaterial(String id) {
 		if (!mMaterialDAO.isDownloadedMaterial(id)) {
 			ServiceController sc = new ServiceController();
 			sc.downloadMaterial(mCtx, id, new IDownloadListener() {
-				
 				@Override
 				public void onDownloadMaterialDone(boolean isDownloaded) {
 					notifyDataSetChanged();

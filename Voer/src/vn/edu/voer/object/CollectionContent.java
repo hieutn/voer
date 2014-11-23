@@ -12,13 +12,13 @@ import java.util.ArrayList;
  */
 public class CollectionContent {
 
-	private String license;
-	private String title;
-	private String url;
-	private int version;
-	private String type;
 	private String id;
 	private ArrayList<String> authors;
+	private String title;
+	private String type;
+	private String license;
+	private String url;
+	private int version;
 	
 	/**
 	 * @return the license
