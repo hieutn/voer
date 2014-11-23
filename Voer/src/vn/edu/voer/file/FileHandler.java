@@ -20,7 +20,6 @@ public class FileHandler {
 	private static final String TAG = FileHandler.class.getSimpleName();
 
 	public static void copyFile(InputStream in, OutputStream out) throws IOException {
-		Log.i(TAG, "Running here");
 		byte[] buffer = new byte[1024];
 		int read;
 		while ((read = in.read(buffer)) != -1) {

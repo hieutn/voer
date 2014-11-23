@@ -320,6 +320,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	public interface IPersonListener {
 		public void onLoadPersonDone(Person person);
 	}
+	
 	//
 	// ====
 	//
