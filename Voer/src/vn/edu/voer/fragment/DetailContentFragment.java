@@ -16,10 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 
 public class DetailContentFragment extends BaseFragment {
 	private WebView mWebViewContent;
 	private View progressBar;
+	private TextView lblAuthor, lblPublishDate;
+
 	private Material mMaterial;
 	private ArrayList<CollectionContent> mCollectionContents;
 	MaterialDAO md = new MaterialDAO(getMainActivity());
@@ -42,6 +45,9 @@ public class DetailContentFragment extends BaseFragment {
 	private void initUI(View view) {
 		mWebViewContent = (WebView) view.findViewById(R.id.webViewContent);
 		progressBar = view.findViewById(R.id.progressBar);
+		lblAuthor = (TextView) view.findViewById(R.id.lblAuthor);
+		lblPublishDate = (TextView) view.findViewById(R.id.lblPublishDate);
+
 		mWebViewContent.setWebViewClient(new WebViewClient() {
 			@Override
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -71,9 +77,7 @@ public class DetailContentFragment extends BaseFragment {
 		mMaterial = getMainActivity().currentMaterial;
 		if (mMaterial.getMaterialType() == Material.TYPE_MODULE) {
 			getMainActivity().setButtonTableContent(false);
-			getMainActivity().setHeaderTitle(mMaterial.getTitle());
-			mWebViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");
-			mWebViewContent.reload();
+			fillContentWebview();
 		} else {
 			getMainActivity().setButtonTableContent(true);
 			mCollectionContents = mMaterial.getCollectionContent();
@@ -97,7 +101,15 @@ public class DetailContentFragment extends BaseFragment {
 
 	private void fillContentWebview(String materialId) {
 		mMaterial = md.getMaterialById(materialId);
+		fillContentWebview();
+	}
+
+	private void fillContentWebview() {
 		getMainActivity().setHeaderTitle(mMaterial.getTitle());
+
+		lblAuthor.setText(getActivity().getString(R.string.by) + ": " + mMaterial.getAuthor());
+		lblPublishDate.setText(getActivity().getString(R.string.publishOn) + " " + mMaterial.getDerivedFrom());
+
 		mWebViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");
 		mWebViewContent.reload();
 	}

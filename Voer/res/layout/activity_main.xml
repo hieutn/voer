@@ -4,7 +4,7 @@
     style="@style/Layout.FillWidthHeight.Vertical"
     tools:context=".activity.MainActivity" >
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_header"
         android:background="@color/pink" >
@@ -19,12 +19,12 @@
         <TextView
             android:id="@+id/lblHeader"
             style="@style/Text.Shadow"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/default_padding"
+            android:layout_marginRight="@dimen/default_padding"
             android:text="@string/app_name"
             android:textSize="18sp" />
-    </RelativeLayout>
+    </LinearLayout>
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
@@ -80,8 +80,8 @@
                     android:drawableTop="@drawable/tab_library_orange"
                     android:text="@string/library"
                     android:textColor="@color/orange" />
-                
-                <View style="@style/Layout.Weight.WidthFillHeight"/>
+
+                <View style="@style/Layout.Weight.WidthFillHeight" />
 
                 <TextView
                     android:id="@+id/lblTabCategory"

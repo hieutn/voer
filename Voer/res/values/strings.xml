@@ -18,6 +18,8 @@
 
     <!-- Detail Content Fragment -->
     <string name="tableOfContent">Table of content</string>
+    <string name="by">By</string>
+    <string name="publishOn">Publish on</string>
 
     <!-- Search Fragment -->
     <string name="keyword">Keyword</string>
