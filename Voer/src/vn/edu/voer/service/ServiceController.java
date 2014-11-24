@@ -342,6 +342,10 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		public void onLoadPersonDone(Person person);
 	}
 	
+	public interface ISearchListener {
+		public void onSearchDone();
+	}
+	
 	//
 	// ====
 	//

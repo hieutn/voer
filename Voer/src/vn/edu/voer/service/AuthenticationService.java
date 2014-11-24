@@ -79,9 +79,9 @@ public class AuthenticationService extends AsyncTask<String, Void, String> {
 	 */
 	@Override
 	protected void onPostExecute(String result) {
+		if (BuildConfig.DEBUG) Log.i(TAG, result);
 		try {
 			Authentication auth = new Gson().fromJson(result, Authentication.class);
-			if (BuildConfig.DEBUG) Log.i(TAG, "Token: " + auth.getToken());
 			new MySharedPreferences(mCtx).putStringValue(Authentication.TOKEN, auth.getToken());
 		} catch (JsonSyntaxException e) {
 			Log.i("SDD", e.toString());
