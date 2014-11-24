@@ -70,6 +70,12 @@ public class SearchResultAdapter extends BaseAdapter {
 			} else {
 				holder.imgDownload.setImageResource(R.drawable.downloaded);
 			}
+
+			if (material.getMaterialType() == Material.TYPE_MODULE) {
+				holder.lblTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_puzzle, 0, 0, 0);
+			} else {
+				holder.lblTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_book, 0, 0, 0);
+			}
 		}
 
 		if (mMaterialDAO.isDownloadedMaterial(material.getMaterialID())) {

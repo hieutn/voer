@@ -8,9 +8,12 @@ import vn.edu.voer.service.AuthUtil;
 import vn.edu.voer.utility.FileHelper;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.TextView;
 
 public class SplashActivity extends Activity {
 	private static final String TAG = SplashActivity.class.getSimpleName();
@@ -21,7 +24,7 @@ public class SplashActivity extends Activity {
 		setContentView(R.layout.activity_splash);
 
 		AuthUtil.authExecute(this);
-		
+
 		// Copy database from assets to device storage
 		try {
 			FileHelper.copyAssetFileToInternalStorage(this, getString(R.string.db_name));
@@ -39,5 +42,18 @@ public class SplashActivity extends Activity {
 				finish();
 			}
 		}, 2000);
+
+		initData();
+	}
+
+	private void initData() {
+		TextView lblVersion = (TextView) findViewById(R.id.lblVersion);
+		PackageInfo pInfo;
+		try {
+			pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+			lblVersion.setText("Version: " + pInfo.versionName);
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 }

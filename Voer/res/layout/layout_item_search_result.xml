@@ -1,34 +1,26 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutRestaurant"
-    style="@style/Layout.FillWidth.Vertical"
+    style="@style/Layout.FillWidth"
+    android:gravity="center_vertical"
     android:padding="@dimen/default_padding" >
 
     <TextView
         android:id="@+id/lblTitle"
-        style="@style/Text.Title.Bold"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="@dimen/default_padding"
-        android:layout_marginRight="@dimen/default_padding"
-        android:layout_toLeftOf="@+id/search_item_btn_download"
-        android:layout_toStartOf="@+id/search_item_btn_download"
+        style="@style/Layout.Weight.Width"
+        android:drawableLeft="@drawable/ic_book"
+        android:drawablePadding="@dimen/default_padding"
         android:text="@string/app_name"
-        android:textColor="@color/orange"
         android:textSize="16sp" />
 
     <ImageButton
         android:id="@+id/search_item_btn_download"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
         android:adjustViewBounds="true"
         android:background="@android:color/transparent"
         android:contentDescription="@string/app_name"
         android:scaleType="fitCenter"
         android:src="@drawable/download" />
 
-</RelativeLayout>
+</LinearLayout>
