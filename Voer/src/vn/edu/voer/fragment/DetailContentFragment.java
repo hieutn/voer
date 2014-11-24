@@ -1,6 +1,7 @@
 package vn.edu.voer.fragment;
 
 import java.util.ArrayList;
+import java.util.regex.PatternSyntaxException;
 
 import vn.edu.voer.R;
 import vn.edu.voer.database.dao.MaterialDAO;
@@ -14,6 +15,7 @@ import vn.edu.voer.service.ServiceController.IPersonListener;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,8 +110,17 @@ public class DetailContentFragment extends BaseFragment {
 
 	private void fillContentWebview() {
 		getMainActivity().setHeaderTitle(mMaterial.getTitle());
+		Log.d("SDD", mMaterial.getModified());
+		String date;
+		try {
+			date = mMaterial.getModified().split("T")[0];
+		} catch (NullPointerException e) {
+			date = "";
+		} catch (PatternSyntaxException e) {
+			date = "";
+		}
 		
-		lblPublishDate.setText(getActivity().getString(R.string.publishOn) + " " + mMaterial.getModified());
+		lblPublishDate.setText(getActivity().getString(R.string.publishOn) + ": " + date);
 		if (pd.isDownloadedPerson(mMaterial.getAuthor())) {
 			Person per = pd.getPersonById(mMaterial.getAuthor());
 			lblAuthor.setText(getActivity().getString(R.string.by) + ": " + per.getFullname());

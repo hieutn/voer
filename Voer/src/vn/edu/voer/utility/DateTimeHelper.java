@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.text.format.DateFormat;
 
 /**
  * @author sidd
@@ -20,5 +22,5 @@ public class DateTimeHelper {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return format.format(new Date());
 	}
-
+	
 }
