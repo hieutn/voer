@@ -82,8 +82,8 @@ public class DetailContentFragment extends BaseFragment {
 			if (md.isDownloadedMaterial(id)) {
 				fillContentWebview(id);
 			} else {
-				ServiceController sc = new ServiceController();
-				sc.downloadSubMaterial(getMainActivity(), id, new IDownloadListener() {
+				ServiceController sc = new ServiceController(getMainActivity());
+				sc.downloadSubMaterial(id, new IDownloadListener() {
 					@Override
 					public void onDownloadMaterialDone(boolean isDownloaded) {
 						if (isDownloaded) {

@@ -10,7 +10,7 @@ package vn.edu.voer.utility;
  */
 public class Constant {
 
-	public static final String URL = "http://dev.voer.vn:2013/0/";
+	public static final String URL = "http://voer.edu.vn:2013/0/";//"http://dev.voer.vn:2013/0/";
 	public static final String URL_AUTHEN = "http://voer.edu.vn:2013/0/auth/mobile01/";
 	public static final String URL_CATEGORY = URL + "categories";
 	public static final String URL_MATERIAL = URL + "materials";

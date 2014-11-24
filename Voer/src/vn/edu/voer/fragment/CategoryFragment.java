@@ -61,7 +61,7 @@ public class CategoryFragment extends BaseFragment {
 
 	private void fillData() {
 		mPrbLoading.setVisibility(View.VISIBLE);
-		ServiceController sc = new ServiceController();
+		ServiceController sc = new ServiceController(getMainActivity());
 		sc.getCategories(new ICategoryListener() {
 
 			@Override

@@ -78,7 +78,7 @@ public class SearchResultFragment extends BaseFragment {
 
 	private void fillData() {
 		mPrbLoading.setVisibility(View.VISIBLE);
-		ServiceController sc = new ServiceController();
+		ServiceController sc = new ServiceController(getMainActivity());
 		sc.getMaterials(Constant.URL_MATERIAL, getMainActivity().currentCategory.getId(), new IMaterialListener() {
 			
 			@Override
@@ -95,7 +95,7 @@ public class SearchResultFragment extends BaseFragment {
 	
 	private void loadMore() {
 		mPrbLoading.setVisibility(View.VISIBLE);
-		ServiceController sc = new ServiceController();
+		ServiceController sc = new ServiceController(getMainActivity());
 		sc.getMaterials(mMaterialList.getNextLink(), new IMaterialListener() {
 			
 			@Override

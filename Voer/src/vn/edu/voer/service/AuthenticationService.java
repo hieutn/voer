@@ -18,9 +18,15 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import vn.edu.voer.BuildConfig;
+import vn.edu.voer.object.Authentication;
 import vn.edu.voer.utility.EncryptHelper;
+import vn.edu.voer.utility.MySharedPreferences;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 /**
  * @author sidd
@@ -33,6 +39,12 @@ public class AuthenticationService extends AsyncTask<String, Void, String> {
 	private static final String SUGAR_VALUE = "hello_im_sugar";
 	private static final String SECRET = "UYEKQIBGbs9jTabD2bYg";
 	private static final String COMB = "comb";
+	private static final String TAG = AuthenticationService.class.getSimpleName();
+	private Context mCtx;
+	
+	public AuthenticationService(Context ctx) {
+		this.mCtx = ctx;
+	}
 
 	@Override
 	protected String doInBackground(String... params) {
@@ -67,7 +79,13 @@ public class AuthenticationService extends AsyncTask<String, Void, String> {
 	 */
 	@Override
 	protected void onPostExecute(String result) {
-		Log.i("SDD", "Result: " + result);
+		try {
+			Authentication auth = new Gson().fromJson(result, Authentication.class);
+			if (BuildConfig.DEBUG) Log.i(TAG, "Token: " + auth.getToken());
+			new MySharedPreferences(mCtx).putStringValue(Authentication.TOKEN, auth.getToken());
+		} catch (JsonSyntaxException e) {
+			Log.i("SDD", e.toString());
+		}
 	}
 
 }

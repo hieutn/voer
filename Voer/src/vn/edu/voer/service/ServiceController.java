@@ -40,7 +40,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	private static final int REQUEST_SEARCH = 2;
 	private static final int REQUEST_DOWNLOAD = 3;
 	private static final int REQUEST_AUTHOR = 4;
-
+	
 	private ICategoryListener mCategoryListener;
 	private IMaterialListener mMaterialListener;
 	private IDownloadListener mDownloadListener;
@@ -51,6 +51,10 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	
 	private boolean mSubMaterial = false;
 
+	public ServiceController(Context ctx) {
+		this.mCtx = ctx;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -69,12 +73,17 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 */
 	@Override
 	protected String doInBackground(String... params) {
+		StringBuilder urlBuilder = new StringBuilder();
+		urlBuilder.append(params[0]);
+		urlBuilder.append(params[0].indexOf("?") >= 0 ? "&" : "?");
+		urlBuilder.append(AuthUtil.getAuthToken(mCtx));
+		
 		if (BuildConfig.DEBUG) {
-			Log.i(TAG, params[0]);
+			Log.i(TAG, urlBuilder.toString());
 		}
+		
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet httpGet = new HttpGet(params[0]);
-
+		HttpGet httpGet = new HttpGet(urlBuilder.toString());
 		try {
 			HttpResponse response = httpClient.execute(httpGet);
 			return EntityUtils.toString(response.getEntity());
@@ -178,17 +187,16 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 * @param materialId
 	 * @param listener
 	 */
-	public void downloadMaterial(Context ctx, String materialId, IDownloadListener listener) {
-		mCtx = ctx;
+	public void downloadMaterial(String materialId, IDownloadListener listener) {
 		mDownloadListener = listener;
 		mRequest = REQUEST_DOWNLOAD;
 		String materialsUrl = Constant.URL_MATERIAL + "/" + materialId;
 		execute(materialsUrl);
 	}
 	
-	public void downloadSubMaterial(Context ctx, String materialId, IDownloadListener listener) {
+	public void downloadSubMaterial(String materialId, IDownloadListener listener) {
 		mSubMaterial = true;
-		downloadMaterial(ctx, materialId, listener);
+		downloadMaterial(materialId, listener);
 	}
 
 	/**
@@ -225,6 +233,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 			if (BuildConfig.DEBUG)
 				Log.e(TAG, e.toString());
 		} catch (NullPointerException e) {
+			cats = null;
 			if (BuildConfig.DEBUG)
 				Log.e(TAG, e.toString());
 		}
