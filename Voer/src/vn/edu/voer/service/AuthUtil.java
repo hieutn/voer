@@ -35,6 +35,11 @@ public class AuthUtil {
 		}
 	}
 
+	public static void refreshAuth(Context ctx) {
+		new MySharedPreferences(ctx).putStringValue(AuthUtil.TOKEN, "");
+		authExecute(ctx);
+	}
+
 	/**
 	 * 
 	 * @param ctx

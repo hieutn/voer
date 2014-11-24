@@ -7,6 +7,7 @@ import vn.edu.voer.activity.MainActivity;
 import vn.edu.voer.adapter.SearchResultAdapter;
 import vn.edu.voer.object.Material;
 import vn.edu.voer.object.MaterialList;
+import vn.edu.voer.service.AuthUtil;
 import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.IMaterialListener;
 import vn.edu.voer.utility.Constant;
@@ -96,6 +97,7 @@ public class SearchResultFragment extends BaseFragment {
 					mListMaterials.addAll(mMaterialList.getMaterials());
 					mAdapter.notifyDataSetChanged();
 				} catch (NullPointerException e) {
+					AuthUtil.refreshAuth(getMainActivity());
 				}
 				mPrbLoading.setVisibility(View.GONE);
 			}
@@ -116,6 +118,7 @@ public class SearchResultFragment extends BaseFragment {
 					mListMaterials.addAll(mMaterialList.getMaterials());
 					mAdapter.notifyDataSetChanged();
 				} catch (NullPointerException e) {
+					AuthUtil.refreshAuth(getMainActivity());
 				}
 				mPrbLoading.setVisibility(View.GONE);
 			}
@@ -137,12 +140,14 @@ public class SearchResultFragment extends BaseFragment {
 						mAdapter.notifyDataSetChanged();
 					} catch (NullPointerException e) {
 						mPrbLoading.setVisibility(View.GONE);
+						AuthUtil.refreshAuth(getMainActivity());
 					}
 					mPrbLoading.setVisibility(View.GONE);
 				}
 			});
 		} catch (NullPointerException e) {
 			mPrbLoading.setVisibility(View.GONE);
+			AuthUtil.refreshAuth(getMainActivity());
 		}
 	}
 }

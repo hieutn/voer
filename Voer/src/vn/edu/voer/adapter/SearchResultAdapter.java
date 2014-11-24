@@ -56,7 +56,6 @@ public class SearchResultAdapter extends BaseAdapter {
 			convertView = mInflater.inflate(R.layout.layout_item_search_result, null);
 			holder = new ViewHolder();
 			holder.lblTitle = (TextView) convertView.findViewById(R.id.lblTitle);
-			//holder.lblAuthor = (TextView) convertView.findViewById(R.id.lblAuthor);
 			holder.imgDownload = (ImageButton) convertView.findViewById(R.id.search_item_btn_download);
 			convertView.setTag(holder);
 		} else {
@@ -66,7 +65,6 @@ public class SearchResultAdapter extends BaseAdapter {
 		final Material material = listMaterials.get(position);
 		if (material != null) {
 			holder.lblTitle.setText(material.getTitle());
-			//holder.lblAuthor.setText("Authors");
 			if (!mMaterialDAO.isDownloadedMaterial(material.getMaterialID())) {
 				holder.imgDownload.setImageResource(R.drawable.download);
 			} else {
@@ -91,7 +89,6 @@ public class SearchResultAdapter extends BaseAdapter {
 
 	static class ViewHolder {
 		TextView lblTitle;
-		//TextView lblAuthor;
 		ImageButton imgDownload;
 	}
 

@@ -7,6 +7,7 @@ import vn.edu.voer.R;
 import vn.edu.voer.activity.MainActivity;
 import vn.edu.voer.adapter.CategoryAdapter;
 import vn.edu.voer.object.Category;
+import vn.edu.voer.service.AuthUtil;
 import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.ICategoryListener;
 import android.os.Bundle;
@@ -67,9 +68,13 @@ public class CategoryFragment extends BaseFragment {
 
 			@Override
 			public void onLoadCategoryDone(ArrayList<Category> categories) {
-				listCategories.clear();
-				listCategories.addAll(categories);
-				adapter.notifyDataSetChanged();
+				try {
+					listCategories.clear();
+					listCategories.addAll(categories);
+					adapter.notifyDataSetChanged();
+				} catch (NullPointerException e) {
+					AuthUtil.refreshAuth(getMainActivity());
+				}
 				mPrbLoading.setVisibility(View.GONE);
 			}
 		});
