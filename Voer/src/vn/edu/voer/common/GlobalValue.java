@@ -1,6 +1,6 @@
 package vn.edu.voer.common;
 
-import vn.edu.voer.util.MySharedPreferences;
+import vn.edu.voer.utility.MySharedPreferences;
 import android.app.Activity;
 
 public class GlobalValue {

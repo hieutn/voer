@@ -31,6 +31,14 @@ public class DetailContentFragment extends BaseFragment {
 		return view;
 	}
 
+	@Override
+	public void onHiddenChanged(boolean hidden) {
+		super.onHiddenChanged(hidden);
+		if (hidden) {
+			clearData();
+		}
+	}
+
 	private void initUI(View view) {
 		mWebViewContent = (WebView) view.findViewById(R.id.webViewContent);
 		progressBar = view.findViewById(R.id.progressBar);
@@ -59,7 +67,7 @@ public class DetailContentFragment extends BaseFragment {
 	}
 
 	public void setData() {
-//		clearData();
+		// clearData();
 		mMaterial = getMainActivity().currentMaterial;
 		if (mMaterial.getMaterialType() == Material.TYPE_MODULE) {
 			getMainActivity().setButtonTableContent(false);

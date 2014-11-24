@@ -1,4 +1,4 @@
-package vn.edu.voer.util;
+package vn.edu.voer.utility;
 
 import android.content.Context;
 import android.content.SharedPreferences;

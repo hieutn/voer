@@ -1,4 +1,4 @@
-package vn.edu.voer.util;
+package vn.edu.voer.utility;
 
 import android.util.Log;
 

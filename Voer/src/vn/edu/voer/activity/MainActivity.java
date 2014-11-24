@@ -174,7 +174,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 			lblTabLibrary.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.tab_library_orange, 0, 0);
 			lblTabCategory.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.tab_category_gray, 0, 0);
 			lblTabSearch.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.tab_search_gray, 0, 0);
-			lblHeader.setText(R.string.library);
+			lblHeader.setText(R.string.yourLibrary);
 			break;
 
 		case TAB_CATEGORY:

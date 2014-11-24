@@ -5,10 +5,16 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
-    <style name="Tabbar" parent="@style/Layout.Weight.WidthFillHeight">
+    <style name="Tabbar" parent="@style/Layout.WrapWidthHeight">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:background">@drawable/bg_white</item>
+        <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
-        <item name="android:paddingTop">5dp</item>
+        <item name="android:drawablePadding">3dp</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
     </style>
 
-</resources>
+</resources> 
