@@ -77,9 +77,7 @@ public class DetailContentFragment extends BaseFragment {
 		mMaterial = getMainActivity().currentMaterial;
 		if (mMaterial.getMaterialType() == Material.TYPE_MODULE) {
 			getMainActivity().setButtonTableContent(false);
-			getMainActivity().setHeaderTitle(mMaterial.getTitle());
-			mWebViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");
-			mWebViewContent.reload();
+			fillContentWebview();
 		} else {
 			getMainActivity().setButtonTableContent(true);
 			mCollectionContents = mMaterial.getCollectionContent();
@@ -103,6 +101,10 @@ public class DetailContentFragment extends BaseFragment {
 
 	private void fillContentWebview(String materialId) {
 		mMaterial = md.getMaterialById(materialId);
+		fillContentWebview();
+	}
+
+	private void fillContentWebview() {
 		getMainActivity().setHeaderTitle(mMaterial.getTitle());
 
 		lblAuthor.setText(getActivity().getString(R.string.by) + ": " + mMaterial.getAuthor());
