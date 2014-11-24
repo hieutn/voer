@@ -83,7 +83,7 @@ public class SearchResultAdapter extends BaseAdapter {
 				holder.lblAuthor.setText(mPersonDAO.getPersonById(material.getAuthor()).getFullname());
 			} else {
 				// Get author from service
-				new ServiceController().getAuthors(material.getAuthor(), new IPersonListener() {
+				new ServiceController(mCtx).getAuthors(material.getAuthor(), new IPersonListener() {
 					@Override
 					public void onLoadPersonDone(Person person) {
 						if (person != null) {
@@ -125,8 +125,8 @@ public class SearchResultAdapter extends BaseAdapter {
 	 */
 	private void downloadMaterial(String id) {
 		if (!mMaterialDAO.isDownloadedMaterial(id)) {
-			ServiceController sc = new ServiceController();
-			sc.downloadMaterial(mCtx, id, new IDownloadListener() {
+			ServiceController sc = new ServiceController(mCtx);
+			sc.downloadMaterial(id, new IDownloadListener() {
 				@Override
 				public void onDownloadMaterialDone(boolean isDownloaded) {
 					notifyDataSetChanged();

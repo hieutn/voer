@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import vn.edu.voer.R;
 import vn.edu.voer.common.GlobalValue;
+import vn.edu.voer.service.AuthUtil;
 import vn.edu.voer.utility.FileHelper;
 import android.app.Activity;
 import android.content.Intent;
@@ -19,6 +20,8 @@ public class SplashActivity extends Activity {
 		super.onCreate(arg0);
 		setContentView(R.layout.activity_splash);
 
+		AuthUtil.authExecute(this);
+		
 		// Copy database from assets to device storage
 		try {
 			FileHelper.copyAssetFileToInternalStorage(this, getString(R.string.db_name));
