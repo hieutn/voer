@@ -80,6 +80,8 @@
                     android:drawableTop="@drawable/tab_library_orange"
                     android:text="@string/library"
                     android:textColor="@color/orange" />
+                
+                <View style="@style/Layout.Weight.WidthFillHeight"/>
 
                 <TextView
                     android:id="@+id/lblTabCategory"

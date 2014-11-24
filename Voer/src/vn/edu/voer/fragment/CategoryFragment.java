@@ -54,6 +54,7 @@ public class CategoryFragment extends BaseFragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				getMainActivity().currentCategory = listCategories.get(position);
 				goToFragment(MainActivity.SEARCH_RESULT);
+				getMainActivity().setHeaderTitle(getMainActivity().currentCategory.getName());
 			}
 		});
 	}
@@ -62,7 +63,7 @@ public class CategoryFragment extends BaseFragment {
 		mPrbLoading.setVisibility(View.VISIBLE);
 		ServiceController sc = new ServiceController();
 		sc.getCategories(new ICategoryListener() {
-			
+
 			@Override
 			public void onLoadCategoryDone(ArrayList<Category> categories) {
 				listCategories.clear();

@@ -28,6 +28,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/btnSearchLong"
         style="@style/Text.Shadow"
         android:layout_height="40dp"
         android:layout_marginLeft="@dimen/default_padding"
