@@ -313,11 +313,6 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	public interface IDownloadListener {
 		public void onDownloadMaterialDone(boolean isDownloaded);
 	}
-
-	public interface ISearchListener {
-		public void onSearchDone();
-	}
-	
 	//
 	// ====
 	//
