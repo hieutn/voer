@@ -272,7 +272,6 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 			String text;
 			try {
 				text = obj.getString("text");
-				Log.i(TAG, "Text: " + text);
 			} catch (JSONException e){
 				text = "";
 			}
