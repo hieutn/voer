@@ -3,13 +3,11 @@ package vn.edu.voer.fragment;
 import java.util.ArrayList;
 
 import vn.edu.voer.R;
-import vn.edu.voer.activity.MainActivity;
 import vn.edu.voer.adapter.MenuAdapter;
 import vn.edu.voer.object.CollectionContent;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

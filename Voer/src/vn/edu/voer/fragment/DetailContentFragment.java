@@ -11,7 +11,6 @@ import vn.edu.voer.service.ServiceController.IDownloadListener;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
