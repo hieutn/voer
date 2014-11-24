@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 public class SearchFragment extends BaseFragment {
-	private Button btnSearch;
+	private Button btnSearch, btnSearchLong;
 	private EditText txtKeyword;
 
 	@Override
@@ -27,6 +27,7 @@ public class SearchFragment extends BaseFragment {
 
 	private void initUI(View view) {
 		btnSearch = (Button) view.findViewById(R.id.btnSearch);
+		btnSearchLong = (Button) view.findViewById(R.id.btnSearchLong);
 		txtKeyword = (EditText) view.findViewById(R.id.txtKeyword);
 	}
 
@@ -37,6 +38,13 @@ public class SearchFragment extends BaseFragment {
 				search();
 			}
 		});
+		btnSearchLong.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showToast("Search feature is coming soon.");
+			}
+		});
+
 		txtKeyword.setOnEditorActionListener(new OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -50,8 +58,8 @@ public class SearchFragment extends BaseFragment {
 
 	private void search() {
 		hideKeyBoard();
-//		String keyword = txtKeyword.getText().toString();
-//		goToFragment(MainActivity.SEARCH_RESULT);
-//		Log.e("", "search: "+ keyword);
+		// String keyword = txtKeyword.getText().toString();
+		// goToFragment(MainActivity.SEARCH_RESULT);
+		// Log.e("", "search: "+ keyword);
 	}
 }

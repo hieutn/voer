@@ -251,6 +251,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 			backFragment(TAB_LIBRARY);
 			break;
 
+		case SEARCH_RESULT:
+			backFragment(TAB_CATEGORY);
+			break;
+
 		default:
 			quitApp();
 			break;
