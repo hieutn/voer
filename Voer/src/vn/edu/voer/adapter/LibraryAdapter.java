@@ -66,7 +66,7 @@ public class LibraryAdapter extends ArrayAdapter<Material> {
 			convertView = LayoutInflater.from(mCtx).inflate(mLayoutId, parent, false);
 			holder = new ViewHolder();
 			holder.title = (TextView) convertView.findViewById(R.id.frm_library_item_title);
-			holder.lblAuthorAndYear = (TextView) convertView.findViewById(R.id.lblAuthorAndYear);
+//			holder.lblAuthorAndYear = (TextView) convertView.findViewById(R.id.lblAuthorAndYear);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -74,11 +74,11 @@ public class LibraryAdapter extends ArrayAdapter<Material> {
 
 		Material material = mMaterials.get(position);
 		holder.title.setText(material.getTitle());
-		if (StringUtil.isEmpty(material.getDerivedFrom())) {
-			holder.lblAuthorAndYear.setText("Author " + material.getAuthor());
-		} else {
-			holder.lblAuthorAndYear.setText(material.getDerivedFrom() + " - by " + material.getAuthor());
-		}
+//		if (StringUtil.isEmpty(material.getDerivedFrom())) {
+//			holder.lblAuthorAndYear.setText("Author " + material.getAuthor());
+//		} else {
+//			holder.lblAuthorAndYear.setText(material.getDerivedFrom() + " - by " + material.getAuthor());
+//		}
 
 		if (material.getMaterialType() == Material.TYPE_MODULE) {
 			holder.title.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_puzzle, 0, 0, 0);
@@ -94,6 +94,6 @@ public class LibraryAdapter extends ArrayAdapter<Material> {
 	 */
 	private static class ViewHolder {
 		TextView title;
-		TextView lblAuthorAndYear;
+//		TextView lblAuthorAndYear;
 	}
 }

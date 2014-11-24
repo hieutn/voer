@@ -17,9 +17,11 @@ import org.json.JSONObject;
 
 import vn.edu.voer.BuildConfig;
 import vn.edu.voer.database.dao.MaterialDAO;
+import vn.edu.voer.database.dao.PersonDAO;
 import vn.edu.voer.object.Category;
 import vn.edu.voer.object.Material;
 import vn.edu.voer.object.MaterialList;
+import vn.edu.voer.object.Person;
 import vn.edu.voer.utility.Constant;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -36,15 +38,18 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	private static final int REQUEST_CATEGORIES = 0;
 	private static final int REQUEST_MATERIALS = 1;
 	private static final int REQUEST_DOWNLOAD = 2;
+	private static final int REQUEST_PERSON = 3;
 	
-	private ICategoryListener mCategoryListener;
-	private IMaterialListener mMaterialListener;
-	private IDownloadListener mDownloadListener;
-
+	private ICategoryListener 	mCategoryListener;
+	private IMaterialListener 	mMaterialListener;
+	private IDownloadListener 	mDownloadListener;
+	private IPersonListener 	mPersonListener;
+	
 	private int mRequest;
 	private Context mCtx;
 	
 	private boolean mSubMaterial = false;
+	
 
 	public ServiceController(Context ctx) {
 		this.mCtx = ctx;
@@ -84,6 +89,10 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 
 		case REQUEST_DOWNLOAD:
 			responseDownloadMaterial(result);
+			break;
+			
+		case REQUEST_PERSON:
+			responseDownloadPerson(result);
 			break;
 			
 		default:
@@ -182,6 +191,16 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		mSubMaterial = true;
 		downloadMaterial(materialId, listener);
 	}
+	
+	public void downloadPersonDetail(String id, IPersonListener listener) {
+		mPersonListener = listener;
+		mRequest = REQUEST_PERSON;
+		StringBuilder url = new StringBuilder();
+		url.append(Constant.URL_AUTHOR);
+		url.append("/");
+		url.append(id);
+		execute(url.toString());
+	}
 
 	/**
 	 * Parse Categories json content to list Category
@@ -262,6 +281,33 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	}
 	
 	/**
+	 * 
+	 * @param result
+	 */
+	private void responseDownloadPerson(String result) {
+		Person person = null;
+		try {
+			JSONObject obj = new JSONObject(result);
+			person = new Person(
+					obj.getInt("id"), 
+					obj.getString("first_name"),
+					obj.getString("last_name"),
+					obj.getString("user_id"), 
+					obj.getString("title"), 
+					obj.getInt("client_id"),
+					obj.getString("fullname"), 
+					obj.getString("email"));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		PersonDAO pd = new PersonDAO(mCtx);
+		pd.insertPerson(person);
+		
+		mPersonListener.onLoadPersonDone(person);
+	}
+	
+	/**
 	 * Parse material object from json content
 	 * @param jsonContent
 	 * @return
@@ -313,11 +359,10 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	public interface IDownloadListener {
 		public void onDownloadMaterialDone(boolean isDownloaded);
 	}
-
-	public interface ISearchListener {
-		public void onSearchDone();
-	}
 	
+	public interface IPersonListener {
+		public void onLoadPersonDone(Person person);
+	}
 	//
 	// ====
 	//

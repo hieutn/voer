@@ -1,16 +1,21 @@
 package vn.edu.voer.fragment;
 
 import java.util.ArrayList;
+import java.util.regex.PatternSyntaxException;
 
 import vn.edu.voer.R;
 import vn.edu.voer.database.dao.MaterialDAO;
+import vn.edu.voer.database.dao.PersonDAO;
 import vn.edu.voer.object.CollectionContent;
 import vn.edu.voer.object.Material;
+import vn.edu.voer.object.Person;
 import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.IDownloadListener;
+import vn.edu.voer.service.ServiceController.IPersonListener;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +31,7 @@ public class DetailContentFragment extends BaseFragment {
 	private Material mMaterial;
 	private ArrayList<CollectionContent> mCollectionContents;
 	MaterialDAO md = new MaterialDAO(getMainActivity());
+	PersonDAO pd = new PersonDAO(getMainActivity());
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -104,9 +110,34 @@ public class DetailContentFragment extends BaseFragment {
 
 	private void fillContentWebview() {
 		getMainActivity().setHeaderTitle(mMaterial.getTitle());
-
-		lblAuthor.setText(getActivity().getString(R.string.by) + ": " + mMaterial.getAuthor());
-		lblPublishDate.setText(getActivity().getString(R.string.publishOn) + " " + mMaterial.getDerivedFrom());
+		Log.d("SDD", mMaterial.getModified());
+		String date;
+		try {
+			date = mMaterial.getModified().split("T")[0];
+		} catch (NullPointerException e) {
+			date = "";
+		} catch (PatternSyntaxException e) {
+			date = "";
+		}
+		
+		lblPublishDate.setText(getActivity().getString(R.string.publishOn) + ": " + date);
+		if (pd.isDownloadedPerson(mMaterial.getAuthor())) {
+			Person per = pd.getPersonById(mMaterial.getAuthor());
+			lblAuthor.setText(getActivity().getString(R.string.by) + ": " + per.getFullname());
+		} else {
+			ServiceController sc = new ServiceController(getMainActivity());
+			sc.downloadPersonDetail(mMaterial.getAuthor(), new IPersonListener() {
+				@Override
+				public void onLoadPersonDone(Person person) {
+					try {
+						lblAuthor.setText(getActivity().getString(R.string.by) + ": " + person.getFullname());
+					} catch (NullPointerException e) {
+						lblAuthor.setText("");
+					}
+				}
+			});
+		}
+		
 
 		mWebViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");
 		mWebViewContent.reload();
