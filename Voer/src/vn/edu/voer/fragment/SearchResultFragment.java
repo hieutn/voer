@@ -44,7 +44,7 @@ public class SearchResultFragment extends BaseFragment {
 			} else {
 				searchMaterial();
 			}
-			
+
 		}
 	}
 
@@ -62,14 +62,14 @@ public class SearchResultFragment extends BaseFragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			}
 		});
-		
+
 		mListView.setOnScrollListener(new OnScrollListener() {
-			
+
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				
+
 			}
-			
+
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 				if (firstVisibleItem + visibleItemCount >= totalItemCount) {
@@ -86,7 +86,7 @@ public class SearchResultFragment extends BaseFragment {
 		mPrbLoading.setVisibility(View.VISIBLE);
 		ServiceController sc = new ServiceController(getMainActivity());
 		sc.getMaterials(Constant.URL_MATERIAL, getMainActivity().currentCategory.getId(), new IMaterialListener() {
-			
+
 			@Override
 			public void onLoadMaterialsDone(MaterialList materialList) {
 				isLoading = false;
@@ -98,12 +98,12 @@ public class SearchResultFragment extends BaseFragment {
 			}
 		});
 	}
-	
+
 	private void searchMaterial() {
 		mPrbLoading.setVisibility(View.VISIBLE);
 		ServiceController sc = new ServiceController(getMainActivity());
 		sc.searchMaterials(getMainActivity().currentSearchKeyword, new IMaterialListener() {
-			
+
 			@Override
 			public void onLoadMaterialsDone(MaterialList materialList) {
 				isLoading = false;
@@ -115,22 +115,28 @@ public class SearchResultFragment extends BaseFragment {
 			}
 		});
 	}
-	
-	
-	
+
 	private void loadMore() {
-		mPrbLoading.setVisibility(View.VISIBLE);
-		ServiceController sc = new ServiceController(getMainActivity());
-		sc.getMaterials(mMaterialList.getNextLink(), new IMaterialListener() {
-			
-			@Override
-			public void onLoadMaterialsDone(MaterialList materialList) {
-				isLoading = false;
-				mMaterialList = materialList;
-				mListMaterials.addAll(mMaterialList.getMaterials());
-				mAdapter.notifyDataSetChanged();
-				mPrbLoading.setVisibility(View.GONE);
-			}
-		});
+		try {
+			mPrbLoading.setVisibility(View.VISIBLE);
+			ServiceController sc = new ServiceController(getMainActivity());
+			sc.getMaterials(mMaterialList.getNextLink(), new IMaterialListener() {
+
+				@Override
+				public void onLoadMaterialsDone(MaterialList materialList) {
+					try {
+						isLoading = false;
+						mMaterialList = materialList;
+						mListMaterials.addAll(mMaterialList.getMaterials());
+						mAdapter.notifyDataSetChanged();
+					} catch (NullPointerException e) {
+						mPrbLoading.setVisibility(View.GONE);
+					}
+					mPrbLoading.setVisibility(View.GONE);
+				}
+			});
+		} catch (NullPointerException e) {
+			mPrbLoading.setVisibility(View.GONE);
+		}
 	}
 }

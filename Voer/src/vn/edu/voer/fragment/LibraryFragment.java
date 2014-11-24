@@ -51,7 +51,9 @@ public class LibraryFragment extends BaseFragment {
 				getMainActivity().currentMaterial = mMaterials.get(position);
 				goToFragment(MainActivity.DETAIL_CONTENT);
 				((DetailContentFragment) getMainActivity().listFragments.get(MainActivity.DETAIL_CONTENT)).setData();
-				getMainActivity().navigationDrawerFragment.setDataTableContent();
+				if (getMainActivity().currentMaterial.getMaterialType() == Material.TYPE_COLLECTION) {
+					getMainActivity().navigationDrawerFragment.setDataTableContent();
+				}
 			}
 		});
 	}

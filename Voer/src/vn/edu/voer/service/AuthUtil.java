@@ -41,13 +41,7 @@ public class AuthUtil {
 	 * @return
 	 */
 	public static String getToken(Context ctx) {
-		String token = new MySharedPreferences(ctx).getStringValue(TOKEN);
-		if (token == null || token == "") {
-			authExecute(ctx);
-		} else {
-			return token;
-		}
-		return null;
+		return new MySharedPreferences(ctx).getStringValue(TOKEN);
 	}
 
 	public static String getAuthToken(Context ctx) {

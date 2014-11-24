@@ -47,7 +47,6 @@ public class DetailContentFragment extends BaseFragment {
 		progressBar = view.findViewById(R.id.progressBar);
 		lblAuthor = (TextView) view.findViewById(R.id.lblAuthor);
 		lblPublishDate = (TextView) view.findViewById(R.id.lblPublishDate);
-
 		mWebViewContent.setWebViewClient(new WebViewClient() {
 			@Override
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
