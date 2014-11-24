@@ -4,7 +4,6 @@
 package vn.edu.voer.service;
 
 import vn.edu.voer.BuildConfig;
-import vn.edu.voer.object.Authentication;
 import vn.edu.voer.utility.Constant;
 import vn.edu.voer.utility.MySharedPreferences;
 import android.content.Context;
@@ -18,16 +17,16 @@ import android.util.Log;
 public class AuthUtil {
 
 	private static final String TAG = AuthUtil.class.getSimpleName();
-	private static final String TOKEN = "vpr_token";
-	private static final String CLIENT = "vpr_client";
-	private static final String CLIENT_ID = "mobile01";
+	public static final String TOKEN = "vpr_token";
+	public static final String CLIENT = "vpr_client";
+	public static final String CLIENT_ID = "mobile01";
 
 	/**
 	 * 
 	 * @param ctx
 	 */
 	public static void authExecute(Context ctx) {
-		String token = new MySharedPreferences(ctx).getStringValue(Authentication.TOKEN);
+		String token = getToken(ctx);
 		if (token == null || token == "") {
 			new AuthenticationService(ctx).execute(Constant.URL_AUTHEN);
 		} else {
@@ -42,7 +41,7 @@ public class AuthUtil {
 	 * @return
 	 */
 	public static String getToken(Context ctx) {
-		String token = new MySharedPreferences(ctx).getStringValue(Authentication.TOKEN);
+		String token = new MySharedPreferences(ctx).getStringValue(TOKEN);
 		if (token == null || token == "") {
 			authExecute(ctx);
 		} else {

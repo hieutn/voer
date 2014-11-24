@@ -17,6 +17,13 @@ public class MaterialList {
 	private String previous;
 	private ArrayList<Material> results;
 	
+	public MaterialList(int count, String next, String previous, ArrayList<Material> results) {
+		this.count = count;
+		this.next = next;
+		this.previous = previous;
+		this.results = results;
+	}
+	
 	/**
 	 * @return the count materials
 	 */

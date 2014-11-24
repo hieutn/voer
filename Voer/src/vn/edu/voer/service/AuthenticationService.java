@@ -16,17 +16,15 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import vn.edu.voer.BuildConfig;
-import vn.edu.voer.object.Authentication;
 import vn.edu.voer.utility.EncryptHelper;
 import vn.edu.voer.utility.MySharedPreferences;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 
 /**
  * @author sidd
@@ -79,13 +77,17 @@ public class AuthenticationService extends AsyncTask<String, Void, String> {
 	 */
 	@Override
 	protected void onPostExecute(String result) {
-		if (BuildConfig.DEBUG) Log.i(TAG, result);
+		String token = "";
 		try {
-			Authentication auth = new Gson().fromJson(result, Authentication.class);
-			new MySharedPreferences(mCtx).putStringValue(Authentication.TOKEN, auth.getToken());
-		} catch (JsonSyntaxException e) {
-			Log.i("SDD", e.toString());
+			JSONObject obj = new JSONObject(result);
+			token = obj.getString("token");
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
+		if (BuildConfig.DEBUG) {
+			Log.i(TAG, token);
+		}
+		new MySharedPreferences(mCtx).putStringValue(AuthUtil.TOKEN, token);
 	}
 
 }

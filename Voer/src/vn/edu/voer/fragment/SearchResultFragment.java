@@ -3,6 +3,7 @@ package vn.edu.voer.fragment;
 import java.util.ArrayList;
 
 import vn.edu.voer.R;
+import vn.edu.voer.activity.MainActivity;
 import vn.edu.voer.adapter.SearchResultAdapter;
 import vn.edu.voer.object.Material;
 import vn.edu.voer.object.MaterialList;
@@ -38,7 +39,12 @@ public class SearchResultFragment extends BaseFragment {
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);
 		if (!hidden) {
-			fillData();
+			if (getMainActivity().currentResultType == MainActivity.RESULT_TYPE_MATERIAL) {
+				fillData();
+			} else {
+				searchMaterial();
+			}
+			
 		}
 	}
 
@@ -92,6 +98,25 @@ public class SearchResultFragment extends BaseFragment {
 			}
 		});
 	}
+	
+	private void searchMaterial() {
+		mPrbLoading.setVisibility(View.VISIBLE);
+		ServiceController sc = new ServiceController(getMainActivity());
+		sc.searchMaterials(getMainActivity().currentSearchKeyword, new IMaterialListener() {
+			
+			@Override
+			public void onLoadMaterialsDone(MaterialList materialList) {
+				isLoading = false;
+				mMaterialList = materialList;
+				mListMaterials.clear();
+				mListMaterials.addAll(mMaterialList.getMaterials());
+				mAdapter.notifyDataSetChanged();
+				mPrbLoading.setVisibility(View.GONE);
+			}
+		});
+	}
+	
+	
 	
 	private void loadMore() {
 		mPrbLoading.setVisibility(View.VISIBLE);

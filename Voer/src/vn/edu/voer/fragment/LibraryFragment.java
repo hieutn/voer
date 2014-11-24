@@ -33,9 +33,7 @@ public class LibraryFragment extends BaseFragment {
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);
 		if (!hidden) {
-			// if (mMaterials.size() == 0) {
 			initData();
-			// }
 		}
 	}
 

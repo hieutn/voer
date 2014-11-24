@@ -2,18 +2,13 @@ package vn.edu.voer.adapter;
 
 import java.util.List;
 
-import vn.edu.voer.BuildConfig;
 import vn.edu.voer.R;
 import vn.edu.voer.database.dao.MaterialDAO;
-import vn.edu.voer.database.dao.PersonDAO;
 import vn.edu.voer.object.Material;
-import vn.edu.voer.object.Person;
 import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.IDownloadListener;
-import vn.edu.voer.service.ServiceController.IPersonListener;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,14 +25,12 @@ public class SearchResultAdapter extends BaseAdapter {
 	private LayoutInflater mInflater = null;
 	private Context mCtx;
 	private MaterialDAO mMaterialDAO;
-	private PersonDAO mPersonDAO;
 
 	public SearchResultAdapter(Context context, List<Material> listMaterials) {
 		mCtx = context;
 		this.listMaterials = listMaterials;
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mMaterialDAO = new MaterialDAO(context);
-		mPersonDAO = new PersonDAO(context);
 	}
 
 	@Override
@@ -73,27 +66,11 @@ public class SearchResultAdapter extends BaseAdapter {
 		final Material material = listMaterials.get(position);
 		if (material != null) {
 			holder.lblTitle.setText(material.getTitle());
+			holder.lblAuthor.setText("Authors");
 			if (!mMaterialDAO.isDownloadedMaterial(material.getMaterialID())) {
 				holder.imgDownload.setImageResource(R.drawable.download);
 			} else {
 				holder.imgDownload.setImageResource(R.drawable.downloaded);
-			}
-
-			if (mPersonDAO.isDownloadedPerson(material.getAuthor())) {
-				holder.lblAuthor.setText(mPersonDAO.getPersonById(material.getAuthor()).getFullname());
-			} else {
-				// Get author from service
-				new ServiceController(mCtx).getAuthors(material.getAuthor(), new IPersonListener() {
-					@Override
-					public void onLoadPersonDone(Person person) {
-						if (person != null) {
-							if (!mPersonDAO.isDownloadedPerson(String.valueOf(person.getId())) && mPersonDAO.insertPerson(person)) {
-								if (BuildConfig.DEBUG) Log.i(TAG, "Insert " + person.getFullname() + " to db local success");
-							}
-							holder.lblAuthor.setText(person.getFullname());
-						}
-					}
-				});
 			}
 		}
 

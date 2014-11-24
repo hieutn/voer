@@ -11,21 +11,19 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import vn.edu.voer.BuildConfig;
 import vn.edu.voer.database.dao.MaterialDAO;
 import vn.edu.voer.object.Category;
 import vn.edu.voer.object.Material;
 import vn.edu.voer.object.MaterialList;
-import vn.edu.voer.object.Person;
 import vn.edu.voer.utility.Constant;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 
 /**
  * @author sidd
@@ -37,14 +35,11 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	private static final String TAG = ServiceController.class.getSimpleName();
 	private static final int REQUEST_CATEGORIES = 0;
 	private static final int REQUEST_MATERIALS = 1;
-	private static final int REQUEST_SEARCH = 2;
-	private static final int REQUEST_DOWNLOAD = 3;
-	private static final int REQUEST_AUTHOR = 4;
+	private static final int REQUEST_DOWNLOAD = 2;
 	
 	private ICategoryListener mCategoryListener;
 	private IMaterialListener mMaterialListener;
 	private IDownloadListener mDownloadListener;
-	private IPersonListener mPersonListener;
 
 	private int mRequest;
 	private Context mCtx;
@@ -55,22 +50,6 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		this.mCtx = ctx;
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.os.AsyncTask#onPreExecute()
-	 */
-	@Override
-	protected void onPreExecute() {
-		// TODO Auto-generated method stub
-		super.onPreExecute();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.os.AsyncTask#doInBackground(java.lang.Object[])
-	 */
 	@Override
 	protected String doInBackground(String... params) {
 		StringBuilder urlBuilder = new StringBuilder();
@@ -92,11 +71,6 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
-	 */
 	@Override
 	protected void onPostExecute(String result) {
 		switch (mRequest) {
@@ -111,11 +85,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		case REQUEST_DOWNLOAD:
 			responseDownloadMaterial(result);
 			break;
-
-		case REQUEST_AUTHOR:
-			responseAuthor(result);
-			break;
-
+			
 		default:
 			break;
 		}
@@ -176,8 +146,12 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 */
 	public void searchMaterials(String keyword, IMaterialListener listener) {
 		mMaterialListener = listener;
-		mRequest = REQUEST_SEARCH;
-
+		mRequest = REQUEST_MATERIALS;
+		StringBuilder url = new StringBuilder();
+		url.append(Constant.URL_SEARCH);
+		url.append("?kw=");
+		url.append(keyword);
+		execute(url.toString());
 	}
 
 	/**
@@ -190,26 +164,23 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	public void downloadMaterial(String materialId, IDownloadListener listener) {
 		mDownloadListener = listener;
 		mRequest = REQUEST_DOWNLOAD;
-		String materialsUrl = Constant.URL_MATERIAL + "/" + materialId;
-		execute(materialsUrl);
+		
+		StringBuilder url = new StringBuilder();
+		url.append(Constant.URL_MATERIAL);
+		url.append("/");
+		url.append(materialId);
+		
+		execute(url.toString());
 	}
 	
+	/**
+	 * Download sub material with module type
+	 * @param materialId
+	 * @param listener
+	 */
 	public void downloadSubMaterial(String materialId, IDownloadListener listener) {
 		mSubMaterial = true;
 		downloadMaterial(materialId, listener);
-	}
-
-	/**
-	 * Get all author from service
-	 */
-	public void getAuthors(String id, IPersonListener listener) {
-		mRequest = REQUEST_AUTHOR;
-		mPersonListener = listener;
-		StringBuilder authorUrl = new StringBuilder();
-		authorUrl.append(Constant.URL_AUTHOR);
-		authorUrl.append("/");
-		authorUrl.append(id);
-		execute(authorUrl.toString());
 	}
 
 	/**
@@ -219,25 +190,24 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 *            Categories json content from service
 	 */
 	private void responseCategories(String result) {
-		ArrayList<Category> cats = null;
+		ArrayList<Category> cats = new ArrayList<Category>();
 		try {
-			cats = new Gson().fromJson(result, new TypeToken<ArrayList<Category>>() {
-			}.getType());
-			if (BuildConfig.DEBUG) {
-				for (Category cat : cats) {
-					Log.i(TAG, "CatID: " + cat.getId() + ", name: " + cat.getName());
-				}
+			JSONArray arr = new JSONArray(result);
+			JSONObject obj = null;
+			Category cat = null;
+			for (int i = 0; i < arr.length(); i++) {
+				obj = arr.getJSONObject(i);
+				cat = new Category(
+						obj.getInt("id"), 
+						obj.getString("name"), 
+						obj.getInt("parent"), 
+						obj.getString("description"));
+				cats.add(cat);
 			}
-		} catch (JsonSyntaxException e) {
+		} catch (JSONException e) {
+			e.printStackTrace();
 			cats = null;
-			if (BuildConfig.DEBUG)
-				Log.e(TAG, e.toString());
-		} catch (NullPointerException e) {
-			cats = null;
-			if (BuildConfig.DEBUG)
-				Log.e(TAG, e.toString());
 		}
-
 		mCategoryListener.onLoadCategoryDone(cats);
 	}
 
@@ -248,23 +218,28 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 *            Categories json content from service
 	 */
 	private void responseMaterials(String result) {
+		
 		MaterialList ml = null;
+		int count;
+		String next;
+		String previous;
+		ArrayList<Material> results = new ArrayList<Material>();
+		Material m;
+		
 		try {
-			ml = new Gson().fromJson(result, MaterialList.class);
-			if (BuildConfig.DEBUG) {
-				for (Material m : ml.getMaterials()) {
-					Log.i(TAG, "MaterialsID: " + m.getMaterialID() + ", Title:" + m.getTitle());
-				}
+			JSONObject obj = new JSONObject(result);
+			count = obj.getInt("count");
+			next = obj.getString("next");
+			previous = obj.getString("previous");
+			JSONArray arr = obj.getJSONArray("results");
+			for (int i = 0; i < arr.length(); i++) {
+				m = parseMaterial(arr.getString(i));
+				results.add(m);
 			}
-		} catch (JsonSyntaxException e) {
-			ml = null;
-			if (BuildConfig.DEBUG)
-				Log.e(TAG, e.toString());
-		} catch (NullPointerException e) {
-			if (BuildConfig.DEBUG)
-				Log.e(TAG, e.toString());
+			ml = new MaterialList(count, next, previous, results);
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
-
 		mMaterialListener.onLoadMaterialsDone(ml);
 	}
 
@@ -275,52 +250,47 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 *            Material detail json content from service
 	 */
 	private void responseDownloadMaterial(String result) {
-		Material m = null;
+		Material m = parseMaterial(result);
 		boolean isDownloaded = false;
-		try {
-			m = new Gson().fromJson(result, Material.class);
-			if (BuildConfig.DEBUG) {
-				Log.i(TAG, m.getTitle());
-			}
-			// Save material to local database
-			MaterialDAO md = new MaterialDAO(mCtx);
-			if (!mSubMaterial) {
-				isDownloaded = md.insertMaterial(m);
-			} else {
-				isDownloaded = md.insertSubMaterial(m);
-			}
-			
-		} catch (JsonSyntaxException e) {
-			if (BuildConfig.DEBUG)
-				Log.e(TAG, e.toString());
-		} catch (NullPointerException e) {
-			if (BuildConfig.DEBUG)
-				Log.e(TAG, e.toString());
+		MaterialDAO md = new MaterialDAO(mCtx);
+		if (!mSubMaterial) {
+			isDownloaded = md.insertMaterial(m);
+		} else {
+			isDownloaded = md.insertSubMaterial(m);
 		}
-
 		mDownloadListener.onDownloadMaterialDone(isDownloaded);
 	}
-
+	
 	/**
-	 * Parse Author json content and save to database local
-	 * 
-	 * @param result
+	 * Parse material object from json content
+	 * @param jsonContent
+	 * @return
 	 */
-	private void responseAuthor(String result) {
-		Person person = null;
+	private Material parseMaterial(String jsonContent) {
 		try {
-			person = new Gson().fromJson(result, Person.class);
-			if (BuildConfig.DEBUG)
-				Log.i(TAG, "Author name: " + person.getFullname());
-		} catch (JsonSyntaxException e) {
-			person = null;
-			if (BuildConfig.DEBUG)
-				Log.e(TAG, e.toString());
-		} catch (NullPointerException e) {
-			if (BuildConfig.DEBUG)
-				Log.e(TAG, e.toString());
+			JSONObject obj = new JSONObject(jsonContent);
+			Material m = new Material(
+					obj.getString("description"), 
+					"", 
+					obj.getString("title"), 
+					"", 
+					"", 
+					obj.getInt("material_type"), 
+					obj.getString("modified"), 
+					obj.getString("material_id"), 
+					obj.getInt("version"),
+					obj.getString("editor"),
+					"", 
+					"", 
+					"", 
+					obj.getString("author"), 
+					obj.getString("categories"));
+			return m;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
 		}
-		mPersonListener.onLoadPersonDone(person);
+		
 	}
 
 	//
@@ -338,10 +308,6 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		public void onDownloadMaterialDone(boolean isDownloaded);
 	}
 
-	public interface IPersonListener {
-		public void onLoadPersonDone(Person person);
-	}
-	
 	public interface ISearchListener {
 		public void onSearchDone();
 	}

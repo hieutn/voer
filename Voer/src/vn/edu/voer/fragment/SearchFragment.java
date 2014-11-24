@@ -1,8 +1,8 @@
 package vn.edu.voer.fragment;
 
 import vn.edu.voer.R;
+import vn.edu.voer.activity.MainActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 public class SearchFragment extends BaseFragment {
-	private static final String TAG = SearchFragment.class.getSimpleName();
 	private Button btnSearch, btnSearchLong;
 	private EditText txtKeyword;
 
@@ -61,8 +60,9 @@ public class SearchFragment extends BaseFragment {
 	private void search() {
 		hideKeyBoard();
 		 String keyword = txtKeyword.getText().toString();
-		 Log.i(TAG, keyword);
-		// goToFragment(MainActivity.SEARCH_RESULT);
-		// Log.e("", "search: "+ keyword);
+		 keyword = keyword.replace(" ", "%20");
+		 getMainActivity().currentResultType = MainActivity.RESULT_TYPE_SEARCH;
+		 getMainActivity().currentSearchKeyword = keyword;
+		 goToFragment(MainActivity.SEARCH_RESULT);
 	}
 }

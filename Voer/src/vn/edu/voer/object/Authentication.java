@@ -10,8 +10,6 @@ package vn.edu.voer.object;
  */
 public class Authentication {
 	
-	public static final String TOKEN = "token";
-	
 	private String token;
 	private String expire;
 	private String result;

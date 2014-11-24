@@ -32,6 +32,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	public static final int DETAIL_CONTENT = 3;
 	public static final int SEARCH_RESULT = 4;
 
+	public static final int RESULT_TYPE_MATERIAL 	= 10;
+	public static final int RESULT_TYPE_SEARCH 		= 11;
+	
 	protected static final String TAG = MainActivity.class.getSimpleName();
 
 	private DrawerLayout mDrawerLayout;
@@ -48,6 +51,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	public int currentModuleIndex = 0;
 	public Category currentCategory;
 	public ArrayList<CollectionContent> currentCollectionContent = null;
+	public String currentSearchKeyword;
+	public int currentResultType;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

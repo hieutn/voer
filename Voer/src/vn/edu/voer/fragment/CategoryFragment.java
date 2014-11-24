@@ -53,6 +53,7 @@ public class CategoryFragment extends BaseFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				getMainActivity().currentCategory = listCategories.get(position);
+				getMainActivity().currentResultType = MainActivity.RESULT_TYPE_MATERIAL;
 				goToFragment(MainActivity.SEARCH_RESULT);
 				getMainActivity().setHeaderTitle(getMainActivity().currentCategory.getName());
 			}

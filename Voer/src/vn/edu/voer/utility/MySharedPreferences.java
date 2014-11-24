@@ -99,7 +99,6 @@ public class MySharedPreferences {
 	 * @return
 	 */
 	public String getStringValue(String key) {
-		// SmartLogger.log(TAG, "Get string value");
 		SharedPreferences pref = context.getSharedPreferences(HAKARU_CROSS_PREFERENCES, 0);
 		return pref.getString(key, "");
 	}
