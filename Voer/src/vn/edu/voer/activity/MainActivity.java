@@ -32,9 +32,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	public static final int DETAIL_CONTENT = 3;
 	public static final int SEARCH_RESULT = 4;
 
-	public static final int RESULT_TYPE_MATERIAL 	= 10;
-	public static final int RESULT_TYPE_SEARCH 		= 11;
-	
+	public static final int RESULT_TYPE_MATERIAL = 10;
+	public static final int RESULT_TYPE_SEARCH = 11;
+
 	protected static final String TAG = MainActivity.class.getSimpleName();
 
 	private DrawerLayout mDrawerLayout;
@@ -46,6 +46,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	private FragmentManager fm;
 	public List<Fragment> listFragments;
 	public int currentFragment;
+	public int fragmentBeforeResult;
 
 	public Material currentMaterial;
 	public int currentModuleIndex = 0;
@@ -127,6 +128,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 		// R.anim.slide_out_right);
 		// transaction.replace(R.id.layoutFragment,
 		// listFragments.get(fragment));
+
+		if (fragment == SEARCH_RESULT) {
+			fragmentBeforeResult = currentFragment;
+		}
 
 		transaction.commit();
 		currentFragment = fragment;
@@ -257,7 +262,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 			break;
 
 		case SEARCH_RESULT:
-			backFragment(TAB_CATEGORY);
+			backFragment(fragmentBeforeResult);
 			break;
 
 		default:

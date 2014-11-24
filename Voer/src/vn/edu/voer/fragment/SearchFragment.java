@@ -42,7 +42,7 @@ public class SearchFragment extends BaseFragment {
 		btnSearchLong.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				showToast("Search feature is coming soon.");
+				search();
 			}
 		});
 
@@ -59,10 +59,10 @@ public class SearchFragment extends BaseFragment {
 
 	private void search() {
 		hideKeyBoard();
-		 String keyword = txtKeyword.getText().toString();
-		 keyword = keyword.replace(" ", "%20");
-		 getMainActivity().currentResultType = MainActivity.RESULT_TYPE_SEARCH;
-		 getMainActivity().currentSearchKeyword = keyword;
-		 goToFragment(MainActivity.SEARCH_RESULT);
+		String keyword = txtKeyword.getText().toString();
+		keyword = keyword.replace(" ", "%20");
+		getMainActivity().currentResultType = MainActivity.RESULT_TYPE_SEARCH;
+		getMainActivity().currentSearchKeyword = keyword;
+		goToFragment(MainActivity.SEARCH_RESULT);
 	}
 }
