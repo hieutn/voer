@@ -269,11 +269,18 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	private Material parseMaterial(String jsonContent) {
 		try {
 			JSONObject obj = new JSONObject(jsonContent);
+			String text;
+			try {
+				text = obj.getString("text");
+				Log.i(TAG, "Text: " + text);
+			} catch (JSONException e){
+				text = "";
+			}
 			Material m = new Material(
 					obj.getString("description"), 
 					"", 
 					obj.getString("title"), 
-					"", 
+					text, 
 					"", 
 					obj.getInt("material_type"), 
 					obj.getString("modified"), 

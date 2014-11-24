@@ -89,11 +89,14 @@ public class SearchResultFragment extends BaseFragment {
 
 			@Override
 			public void onLoadMaterialsDone(MaterialList materialList) {
-				isLoading = false;
-				mMaterialList = materialList;
-				mListMaterials.clear();
-				mListMaterials.addAll(mMaterialList.getMaterials());
-				mAdapter.notifyDataSetChanged();
+				try {
+					isLoading = false;
+					mMaterialList = materialList;
+					mListMaterials.clear();
+					mListMaterials.addAll(mMaterialList.getMaterials());
+					mAdapter.notifyDataSetChanged();
+				} catch (NullPointerException e) {
+				}
 				mPrbLoading.setVisibility(View.GONE);
 			}
 		});
@@ -106,11 +109,14 @@ public class SearchResultFragment extends BaseFragment {
 
 			@Override
 			public void onLoadMaterialsDone(MaterialList materialList) {
-				isLoading = false;
-				mMaterialList = materialList;
-				mListMaterials.clear();
-				mListMaterials.addAll(mMaterialList.getMaterials());
-				mAdapter.notifyDataSetChanged();
+				try {
+					isLoading = false;
+					mMaterialList = materialList;
+					mListMaterials.clear();
+					mListMaterials.addAll(mMaterialList.getMaterials());
+					mAdapter.notifyDataSetChanged();
+				} catch (NullPointerException e) {
+				}
 				mPrbLoading.setVisibility(View.GONE);
 			}
 		});
