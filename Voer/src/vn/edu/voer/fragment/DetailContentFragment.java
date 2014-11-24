@@ -59,7 +59,7 @@ public class DetailContentFragment extends BaseFragment {
 	}
 
 	public void setData() {
-		clearData();
+//		clearData();
 		mMaterial = getMainActivity().currentMaterial;
 		if (mMaterial.getMaterialType() == Material.TYPE_MODULE) {
 			getMainActivity().setButtonTableContent(false);
