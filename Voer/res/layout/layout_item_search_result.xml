@@ -4,47 +4,31 @@
     style="@style/Layout.FillWidth.Vertical"
     android:padding="@dimen/default_padding" >
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/lblTitle"
+        style="@style/Text.Title.Bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_marginEnd="@dimen/default_padding"
         android:layout_marginRight="@dimen/default_padding"
         android:layout_toLeftOf="@+id/search_item_btn_download"
-        android:layout_toStartOf="@+id/search_item_btn_download" >
-
-        <TextView
-            android:id="@+id/lblTitle"
-            style="@style/Text.Title.Bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textColor="@color/orange"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/lblAuthor"
-            style="@style/Text.Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/lblTitle"
-            android:layout_marginTop="5dp"
-            android:drawableLeft="@drawable/author"
-            android:drawablePadding="5dp"
-            android:text="@string/app_name"
-            android:textSize="16sp" />
-    </RelativeLayout>
+        android:layout_toStartOf="@+id/search_item_btn_download"
+        android:text="@string/app_name"
+        android:textColor="@color/orange"
+        android:textSize="16sp" />
 
     <ImageButton
         android:id="@+id/search_item_btn_download"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:adjustViewBounds="true"
         android:background="@android:color/transparent"
         android:contentDescription="@string/app_name"
-        android:scaleType="fitEnd"
+        android:scaleType="fitCenter"
         android:src="@drawable/download" />
 
 </RelativeLayout>
