@@ -95,8 +95,9 @@ public class DetailContentFragment extends BaseFragment {
 					@Override
 					public void onDownloadMaterialDone(boolean isDownloaded, int code) {
 						if (code == ServiceController.CODE_NO_INTERNET) {
-							DialogHelper.showDialogMessage(getMainActivity(), getMainActivity().getResources()
-									.getString(R.string.msg_no_internet));
+							DialogHelper.showDialogMessage(getMainActivity(), getMainActivity().getResources().getString(R.string.msg_no_internet));
+						} else if (code == ServiceController.CODE_TOKEN_EXPIRE) {
+							setData();
 						} else if (isDownloaded) {
 							fillContentWebview(id);
 						}
@@ -113,8 +114,7 @@ public class DetailContentFragment extends BaseFragment {
 
 	private void fillContentWebview() {
 		getMainActivity().setHeaderTitle(mMaterial.getTitle());
-		lblPublishDate.setText(getActivity().getString(R.string.publishOn) + ": "
-				+ DateTimeHelper.getDateFromDateTime(mMaterial.getModified()));
+		lblPublishDate.setText(getActivity().getString(R.string.publishOn) + ": " + DateTimeHelper.getDateFromDateTime(mMaterial.getModified()));
 		if (pd.isDownloadedPerson(mMaterial.getAuthor())) {
 			Person per = pd.getPersonById(mMaterial.getAuthor());
 			lblAuthor.setText(getActivity().getString(R.string.by) + ": " + per.getFullname());
@@ -124,8 +124,7 @@ public class DetailContentFragment extends BaseFragment {
 				@Override
 				public void onLoadPersonDone(Person person, int code) {
 					if (code == ServiceController.CODE_NO_INTERNET) {
-						DialogHelper.showDialogMessage(getMainActivity(),
-								getMainActivity().getResources().getString(R.string.msg_no_internet));
+						DialogHelper.showDialogMessage(getMainActivity(), getMainActivity().getResources().getString(R.string.msg_no_internet));
 					} else {
 						try {
 							lblAuthor.setText(getActivity().getString(R.string.by) + ": " + person.getFullname());

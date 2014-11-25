@@ -34,12 +34,7 @@ public class AuthUtil {
 				Log.i(TAG, "Token saved: " + token);
 		}
 	}
-
-	public static void refreshAuth(Context ctx) {
-		new MySharedPreferences(ctx).putStringValue(AuthUtil.TOKEN, "");
-		authExecute(ctx);
-	}
-
+	
 	/**
 	 * 
 	 * @param ctx

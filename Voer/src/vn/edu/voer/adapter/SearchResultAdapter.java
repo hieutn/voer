@@ -112,7 +112,7 @@ public class SearchResultAdapter extends BaseAdapter {
 	 * 
 	 * @param id
 	 */
-	public void downloadMaterial(String id) {
+	public void downloadMaterial(final String id) {
 		if (!mMaterialDAO.isDownloadedMaterial(id)) {
 			ServiceController sc = new ServiceController(mCtx);
 			sc.downloadMaterial(id, new IDownloadListener() {
@@ -120,6 +120,8 @@ public class SearchResultAdapter extends BaseAdapter {
 				public void onDownloadMaterialDone(boolean isDownloaded, int code) {
 					if (code == ServiceController.CODE_NO_INTERNET) {
 						DialogHelper.showDialogMessage(mCtx, mCtx.getResources().getString(R.string.msg_no_internet));
+					} else if (code == ServiceController.CODE_TOKEN_EXPIRE) {
+						downloadMaterial(id);
 					} else {
 						notifyDataSetChanged();
 					}

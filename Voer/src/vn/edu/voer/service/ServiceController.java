@@ -97,6 +97,14 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected void onPostExecute(String result) {
+		// Check token invalid
+		if (checkTokenExpired(result)) {
+			mCode = CODE_TOKEN_EXPIRE;
+			result = null;
+			AuthenticationService as = new AuthenticationService(mCtx);
+			as.execute(Constant.URL_AUTHEN);
+		}
+
 		switch (mRequest) {
 		case REQUEST_CATEGORIES:
 			responseCategories(result);
@@ -278,7 +286,6 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 				}
 				ml = new MaterialList(count, next, previous, results);
 			} catch (JSONException e) {
-
 				e.printStackTrace();
 			} catch (NullPointerException e) {
 
@@ -348,7 +355,28 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 			e.printStackTrace();
 			return null;
 		}
+	}
 
+	/**
+	 * Check response content have a message token invalid
+	 * 
+	 * @param result
+	 * @return
+	 */
+	private boolean checkTokenExpired(String result) {
+		if (result == null) {
+			return false;
+		}
+		try {
+			String details = new JSONObject(result).getString("details");
+			if (details != null && details != "") {
+				Log.i(TAG, details);
+				return true;
+			}
+		} catch (JSONException e) {
+		} catch (NullPointerException e) {
+		}
+		return false;
 	}
 
 	//

@@ -7,7 +7,6 @@ import vn.edu.voer.R;
 import vn.edu.voer.activity.MainActivity;
 import vn.edu.voer.adapter.CategoryAdapter;
 import vn.edu.voer.object.Category;
-import vn.edu.voer.service.AuthUtil;
 import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.ICategoryListener;
 import vn.edu.voer.utility.DialogHelper;
@@ -69,15 +68,15 @@ public class CategoryFragment extends BaseFragment {
 			@Override
 			public void onLoadCategoryDone(ArrayList<Category> categories, int code) {
 				if (code == ServiceController.CODE_NO_INTERNET) {
-					DialogHelper.showDialogMessage(getMainActivity(),
-							getMainActivity().getResources().getString(R.string.msg_no_internet));
+					DialogHelper.showDialogMessage(getMainActivity(), getMainActivity().getResources().getString(R.string.msg_no_internet));
+				} else if (code == ServiceController.CODE_TOKEN_EXPIRE) {
+					fillData();
 				} else if (categories != null) {
 					try {
 						listCategories.clear();
 						listCategories.addAll(categories);
 						adapter.notifyDataSetChanged();
 					} catch (NullPointerException e) {
-						AuthUtil.refreshAuth(getMainActivity());
 					}
 				}
 				mPrbLoading.setVisibility(View.GONE);
