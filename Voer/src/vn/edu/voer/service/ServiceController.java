@@ -3,12 +3,16 @@
  */
 package vn.edu.voer.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,10 +45,12 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	private static final int REQUEST_DOWNLOAD = 2;
 	private static final int REQUEST_PERSON = 3;
 
-	public static final int CODE_OK = 10;
-	public static final int CODE_NO_INTERNET = 11;
-	public static final int CODE_CONNECTION_TIMEOUT = 12;
-	public static final int CODE_TOKEN_EXPIRE = 13;
+	public static final int CODE_OK = 0;
+	public static final int CODE_NO_INTERNET = 1;
+	public static final int CODE_CONNECTION_TIMEOUT = 2;
+	public static final int CODE_TOKEN_EXPIRE = 3;
+
+	public static final int TIMEOUT = 30000;
 
 	private ICategoryListener mCategoryListener;
 	private IMaterialListener mMaterialListener;
@@ -84,13 +90,20 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 			Log.i(TAG, urlBuilder.toString());
 		}
 
-		HttpClient httpClient = new DefaultHttpClient();
+		HttpParams httpParameters = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParameters, TIMEOUT);
+		HttpConnectionParams.setSoTimeout(httpParameters, TIMEOUT);
+
+		HttpClient httpClient = new DefaultHttpClient(httpParameters);
 		HttpGet httpGet = new HttpGet(urlBuilder.toString());
 		try {
 			HttpResponse response = httpClient.execute(httpGet);
 			return EntityUtils.toString(response.getEntity());
-		} catch (Exception e) {
-			Log.i(TAG, e.toString());
+		} catch (IOException e) {
+			mCode = CODE_CONNECTION_TIMEOUT;
+			if (BuildConfig.DEBUG) {
+				Log.i(TAG, e.toString());
+			}
 			return null;
 		}
 	}

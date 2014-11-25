@@ -27,5 +27,6 @@
     <string name="loading">Loading&#8230;</string>
 
     <string name="msg_no_internet">No internet connection!</string>
+    <string name="msg_connection_timeout">Connection timed out! Please try again!</string>
     
 </resources>

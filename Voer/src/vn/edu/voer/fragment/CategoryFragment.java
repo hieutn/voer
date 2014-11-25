@@ -10,6 +10,7 @@ import vn.edu.voer.object.Category;
 import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.ICategoryListener;
 import vn.edu.voer.utility.DialogHelper;
+import vn.edu.voer.utility.DialogHelper.IDialogListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,9 +69,18 @@ public class CategoryFragment extends BaseFragment {
 			@Override
 			public void onLoadCategoryDone(ArrayList<Category> categories, int code) {
 				if (code == ServiceController.CODE_NO_INTERNET) {
-					DialogHelper.showDialogMessage(getMainActivity(), getMainActivity().getResources().getString(R.string.msg_no_internet));
+					DialogHelper.showDialogMessage(getMainActivity(),
+							getMainActivity().getString(R.string.msg_no_internet));
 				} else if (code == ServiceController.CODE_TOKEN_EXPIRE) {
 					fillData();
+				} else if (code == ServiceController.CODE_CONNECTION_TIMEOUT) {
+					DialogHelper.showConfirmMessage(getMainActivity(),
+							getMainActivity().getString(R.string.msg_connection_timeout), new IDialogListener() {
+								@Override
+								public void onOKClick() {
+									fillData();
+								}
+							});
 				} else if (categories != null) {
 					try {
 						listCategories.clear();

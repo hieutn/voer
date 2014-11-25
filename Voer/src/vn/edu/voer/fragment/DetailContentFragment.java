@@ -13,6 +13,7 @@ import vn.edu.voer.service.ServiceController.IDownloadListener;
 import vn.edu.voer.service.ServiceController.IPersonListener;
 import vn.edu.voer.utility.DateTimeHelper;
 import vn.edu.voer.utility.DialogHelper;
+import vn.edu.voer.utility.DialogHelper.IDialogListener;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -95,9 +96,19 @@ public class DetailContentFragment extends BaseFragment {
 					@Override
 					public void onDownloadMaterialDone(boolean isDownloaded, int code) {
 						if (code == ServiceController.CODE_NO_INTERNET) {
-							DialogHelper.showDialogMessage(getMainActivity(), getMainActivity().getResources().getString(R.string.msg_no_internet));
+							DialogHelper.showDialogMessage(getMainActivity(), getMainActivity().getResources()
+									.getString(R.string.msg_no_internet));
 						} else if (code == ServiceController.CODE_TOKEN_EXPIRE) {
 							setData();
+						} else if (code == ServiceController.CODE_CONNECTION_TIMEOUT) {
+							DialogHelper.showConfirmMessage(getMainActivity(),
+									getMainActivity().getString(R.string.msg_connection_timeout),
+									new IDialogListener() {
+										@Override
+										public void onOKClick() {
+											setData();
+										}
+									});
 						} else if (isDownloaded) {
 							fillContentWebview(id);
 						}
@@ -114,7 +125,8 @@ public class DetailContentFragment extends BaseFragment {
 
 	private void fillContentWebview() {
 		getMainActivity().setHeaderTitle(mMaterial.getTitle());
-		lblPublishDate.setText(getActivity().getString(R.string.publishOn) + ": " + DateTimeHelper.getDateFromDateTime(mMaterial.getModified()));
+		lblPublishDate.setText(getActivity().getString(R.string.publishOn) + ": "
+				+ DateTimeHelper.getDateFromDateTime(mMaterial.getModified()));
 		if (pd.isDownloadedPerson(mMaterial.getAuthor())) {
 			Person per = pd.getPersonById(mMaterial.getAuthor());
 			lblAuthor.setText(getActivity().getString(R.string.by) + ": " + per.getFullname());
@@ -123,14 +135,10 @@ public class DetailContentFragment extends BaseFragment {
 			sc.downloadPersonDetail(mMaterial.getAuthor(), new IPersonListener() {
 				@Override
 				public void onLoadPersonDone(Person person, int code) {
-					if (code == ServiceController.CODE_NO_INTERNET) {
-						DialogHelper.showDialogMessage(getMainActivity(), getMainActivity().getResources().getString(R.string.msg_no_internet));
-					} else {
-						try {
-							lblAuthor.setText(getActivity().getString(R.string.by) + ": " + person.getFullname());
-						} catch (NullPointerException e) {
-							lblAuthor.setText("");
-						}
+					try {
+						lblAuthor.setText(getActivity().getString(R.string.by) + ": " + person.getFullname());
+					} catch (NullPointerException e) {
+						lblAuthor.setText("");
 					}
 				}
 			});

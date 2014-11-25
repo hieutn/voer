@@ -8,6 +8,7 @@ import vn.edu.voer.object.Material;
 import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.IDownloadListener;
 import vn.edu.voer.utility.DialogHelper;
+import vn.edu.voer.utility.DialogHelper.IDialogListener;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
@@ -122,6 +123,14 @@ public class SearchResultAdapter extends BaseAdapter {
 						DialogHelper.showDialogMessage(mCtx, mCtx.getResources().getString(R.string.msg_no_internet));
 					} else if (code == ServiceController.CODE_TOKEN_EXPIRE) {
 						downloadMaterial(id);
+					} else if (code == ServiceController.CODE_CONNECTION_TIMEOUT) {
+						DialogHelper.showConfirmMessage(mCtx,
+								mCtx.getString(R.string.msg_connection_timeout), new IDialogListener() {
+									@Override
+									public void onOKClick() {
+										downloadMaterial(id);
+									}
+								});
 					} else {
 						notifyDataSetChanged();
 					}

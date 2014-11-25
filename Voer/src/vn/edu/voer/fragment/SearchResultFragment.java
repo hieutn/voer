@@ -1,6 +1,7 @@
 package vn.edu.voer.fragment;
 
 import java.util.ArrayList;
+
 import vn.edu.voer.R;
 import vn.edu.voer.activity.MainActivity;
 import vn.edu.voer.adapter.SearchResultAdapter;
@@ -11,6 +12,7 @@ import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.IMaterialListener;
 import vn.edu.voer.utility.Constant;
 import vn.edu.voer.utility.DialogHelper;
+import vn.edu.voer.utility.DialogHelper.IDialogListener;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -98,9 +100,18 @@ public class SearchResultFragment extends BaseFragment {
 			@Override
 			public void onLoadMaterialsDone(MaterialList materialList, int code) {
 				if (code == ServiceController.CODE_NO_INTERNET) {
-					DialogHelper.showDialogMessage(getMainActivity(), getMainActivity().getResources().getString(R.string.msg_no_internet));
+					DialogHelper.showDialogMessage(getMainActivity(),
+							getMainActivity().getResources().getString(R.string.msg_no_internet));
 				} else if (code == ServiceController.CODE_TOKEN_EXPIRE) {
 					fillData();
+				} else if (code == ServiceController.CODE_CONNECTION_TIMEOUT) {
+					DialogHelper.showConfirmMessage(getMainActivity(),
+							getMainActivity().getString(R.string.msg_connection_timeout), new IDialogListener() {
+								@Override
+								public void onOKClick() {
+									fillData();
+								}
+							});
 				} else if (materialList != null) {
 					try {
 						isLoading = false;
@@ -124,9 +135,18 @@ public class SearchResultFragment extends BaseFragment {
 			@Override
 			public void onLoadMaterialsDone(MaterialList materialList, int code) {
 				if (code == ServiceController.CODE_NO_INTERNET) {
-					DialogHelper.showDialogMessage(getMainActivity(), getMainActivity().getResources().getString(R.string.msg_no_internet));
+					DialogHelper.showDialogMessage(getMainActivity(),
+							getMainActivity().getResources().getString(R.string.msg_no_internet));
 				} else if (code == ServiceController.CODE_TOKEN_EXPIRE) {
 					searchMaterial();
+				} else if (code == ServiceController.CODE_CONNECTION_TIMEOUT) {
+					DialogHelper.showConfirmMessage(getMainActivity(),
+							getMainActivity().getString(R.string.msg_connection_timeout), new IDialogListener() {
+								@Override
+								public void onOKClick() {
+									searchMaterial();
+								}
+							});
 				} else if (materialList != null) {
 					try {
 						isLoading = false;
@@ -154,10 +174,19 @@ public class SearchResultFragment extends BaseFragment {
 				@Override
 				public void onLoadMaterialsDone(MaterialList materialList, int code) {
 					if (code == ServiceController.CODE_NO_INTERNET) {
-						DialogHelper.showDialogMessage(getMainActivity(), getMainActivity().getResources().getString(R.string.msg_no_internet));
+						DialogHelper.showDialogMessage(getMainActivity(),
+								getMainActivity().getResources().getString(R.string.msg_no_internet));
 					}
 					if (code == ServiceController.CODE_TOKEN_EXPIRE) {
 						loadMore();
+					} else if (code == ServiceController.CODE_CONNECTION_TIMEOUT) {
+						DialogHelper.showConfirmMessage(getMainActivity(),
+								getMainActivity().getString(R.string.msg_connection_timeout), new IDialogListener() {
+									@Override
+									public void onOKClick() {
+										loadMore();
+									}
+								});
 					} else if (materialList != null) {
 						try {
 							isLoading = false;
