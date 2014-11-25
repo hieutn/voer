@@ -3,7 +3,6 @@ package vn.edu.voer.fragment;
 import vn.edu.voer.R;
 import vn.edu.voer.activity.MainActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
