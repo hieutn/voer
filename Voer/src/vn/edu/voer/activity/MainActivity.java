@@ -55,6 +55,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	public ArrayList<CollectionContent> currentCollectionContent = null;
 	public String currentSearchKeyword;
 	public int currentResultType;
+	public boolean isSearching;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
