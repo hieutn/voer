@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * @author sidd
  *
- * Nov 22, 2014
+ *         Nov 22, 2014
  */
 public class CollectionContent {
 
@@ -19,14 +19,25 @@ public class CollectionContent {
 	private String license;
 	private String url;
 	private int version;
-	
+
+	public CollectionContent(String id, ArrayList<String> authors, String title, String type, String license,
+			String url, int version) {
+		this.id = id;
+		this.authors = authors;
+		this.title = title;
+		this.type = type;
+		this.license = license;
+		this.url = url;
+		this.version = version;
+	}
+
 	/**
 	 * @return the license
 	 */
 	public String getLicense() {
 		return license;
 	}
-	
+
 	/**
 	 * @return the title
 	 */

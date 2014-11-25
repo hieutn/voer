@@ -83,8 +83,12 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 
 		StringBuilder urlBuilder = new StringBuilder();
 		urlBuilder.append(params[0]);
-		urlBuilder.append(params[0].indexOf("?") >= 0 ? "&" : "?");
-		urlBuilder.append(AuthUtil.getAuthToken(mCtx));
+		if (urlBuilder.toString().indexOf("vpr_token") < 0) {
+			urlBuilder.append(params[0].indexOf("?") >= 0 ? "&" : "?");
+			urlBuilder.append(AuthUtil.getAuthToken(mCtx));
+		} else {
+			Log.i(TAG, "URL is containt token");
+		}
 
 		if (BuildConfig.DEBUG) {
 			Log.i(TAG, urlBuilder.toString());

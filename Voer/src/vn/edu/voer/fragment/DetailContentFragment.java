@@ -86,34 +86,36 @@ public class DetailContentFragment extends BaseFragment {
 		} else {
 			getMainActivity().setButtonTableContent(true);
 			mCollectionContents = mMaterial.getCollectionContent();
-			getMainActivity().currentCollectionContent = mCollectionContents;
-			final String id = mCollectionContents.get(getMainActivity().currentModuleIndex).getId();
-			if (md.isDownloadedMaterial(id)) {
-				fillContentWebview(id);
-			} else {
-				ServiceController sc = new ServiceController(getMainActivity());
-				sc.downloadSubMaterial(id, new IDownloadListener() {
-					@Override
-					public void onDownloadMaterialDone(boolean isDownloaded, int code) {
-						if (code == ServiceController.CODE_NO_INTERNET) {
-							DialogHelper.showDialogMessage(getMainActivity(), getMainActivity().getResources()
-									.getString(R.string.msg_no_internet));
-						} else if (code == ServiceController.CODE_TOKEN_EXPIRE) {
-							setData();
-						} else if (code == ServiceController.CODE_CONNECTION_TIMEOUT) {
-							DialogHelper.showConfirmMessage(getMainActivity(),
-									getMainActivity().getString(R.string.msg_connection_timeout),
-									new IDialogListener() {
-										@Override
-										public void onOKClick() {
-											setData();
-										}
-									});
-						} else if (isDownloaded) {
-							fillContentWebview(id);
+			if (mCollectionContents != null) {
+				getMainActivity().currentCollectionContent = mCollectionContents;
+				final String id = mCollectionContents.get(getMainActivity().currentModuleIndex).getId();
+				if (md.isDownloadedMaterial(id)) {
+					fillContentWebview(id);
+				} else {
+					ServiceController sc = new ServiceController(getMainActivity());
+					sc.downloadSubMaterial(id, new IDownloadListener() {
+						@Override
+						public void onDownloadMaterialDone(boolean isDownloaded, int code) {
+							if (code == ServiceController.CODE_NO_INTERNET) {
+								DialogHelper.showDialogMessage(getMainActivity(), getMainActivity().getResources()
+										.getString(R.string.msg_no_internet));
+							} else if (code == ServiceController.CODE_TOKEN_EXPIRE) {
+								setData();
+							} else if (code == ServiceController.CODE_CONNECTION_TIMEOUT) {
+								DialogHelper.showConfirmMessage(getMainActivity(),
+										getMainActivity().getString(R.string.msg_connection_timeout),
+										new IDialogListener() {
+											@Override
+											public void onOKClick() {
+												setData();
+											}
+										});
+							} else if (isDownloaded) {
+								fillContentWebview(id);
+							}
 						}
-					}
-				});
+					});
+				}
 			}
 		}
 	}

@@ -2,6 +2,7 @@ package vn.edu.voer.fragment;
 
 import java.util.ArrayList;
 
+import vn.edu.voer.BuildConfig;
 import vn.edu.voer.R;
 import vn.edu.voer.adapter.LibraryAdapter;
 import vn.edu.voer.database.dao.MaterialDAO;
@@ -58,7 +59,9 @@ public class LibraryFragment extends BaseFragment {
 		try {
 			mAdapter.setMaterials(mMaterials);
 		} catch (NullPointerException e) {
-			Log.e("SDD", e.toString());
+			if (BuildConfig.DEBUG) {
+				Log.e("SDD", e.toString());
+			}
 		}
 	}
 }

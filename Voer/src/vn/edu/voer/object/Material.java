@@ -5,6 +5,10 @@ package vn.edu.voer.object;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * @author sidd
  *
@@ -159,20 +163,30 @@ public class Material {
 	 * Get list modules of Collection Type
 	 */
 	public ArrayList<CollectionContent> getCollectionContent() {
-		// ArrayList<CollectionContent> collectionContent = null;
-		// if (material_type == TYPE_COLLECTION) {
-		// try {
-		// collectionContent = new ArrayList<CollectionContent>();
-		// collectionContent = new Gson().fromJson(new
-		// JSONObject(text).getString("content"),
-		// new TypeToken<ArrayList<CollectionContent>>() {}.getType());
-		// } catch (JSONException e) {
-		// collectionContent = null;
-		// } catch (JsonSyntaxException e) {
-		// collectionContent = null;
-		// }
-		// }
-		return null;// collectionContent;
+		ArrayList<CollectionContent> cc = null;
+		if (material_type == TYPE_COLLECTION && text != null) {
+			cc = new ArrayList<CollectionContent>();
+			try {
+				JSONObject obj = new JSONObject(text);
+				JSONArray arr = obj.getJSONArray("content");
+				for (int i = 0; i < arr.length(); i++) {
+					obj = arr.getJSONObject(i);
+					CollectionContent collectionContent = new CollectionContent(
+							obj.getString("id"), 
+							null,
+							obj.getString("title"),
+							obj.getString("type"),
+							obj.getString("license"),
+							obj.getString("url"), 
+							obj.getInt("version"));
+					cc.add(collectionContent);
+				}
+			} catch (JSONException e) {
+				cc = null;
+			}
+		}
+		
+		return cc;
 	}
 
 }

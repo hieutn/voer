@@ -189,13 +189,13 @@ public class SearchResultFragment extends BaseFragment {
 								});
 					} else if (materialList != null) {
 						try {
-							isLoading = false;
 							mMaterialList = materialList;
 							mListMaterials.addAll(mMaterialList.getMaterials());
 							mAdapter.notifyDataSetChanged();
 						} catch (NullPointerException e) {
 						}
 					}
+					isLoading = false;
 					mListView.removeFooterView(loading);
 				}
 			});
