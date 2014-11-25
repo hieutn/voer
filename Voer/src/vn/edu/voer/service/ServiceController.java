@@ -316,10 +316,17 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		try {
 			JSONObject obj = new JSONObject(jsonContent);
 			String text;
+			int type;
+			int version;
 			try {
 				text = obj.getString("text");
 			} catch (JSONException e){
 				text = "";
+			}
+			try {
+				type = obj.getInt("material_type");
+			} catch (Exception e) {
+				type = 0;
 			}
 			Material m = new Material(
 					obj.getString("description"), 
@@ -327,7 +334,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 					obj.getString("title"), 
 					text, 
 					"", 
-					obj.getInt("material_type"), 
+					type, 
 					obj.getString("modified"), 
 					obj.getString("material_id"), 
 					obj.getInt("version"),
