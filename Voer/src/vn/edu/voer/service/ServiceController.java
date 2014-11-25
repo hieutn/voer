@@ -3,7 +3,6 @@
  */
 package vn.edu.voer.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
@@ -23,6 +22,7 @@ import vn.edu.voer.object.Material;
 import vn.edu.voer.object.MaterialList;
 import vn.edu.voer.object.Person;
 import vn.edu.voer.utility.Constant;
+import vn.edu.voer.utility.NetworkUtil;
 import vn.edu.voer.utility.ParseUtil;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -41,22 +41,40 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	private static final int REQUEST_DOWNLOAD = 2;
 	private static final int REQUEST_PERSON = 3;
 
+	public static final int CODE_OK = 10;
+	public static final int CODE_NO_INTERNET = 11;
+	public static final int CODE_CONNECTION_TIMEOUT = 12;
+	public static final int CODE_TOKEN_EXPIRE = 13;
+
 	private ICategoryListener mCategoryListener;
 	private IMaterialListener mMaterialListener;
 	private IDownloadListener mDownloadListener;
 	private IPersonListener mPersonListener;
 
 	private int mRequest;
+	private int mCode;
 	private Context mCtx;
-
 	private boolean mSubMaterial = false;
 
 	public ServiceController(Context ctx) {
 		this.mCtx = ctx;
+		mCode = CODE_OK;
+	}
+
+	@Override
+	protected void onPreExecute() {
+		if (!NetworkUtil.isConnected(mCtx)) {
+			mCode = CODE_NO_INTERNET;
+		}
 	}
 
 	@Override
 	protected String doInBackground(String... params) {
+
+		if (mCode == CODE_NO_INTERNET) {
+			return null;
+		}
+
 		StringBuilder urlBuilder = new StringBuilder();
 		urlBuilder.append(params[0]);
 		urlBuilder.append(params[0].indexOf("?") >= 0 ? "&" : "?");
@@ -212,21 +230,25 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 */
 	private void responseCategories(String result) {
 		ArrayList<Category> cats = new ArrayList<Category>();
-		try {
-			JSONArray arr = new JSONArray(result);
-			JSONObject obj = null;
-			Category cat = null;
-			for (int i = 0; i < arr.length(); i++) {
-				obj = arr.getJSONObject(i);
-				cat = new Category(obj.getInt("id"), obj.getString("name"), obj.getInt("parent"),
-						obj.getString("description"));
-				cats.add(cat);
+		if (result != null) {
+			try {
+				JSONArray arr = new JSONArray(result);
+				JSONObject obj = null;
+				Category cat = null;
+				for (int i = 0; i < arr.length(); i++) {
+					obj = arr.getJSONObject(i);
+					cat = new Category(obj.getInt("id"), obj.getString("name"), obj.getInt("parent"),
+							obj.getString("description"));
+					cats.add(cat);
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+				cats = null;
 			}
-		} catch (JSONException e) {
-			e.printStackTrace();
+		} else {
 			cats = null;
 		}
-		mCategoryListener.onLoadCategoryDone(cats);
+		mCategoryListener.onLoadCategoryDone(cats, mCode);
 	}
 
 	/**
@@ -236,31 +258,33 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 *            Categories json content from service
 	 */
 	private void responseMaterials(String result) {
-
 		MaterialList ml = null;
-		int count;
-		String next;
-		String previous;
-		ArrayList<Material> results = new ArrayList<Material>();
-		Material m;
+		if (result != null) {
+			int count;
+			String next;
+			String previous;
+			ArrayList<Material> results = new ArrayList<Material>();
+			Material m;
 
-		try {
-			JSONObject obj = new JSONObject(result);
-			count = obj.getInt("count");
-			next = obj.getString("next");
-			previous = obj.getString("previous");
-			JSONArray arr = obj.getJSONArray("results");
-			for (int i = 0; i < arr.length(); i++) {
-				m = parseMaterial(arr.getString(i));
-				results.add(m);
+			try {
+				JSONObject obj = new JSONObject(result);
+				count = obj.getInt("count");
+				next = obj.getString("next");
+				previous = obj.getString("previous");
+				JSONArray arr = obj.getJSONArray("results");
+				for (int i = 0; i < arr.length(); i++) {
+					m = parseMaterial(arr.getString(i));
+					results.add(m);
+				}
+				ml = new MaterialList(count, next, previous, results);
+			} catch (JSONException e) {
+
+				e.printStackTrace();
+			} catch (NullPointerException e) {
+
 			}
-			ml = new MaterialList(count, next, previous, results);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (NullPointerException e) {
-			
 		}
-		mMaterialListener.onLoadMaterialsDone(ml);
+		mMaterialListener.onLoadMaterialsDone(ml, mCode);
 	}
 
 	/**
@@ -270,15 +294,17 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 *            Material detail json content from service
 	 */
 	private void responseDownloadMaterial(String result) {
-		Material m = parseMaterial(result);
 		boolean isDownloaded = false;
-		MaterialDAO md = new MaterialDAO(mCtx);
-		if (!mSubMaterial) {
-			isDownloaded = md.insertMaterial(m);
-		} else {
-			isDownloaded = md.insertSubMaterial(m);
+		if (result != null) {
+			Material m = parseMaterial(result);
+			MaterialDAO md = new MaterialDAO(mCtx);
+			if (!mSubMaterial) {
+				isDownloaded = md.insertMaterial(m);
+			} else {
+				isDownloaded = md.insertSubMaterial(m);
+			}
 		}
-		mDownloadListener.onDownloadMaterialDone(isDownloaded);
+		mDownloadListener.onDownloadMaterialDone(isDownloaded, mCode);
 	}
 
 	/**
@@ -287,19 +313,20 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 */
 	private void responseDownloadPerson(String result) {
 		Person person = null;
-		try {
-			JSONObject obj = new JSONObject(result);
-			person = new Person(obj.getInt("id"), obj.getString("first_name"), obj.getString("last_name"),
-					obj.getString("user_id"), obj.getString("title"), obj.getInt("client_id"),
-					obj.getString("fullname"), obj.getString("email"));
-		} catch (JSONException e) {
-			e.printStackTrace();
+		if (result != null) {
+			try {
+				JSONObject obj = new JSONObject(result);
+				person = new Person(obj.getInt("id"), obj.getString("first_name"), obj.getString("last_name"),
+						obj.getString("user_id"), obj.getString("title"), obj.getInt("client_id"),
+						obj.getString("fullname"), obj.getString("email"));
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+
+			PersonDAO pd = new PersonDAO(mCtx);
+			pd.insertPerson(person);
 		}
-
-		PersonDAO pd = new PersonDAO(mCtx);
-		pd.insertPerson(person);
-
-		mPersonListener.onLoadPersonDone(person);
+		mPersonListener.onLoadPersonDone(person, mCode);
 	}
 
 	/**
@@ -311,22 +338,11 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	private Material parseMaterial(String jsonContent) {
 		try {
 			JSONObject obj = new JSONObject(jsonContent);
-			Material m = new Material(
-					obj.getString("description"), 
-					ParseUtil.getStringValue(obj, "language"), 
-					obj.getString("title"), 
-					ParseUtil.getStringValue(obj, "text"),
-					ParseUtil.getStringValue(obj, "image"),
-					ParseUtil.getIntValue(obj, "material_type"),
-					obj.getString("modified"),
-					obj.getString("material_id"),
-					ParseUtil.getIntValue(obj, "version"), 
-					obj.getString("editor"),
-					"",
-					"", 
-					"",
-					obj.getString("author"), 
-					obj.getString("categories"));
+			Material m = new Material(obj.getString("description"), ParseUtil.getStringValue(obj, "language"),
+					obj.getString("title"), ParseUtil.getStringValue(obj, "text"), ParseUtil.getStringValue(obj,
+							"image"), ParseUtil.getIntValue(obj, "material_type"), obj.getString("modified"),
+					obj.getString("material_id"), ParseUtil.getIntValue(obj, "version"), obj.getString("editor"), "",
+					"", "", obj.getString("author"), obj.getString("categories"));
 			return m;
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -339,19 +355,19 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	// ===== Interface listener service request ====
 	//
 	public interface ICategoryListener {
-		public void onLoadCategoryDone(ArrayList<Category> categories);
+		public void onLoadCategoryDone(ArrayList<Category> categories, int code);
 	}
 
 	public interface IMaterialListener {
-		public void onLoadMaterialsDone(MaterialList materialList);
+		public void onLoadMaterialsDone(MaterialList materialList, int code);
 	}
 
 	public interface IDownloadListener {
-		public void onDownloadMaterialDone(boolean isDownloaded);
+		public void onDownloadMaterialDone(boolean isDownloaded, int code);
 	}
 
 	public interface IPersonListener {
-		public void onLoadPersonDone(Person person);
+		public void onLoadPersonDone(Person person, int code);
 	}
 
 }

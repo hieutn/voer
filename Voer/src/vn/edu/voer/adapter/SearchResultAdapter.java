@@ -7,6 +7,7 @@ import vn.edu.voer.database.dao.MaterialDAO;
 import vn.edu.voer.object.Material;
 import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.IDownloadListener;
+import vn.edu.voer.utility.DialogHelper;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
@@ -116,8 +117,12 @@ public class SearchResultAdapter extends BaseAdapter {
 			ServiceController sc = new ServiceController(mCtx);
 			sc.downloadMaterial(id, new IDownloadListener() {
 				@Override
-				public void onDownloadMaterialDone(boolean isDownloaded) {
-					notifyDataSetChanged();
+				public void onDownloadMaterialDone(boolean isDownloaded, int code) {
+					if (code == ServiceController.CODE_NO_INTERNET) {
+						DialogHelper.showDialogMessage(mCtx, mCtx.getResources().getString(R.string.msg_no_internet));
+					} else {
+						notifyDataSetChanged();
+					}
 				}
 			});
 		}

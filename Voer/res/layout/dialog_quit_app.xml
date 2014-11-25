@@ -15,6 +15,7 @@
         android:textSize="18sp" />
 
     <TextView
+        android:id="@+id/dialog_tv_msg"
         style="@style/Text.Content.Black"
         android:layout_margin="20dp"
         android:hint="@string/quitApp"

@@ -12,6 +12,7 @@ import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.IDownloadListener;
 import vn.edu.voer.service.ServiceController.IPersonListener;
 import vn.edu.voer.utility.DateTimeHelper;
+import vn.edu.voer.utility.DialogHelper;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -92,8 +93,11 @@ public class DetailContentFragment extends BaseFragment {
 				ServiceController sc = new ServiceController(getMainActivity());
 				sc.downloadSubMaterial(id, new IDownloadListener() {
 					@Override
-					public void onDownloadMaterialDone(boolean isDownloaded) {
-						if (isDownloaded) {
+					public void onDownloadMaterialDone(boolean isDownloaded, int code) {
+						if (code == ServiceController.CODE_NO_INTERNET) {
+							DialogHelper.showDialogMessage(getMainActivity(), getMainActivity().getResources()
+									.getString(R.string.msg_no_internet));
+						} else if (isDownloaded) {
 							fillContentWebview(id);
 						}
 					}
@@ -118,11 +122,16 @@ public class DetailContentFragment extends BaseFragment {
 			ServiceController sc = new ServiceController(getMainActivity());
 			sc.downloadPersonDetail(mMaterial.getAuthor(), new IPersonListener() {
 				@Override
-				public void onLoadPersonDone(Person person) {
-					try {
-						lblAuthor.setText(getActivity().getString(R.string.by) + ": " + person.getFullname());
-					} catch (NullPointerException e) {
-						lblAuthor.setText("");
+				public void onLoadPersonDone(Person person, int code) {
+					if (code == ServiceController.CODE_NO_INTERNET) {
+						DialogHelper.showDialogMessage(getMainActivity(),
+								getMainActivity().getResources().getString(R.string.msg_no_internet));
+					} else {
+						try {
+							lblAuthor.setText(getActivity().getString(R.string.by) + ": " + person.getFullname());
+						} catch (NullPointerException e) {
+							lblAuthor.setText("");
+						}
 					}
 				}
 			});

@@ -10,6 +10,7 @@ import vn.edu.voer.object.Category;
 import vn.edu.voer.service.AuthUtil;
 import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.ICategoryListener;
+import vn.edu.voer.utility.DialogHelper;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,13 +67,18 @@ public class CategoryFragment extends BaseFragment {
 		ServiceController sc = new ServiceController(getMainActivity());
 		sc.getCategories(new ICategoryListener() {
 			@Override
-			public void onLoadCategoryDone(ArrayList<Category> categories) {
-				try {
-					listCategories.clear();
-					listCategories.addAll(categories);
-					adapter.notifyDataSetChanged();
-				} catch (NullPointerException e) {
-					AuthUtil.refreshAuth(getMainActivity());
+			public void onLoadCategoryDone(ArrayList<Category> categories, int code) {
+				if (code == ServiceController.CODE_NO_INTERNET) {
+					DialogHelper.showDialogMessage(getMainActivity(),
+							getMainActivity().getResources().getString(R.string.msg_no_internet));
+				} else if (categories != null) {
+					try {
+						listCategories.clear();
+						listCategories.addAll(categories);
+						adapter.notifyDataSetChanged();
+					} catch (NullPointerException e) {
+						AuthUtil.refreshAuth(getMainActivity());
+					}
 				}
 				mPrbLoading.setVisibility(View.GONE);
 			}

@@ -82,7 +82,11 @@ public class AuthenticationService extends AsyncTask<String, Void, String> {
 			JSONObject obj = new JSONObject(result);
 			token = obj.getString("token");
 		} catch (JSONException e) {
-			e.printStackTrace();
+			Log.i(TAG, e.toString());
+			token = "";
+		} catch (NullPointerException e) {
+			Log.i(TAG, e.toString());
+			token = "";
 		}
 		if (BuildConfig.DEBUG) {
 			Log.i(TAG, token);

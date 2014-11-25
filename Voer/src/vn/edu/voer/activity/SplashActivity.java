@@ -22,7 +22,7 @@ public class SplashActivity extends Activity {
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
 		setContentView(R.layout.activity_splash);
-
+		
 		AuthUtil.authExecute(this);
 
 		// Copy database from assets to device storage

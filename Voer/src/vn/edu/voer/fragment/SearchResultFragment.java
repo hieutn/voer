@@ -12,6 +12,7 @@ import vn.edu.voer.service.AuthUtil;
 import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.IMaterialListener;
 import vn.edu.voer.utility.Constant;
+import vn.edu.voer.utility.DialogHelper;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -96,15 +97,20 @@ public class SearchResultFragment extends BaseFragment {
 		sc.getMaterials(Constant.URL_MATERIAL, getMainActivity().currentCategory.getId(), new IMaterialListener() {
 
 			@Override
-			public void onLoadMaterialsDone(MaterialList materialList) {
-				try {
-					isLoading = false;
-					mMaterialList = materialList;
-					mListMaterials.clear();
-					mListMaterials.addAll(mMaterialList.getMaterials());
-					mAdapter.notifyDataSetChanged();
-				} catch (NullPointerException e) {
-					AuthUtil.refreshAuth(getMainActivity());
+			public void onLoadMaterialsDone(MaterialList materialList, int code) {
+				if (code == ServiceController.CODE_NO_INTERNET) {
+					DialogHelper.showDialogMessage(getMainActivity(),
+							getMainActivity().getResources().getString(R.string.msg_no_internet));
+				} else if (materialList != null) {
+					try {
+						isLoading = false;
+						mMaterialList = materialList;
+						mListMaterials.clear();
+						mListMaterials.addAll(mMaterialList.getMaterials());
+						mAdapter.notifyDataSetChanged();
+					} catch (NullPointerException e) {
+						AuthUtil.refreshAuth(getMainActivity());
+					}
 				}
 				mPrbLoading.setVisibility(View.GONE);
 			}
@@ -117,15 +123,20 @@ public class SearchResultFragment extends BaseFragment {
 		sc.searchMaterials(getMainActivity().currentSearchKeyword, new IMaterialListener() {
 
 			@Override
-			public void onLoadMaterialsDone(MaterialList materialList) {
-				try {
-					isLoading = false;
-					mMaterialList = materialList;
-					mListMaterials.clear();
-					mListMaterials.addAll(mMaterialList.getMaterials());
-					mAdapter.notifyDataSetChanged();
-				} catch (NullPointerException e) {
-					AuthUtil.refreshAuth(getMainActivity());
+			public void onLoadMaterialsDone(MaterialList materialList, int code) {
+				if (code == ServiceController.CODE_NO_INTERNET) {
+					DialogHelper.showDialogMessage(getMainActivity(),
+							getMainActivity().getResources().getString(R.string.msg_no_internet));
+				} else if (materialList != null) {
+					try {
+						isLoading = false;
+						mMaterialList = materialList;
+						mListMaterials.clear();
+						mListMaterials.addAll(mMaterialList.getMaterials());
+						mAdapter.notifyDataSetChanged();
+					} catch (NullPointerException e) {
+						AuthUtil.refreshAuth(getMainActivity());
+					}
 				}
 				mPrbLoading.setVisibility(View.GONE);
 				getMainActivity().isSearching = false;
@@ -140,15 +151,20 @@ public class SearchResultFragment extends BaseFragment {
 			sc.getMaterials(mMaterialList.getNextLink(), new IMaterialListener() {
 
 				@Override
-				public void onLoadMaterialsDone(MaterialList materialList) {
-					try {
-						isLoading = false;
-						mMaterialList = materialList;
-						mListMaterials.addAll(mMaterialList.getMaterials());
-						mAdapter.notifyDataSetChanged();
-					} catch (NullPointerException e) {
-						mPrbLoading.setVisibility(View.GONE);
-						AuthUtil.refreshAuth(getMainActivity());
+				public void onLoadMaterialsDone(MaterialList materialList, int code) {
+					if (code == ServiceController.CODE_NO_INTERNET) {
+						DialogHelper.showDialogMessage(getMainActivity(),
+								getMainActivity().getResources().getString(R.string.msg_no_internet));
+					} else if (materialList != null) {
+						try {
+							isLoading = false;
+							mMaterialList = materialList;
+							mListMaterials.addAll(mMaterialList.getMaterials());
+							mAdapter.notifyDataSetChanged();
+						} catch (NullPointerException e) {
+							mPrbLoading.setVisibility(View.GONE);
+							AuthUtil.refreshAuth(getMainActivity());
+						}
 					}
 					mPrbLoading.setVisibility(View.GONE);
 				}
