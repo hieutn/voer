@@ -65,7 +65,7 @@ public class SearchResultFragment extends BaseFragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Material material = mListMaterials.get(position);
 				if (mMaterialDAO.isDownloadedMaterial(material.getMaterialID())) {
-					getMainActivity().displayDetailContent(material);
+					getMainActivity().displayDetailContent(mMaterialDAO.getMaterialById(material.getMaterialID()));
 				} else {
 					mAdapter.downloadMaterial(material.getMaterialID());
 				}

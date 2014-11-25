@@ -1,7 +1,6 @@
 package vn.edu.voer.fragment;
 
 import java.util.ArrayList;
-import java.util.regex.PatternSyntaxException;
 
 import vn.edu.voer.R;
 import vn.edu.voer.database.dao.MaterialDAO;
@@ -12,10 +11,10 @@ import vn.edu.voer.object.Person;
 import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.IDownloadListener;
 import vn.edu.voer.service.ServiceController.IPersonListener;
+import vn.edu.voer.utility.DateTimeHelper;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +43,7 @@ public class DetailContentFragment extends BaseFragment {
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);
 		if (hidden) {
-			clearData();
+			//clearData();
 		}
 	}
 
@@ -110,16 +109,8 @@ public class DetailContentFragment extends BaseFragment {
 
 	private void fillContentWebview() {
 		getMainActivity().setHeaderTitle(mMaterial.getTitle());
-		String date;
-		try {
-			date = mMaterial.getModified().split("T")[0];
-		} catch (NullPointerException e) {
-			date = "";
-		} catch (PatternSyntaxException e) {
-			date = "";
-		}
-		
-		lblPublishDate.setText(getActivity().getString(R.string.publishOn) + ": " + date);
+		lblPublishDate.setText(getActivity().getString(R.string.publishOn) + ": "
+				+ DateTimeHelper.getDateFromDateTime(mMaterial.getModified()));
 		if (pd.isDownloadedPerson(mMaterial.getAuthor())) {
 			Person per = pd.getPersonById(mMaterial.getAuthor());
 			lblAuthor.setText(getActivity().getString(R.string.by) + ": " + per.getFullname());
@@ -136,7 +127,6 @@ public class DetailContentFragment extends BaseFragment {
 				}
 			});
 		}
-		
 
 		mWebViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");
 		mWebViewContent.reload();
