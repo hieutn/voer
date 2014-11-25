@@ -110,7 +110,6 @@ public class DetailContentFragment extends BaseFragment {
 
 	private void fillContentWebview() {
 		getMainActivity().setHeaderTitle(mMaterial.getTitle());
-		Log.d("SDD", mMaterial.getModified());
 		String date;
 		try {
 			date = mMaterial.getModified().split("T")[0];

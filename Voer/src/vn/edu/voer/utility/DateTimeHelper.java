@@ -7,8 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.text.format.DateFormat;
 
 /**
  * @author sidd
