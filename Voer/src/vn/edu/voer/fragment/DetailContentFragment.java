@@ -43,7 +43,7 @@ public class DetailContentFragment extends BaseFragment {
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);
 		if (hidden) {
-			//clearData();
+			clearData();
 		}
 	}
 
