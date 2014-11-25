@@ -23,6 +23,20 @@ public class MaterialDAO {
 	public MaterialDAO(Context ctx) {
 		mDBHelper = DbConnectionHelper.getInstance(ctx);
 	}
+	
+	public boolean deleteMaterial(String id) {
+		StringBuilder where = new StringBuilder();
+		where.append(MaterialSchema.ID);
+		where.append("='");
+		where.append(id);
+		where.append("'");
+		long res = mDBHelper.delete(MaterialSchema.TABLE_NAME, where.toString());
+		if (res < 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 
 	/**
 	 * Check material downloaded to local database
