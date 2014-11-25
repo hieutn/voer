@@ -71,7 +71,8 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		try {
 			HttpResponse response = httpClient.execute(httpGet);
 			return EntityUtils.toString(response.getEntity());
-		} catch (IOException e) {
+		} catch (Exception e) {
+			Log.i(TAG, e.toString());
 			return null;
 		}
 	}
@@ -256,6 +257,8 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 			ml = new MaterialList(count, next, previous, results);
 		} catch (JSONException e) {
 			e.printStackTrace();
+		} catch (NullPointerException e) {
+			
 		}
 		mMaterialListener.onLoadMaterialsDone(ml);
 	}

@@ -63,7 +63,12 @@ public class SearchResultAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		final Material material = listMaterials.get(position);
+		final Material material;
+		try {
+			material = listMaterials.get(position);
+		} catch (IndexOutOfBoundsException e) {
+			return convertView;
+		}
 		if (material != null) {
 			holder.lblTitle.setText(material.getTitle());
 			if (!mMaterialDAO.isDownloadedMaterial(material.getMaterialID())) {
