@@ -47,6 +47,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	public List<Fragment> listFragments;
 	public int currentFragment;
 	public int fragmentBeforeResult;
+	public int fragmentBeforeDetail;
 
 	public Material currentMaterial;
 	public int currentModuleIndex = 0;
@@ -174,6 +175,16 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 		((DetailContentFragment) listFragments.get(DETAIL_CONTENT)).setData();
 	}
 
+	public void displayDetailContent(Material material) {
+		fragmentBeforeDetail = currentFragment;
+		currentMaterial = material;
+		gotoFragment(DETAIL_CONTENT);
+		((DetailContentFragment) listFragments.get(MainActivity.DETAIL_CONTENT)).setData();
+		if (currentMaterial.getMaterialType() == Material.TYPE_COLLECTION) {
+			navigationDrawerFragment.setDataTableContent();
+		}
+	}
+
 	public void setTabSelected(int tabSelected) {
 		showFragment(tabSelected);
 		switch (tabSelected) {
@@ -258,7 +269,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	public void onBackPressed() {
 		switch (currentFragment) {
 		case DETAIL_CONTENT:
-			backFragment(TAB_LIBRARY);
+			backFragment(fragmentBeforeDetail);
 			break;
 
 		case SEARCH_RESULT:
