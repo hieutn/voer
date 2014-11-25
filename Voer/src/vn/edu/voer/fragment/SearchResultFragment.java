@@ -27,7 +27,7 @@ public class SearchResultFragment extends BaseFragment {
 	private ArrayList<Material> mListMaterials;
 	private MaterialList mMaterialList;
 	private SearchResultAdapter mAdapter;
-	private boolean isLoading = true;
+	private boolean isLoading = false;
 	private MaterialDAO mMaterialDAO;
 
 	@Override
@@ -128,6 +128,7 @@ public class SearchResultFragment extends BaseFragment {
 					AuthUtil.refreshAuth(getMainActivity());
 				}
 				mPrbLoading.setVisibility(View.GONE);
+				getMainActivity().isSearching = false;
 			}
 		});
 	}
