@@ -3,7 +3,6 @@ package vn.edu.voer.fragment;
 import java.util.ArrayList;
 
 import vn.edu.voer.R;
-import vn.edu.voer.activity.MainActivity;
 import vn.edu.voer.adapter.LibraryAdapter;
 import vn.edu.voer.database.dao.MaterialDAO;
 import vn.edu.voer.object.Material;
@@ -48,12 +47,7 @@ public class LibraryFragment extends BaseFragment {
 		lsvBook.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				getMainActivity().currentMaterial = mMaterials.get(position);
-				goToFragment(MainActivity.DETAIL_CONTENT);
-				((DetailContentFragment) getMainActivity().listFragments.get(MainActivity.DETAIL_CONTENT)).setData();
-				if (getMainActivity().currentMaterial.getMaterialType() == Material.TYPE_COLLECTION) {
-					getMainActivity().navigationDrawerFragment.setDataTableContent();
-				}
+				getMainActivity().displayDetailContent(mMaterials.get(position));
 			}
 		});
 	}

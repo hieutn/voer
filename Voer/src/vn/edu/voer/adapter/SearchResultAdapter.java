@@ -9,12 +9,14 @@ import vn.edu.voer.service.ServiceController;
 import vn.edu.voer.service.ServiceController.IDownloadListener;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class SearchResultAdapter extends BaseAdapter {
@@ -56,7 +58,7 @@ public class SearchResultAdapter extends BaseAdapter {
 			convertView = mInflater.inflate(R.layout.layout_item_search_result, null);
 			holder = new ViewHolder();
 			holder.lblTitle = (TextView) convertView.findViewById(R.id.lblTitle);
-			holder.imgDownload = (ImageButton) convertView.findViewById(R.id.search_item_btn_download);
+			holder.imgDownload = (ImageView) convertView.findViewById(R.id.search_item_btn_download);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -67,8 +69,10 @@ public class SearchResultAdapter extends BaseAdapter {
 			holder.lblTitle.setText(material.getTitle());
 			if (!mMaterialDAO.isDownloadedMaterial(material.getMaterialID())) {
 				holder.imgDownload.setImageResource(R.drawable.download);
+				holder.lblTitle.setTypeface(null, Typeface.NORMAL);
 			} else {
 				holder.imgDownload.setImageResource(R.drawable.downloaded);
+				holder.lblTitle.setTypeface(null, Typeface.BOLD);
 			}
 
 			if (material.getMaterialType() == Material.TYPE_MODULE) {
@@ -95,7 +99,7 @@ public class SearchResultAdapter extends BaseAdapter {
 
 	static class ViewHolder {
 		TextView lblTitle;
-		ImageButton imgDownload;
+		ImageView imgDownload;
 	}
 
 	/**
@@ -103,7 +107,7 @@ public class SearchResultAdapter extends BaseAdapter {
 	 * 
 	 * @param id
 	 */
-	private void downloadMaterial(String id) {
+	public void downloadMaterial(String id) {
 		if (!mMaterialDAO.isDownloadedMaterial(id)) {
 			ServiceController sc = new ServiceController(mCtx);
 			sc.downloadMaterial(id, new IDownloadListener() {

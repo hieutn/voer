@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import vn.edu.voer.R;
 import vn.edu.voer.activity.MainActivity;
 import vn.edu.voer.adapter.SearchResultAdapter;
+import vn.edu.voer.database.dao.MaterialDAO;
 import vn.edu.voer.object.Material;
 import vn.edu.voer.object.MaterialList;
 import vn.edu.voer.service.AuthUtil;
@@ -27,6 +28,7 @@ public class SearchResultFragment extends BaseFragment {
 	private MaterialList mMaterialList;
 	private SearchResultAdapter mAdapter;
 	private boolean isLoading = true;
+	private MaterialDAO mMaterialDAO;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,13 +47,13 @@ public class SearchResultFragment extends BaseFragment {
 			} else {
 				searchMaterial();
 			}
-
 		}
 	}
 
 	private void initUI(View view) {
 		mListView = (ListView) view.findViewById(R.id.listView);
 		mPrbLoading = (View) view.findViewById(R.id.frm_category_loading);
+		mMaterialDAO = new MaterialDAO(getActivity());
 	}
 
 	private void initControl() {
@@ -61,11 +63,16 @@ public class SearchResultFragment extends BaseFragment {
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Material material = mListMaterials.get(position);
+				if (mMaterialDAO.isDownloadedMaterial(material.getMaterialID())) {
+					getMainActivity().displayDetailContent(material);
+				} else {
+					mAdapter.downloadMaterial(material.getMaterialID());
+				}
 			}
 		});
 
 		mListView.setOnScrollListener(new OnScrollListener() {
-
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
 
