@@ -39,33 +39,32 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	private static final int REQUEST_MATERIALS = 1;
 	private static final int REQUEST_DOWNLOAD = 2;
 	private static final int REQUEST_PERSON = 3;
-	
-	private ICategoryListener 	mCategoryListener;
-	private IMaterialListener 	mMaterialListener;
-	private IDownloadListener 	mDownloadListener;
-	private IPersonListener 	mPersonListener;
-	
+
+	private ICategoryListener mCategoryListener;
+	private IMaterialListener mMaterialListener;
+	private IDownloadListener mDownloadListener;
+	private IPersonListener mPersonListener;
+
 	private int mRequest;
 	private Context mCtx;
-	
+
 	private boolean mSubMaterial = false;
-	
 
 	public ServiceController(Context ctx) {
 		this.mCtx = ctx;
 	}
-	
+
 	@Override
 	protected String doInBackground(String... params) {
 		StringBuilder urlBuilder = new StringBuilder();
 		urlBuilder.append(params[0]);
 		urlBuilder.append(params[0].indexOf("?") >= 0 ? "&" : "?");
 		urlBuilder.append(AuthUtil.getAuthToken(mCtx));
-		
+
 		if (BuildConfig.DEBUG) {
 			Log.i(TAG, urlBuilder.toString());
 		}
-		
+
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpGet httpGet = new HttpGet(urlBuilder.toString());
 		try {
@@ -90,11 +89,11 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		case REQUEST_DOWNLOAD:
 			responseDownloadMaterial(result);
 			break;
-			
+
 		case REQUEST_PERSON:
 			responseDownloadPerson(result);
 			break;
-			
+
 		default:
 			break;
 		}
@@ -173,17 +172,18 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	public void downloadMaterial(String materialId, IDownloadListener listener) {
 		mDownloadListener = listener;
 		mRequest = REQUEST_DOWNLOAD;
-		
+
 		StringBuilder url = new StringBuilder();
 		url.append(Constant.URL_MATERIAL);
 		url.append("/");
 		url.append(materialId);
-		
+
 		execute(url.toString());
 	}
-	
+
 	/**
 	 * Download sub material with module type
+	 * 
 	 * @param materialId
 	 * @param listener
 	 */
@@ -191,7 +191,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		mSubMaterial = true;
 		downloadMaterial(materialId, listener);
 	}
-	
+
 	public void downloadPersonDetail(String id, IPersonListener listener) {
 		mPersonListener = listener;
 		mRequest = REQUEST_PERSON;
@@ -216,10 +216,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 			Category cat = null;
 			for (int i = 0; i < arr.length(); i++) {
 				obj = arr.getJSONObject(i);
-				cat = new Category(
-						obj.getInt("id"), 
-						obj.getString("name"), 
-						obj.getInt("parent"), 
+				cat = new Category(obj.getInt("id"), obj.getString("name"), obj.getInt("parent"),
 						obj.getString("description"));
 				cats.add(cat);
 			}
@@ -237,14 +234,14 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	 *            Categories json content from service
 	 */
 	private void responseMaterials(String result) {
-		
+
 		MaterialList ml = null;
 		int count;
 		String next;
 		String previous;
 		ArrayList<Material> results = new ArrayList<Material>();
 		Material m;
-		
+
 		try {
 			JSONObject obj = new JSONObject(result);
 			count = obj.getInt("count");
@@ -279,7 +276,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		}
 		mDownloadListener.onDownloadMaterialDone(isDownloaded);
 	}
-	
+
 	/**
 	 * 
 	 * @param result
@@ -288,27 +285,22 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		Person person = null;
 		try {
 			JSONObject obj = new JSONObject(result);
-			person = new Person(
-					obj.getInt("id"), 
-					obj.getString("first_name"),
-					obj.getString("last_name"),
-					obj.getString("user_id"), 
-					obj.getString("title"), 
-					obj.getInt("client_id"),
-					obj.getString("fullname"), 
-					obj.getString("email"));
+			person = new Person(obj.getInt("id"), obj.getString("first_name"), obj.getString("last_name"),
+					obj.getString("user_id"), obj.getString("title"), obj.getInt("client_id"),
+					obj.getString("fullname"), obj.getString("email"));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
+
 		PersonDAO pd = new PersonDAO(mCtx);
 		pd.insertPerson(person);
-		
+
 		mPersonListener.onLoadPersonDone(person);
 	}
-	
+
 	/**
 	 * Parse material object from json content
+	 * 
 	 * @param jsonContent
 	 * @return
 	 */
@@ -318,31 +310,19 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 			String text;
 			try {
 				text = obj.getString("text");
-			} catch (JSONException e){
+			} catch (JSONException e) {
 				text = "";
 			}
-			Material m = new Material(
-					obj.getString("description"), 
-					"", 
-					obj.getString("title"), 
-					text, 
-					"", 
-					obj.getInt("material_type"), 
-					obj.getString("modified"), 
-					obj.getString("material_id"), 
-					obj.getInt("version"),
-					obj.getString("editor"),
-					"", 
-					"", 
-					"", 
-					obj.getString("author"), 
+			Material m = new Material(obj.getString("description"), "", obj.getString("title"), text, "",
+					obj.getInt("material_type"), obj.getString("modified"), obj.getString("material_id"),
+					obj.getInt("version"), obj.getString("editor"), "", "", "", obj.getString("author"),
 					obj.getString("categories"));
 			return m;
 		} catch (JSONException e) {
 			e.printStackTrace();
 			return null;
 		}
-		
+
 	}
 
 	//
@@ -359,12 +339,53 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	public interface IDownloadListener {
 		public void onDownloadMaterialDone(boolean isDownloaded);
 	}
-	
+
 	public interface IPersonListener {
 		public void onLoadPersonDone(Person person);
 	}
+
 	//
 	// ====
 	//
+	// Core function. Please don't change it
+	public static String getStringValue(JSONObject obj, String key) {
+		try {
+			return obj.isNull(key) ? "" : obj.getString(key);
+		} catch (JSONException e) {
+			return "";
+		}
+	}
 
+	public static long getLongValue(JSONObject obj, String key) {
+		try {
+			return obj.isNull(key) ? 0L : obj.getLong(key);
+		} catch (JSONException e) {
+			return 0L;
+		}
+	}
+
+	public static int getIntValue(JSONObject obj, String key) {
+		try {
+			return obj.isNull(key) ? 0 : obj.getInt(key);
+		} catch (JSONException e) {
+			return 0;
+		}
+	}
+
+	public static Double getDoubleValue(JSONObject obj, String key) {
+		double d = 0.0;
+		try {
+			return obj.isNull(key) ? d : obj.getDouble(key);
+		} catch (JSONException e) {
+			return d;
+		}
+	}
+
+	public static boolean getBooleanValue(JSONObject obj, String key) {
+		try {
+			return obj.isNull(key) ? false : obj.getBoolean(key);
+		} catch (JSONException e) {
+			return false;
+		}
+	}
 }
