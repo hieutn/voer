@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -70,7 +70,7 @@ public class LibraryAdapter extends ArrayAdapter<Material> {
 			convertView = LayoutInflater.from(mCtx).inflate(mLayoutId, parent, false);
 			holder = new ViewHolder();
 			holder.title = (TextView) convertView.findViewById(R.id.frm_library_item_title);
-			holder.btnRemove = (ImageButton) convertView.findViewById(R.id.frm_library_item_btn_remove);
+			holder.btnRemove = (ImageView) convertView.findViewById(R.id.frm_library_item_btn_remove);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -103,7 +103,7 @@ public class LibraryAdapter extends ArrayAdapter<Material> {
 	 */
 	private static class ViewHolder {
 		TextView title;
-		ImageButton btnRemove;
+		ImageView btnRemove;
 //		TextView lblAuthorAndYear;
 	}
 }
