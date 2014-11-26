@@ -2,6 +2,13 @@ package vn.edu.voer.fragment;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import vn.edu.voer.R;
 import vn.edu.voer.database.dao.MaterialDAO;
 import vn.edu.voer.database.dao.PersonDAO;
@@ -9,6 +16,7 @@ import vn.edu.voer.object.CollectionContent;
 import vn.edu.voer.object.Material;
 import vn.edu.voer.object.Person;
 import vn.edu.voer.service.ServiceController;
+import vn.edu.voer.service.ServiceController.IDownloadImageListener;
 import vn.edu.voer.service.ServiceController.IDownloadListener;
 import vn.edu.voer.service.ServiceController.IPersonListener;
 import vn.edu.voer.utility.DateTimeHelper;
@@ -34,6 +42,7 @@ public class DetailContentFragment extends BaseFragment {
 	private ArrayList<CollectionContent> mCollectionContents;
 	MaterialDAO md = new MaterialDAO(getMainActivity());
 	PersonDAO pd = new PersonDAO(getMainActivity());
+	private ArrayList<String> mAttachs = new ArrayList<String>();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -82,8 +91,12 @@ public class DetailContentFragment extends BaseFragment {
 	public void setData() {
 		mMaterial = getMainActivity().currentMaterial;
 		if (mMaterial != null) {
-			Log.i("SDD", mMaterial.getMaterialID());
-			Log.i("SDD", mMaterial.getText());
+			// Download image for material from service
+			if (mMaterial.getAttachFile().length() == 0) {
+				downloadImage(mMaterial.getMaterialID());
+			} else if (!getMainActivity().isReplaceImageLink) {
+				parseImageAttach(mMaterial.getAttachFile());
+			}
 			if (mMaterial.getMaterialType() == Material.TYPE_MODULE) {
 				getMainActivity().setButtonTableContent(false);
 				fillContentWebview();
@@ -153,5 +166,73 @@ public class DetailContentFragment extends BaseFragment {
 
 		mWebViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");
 		mWebViewContent.reload();
+	}
+
+	private void downloadImage(final String materialId) {
+		ServiceController sc = new ServiceController(getMainActivity());
+		sc.downloadMaterialImage(materialId, new IDownloadImageListener() {
+			@Override
+			public void onDownloadImageDone(String attach) {
+				Log.i("SDD", attach);
+				MaterialDAO md = new MaterialDAO(getMainActivity());
+				md.updateAttachFile(materialId, attach);
+				getMainActivity().currentMaterial = md.getMaterialById(materialId);
+				setData();
+			}
+		});
+	}
+
+	private void parseImageAttach(String attach) {
+		if (attach.length() == 2) {
+			return;
+		} else {
+			try {
+				mAttachs.clear();
+				JSONArray arr = new JSONArray(attach);
+				for (int i = 0; i < arr.length(); i++) {
+					String img = arr.getString(i);
+					mAttachs.add(img);
+				}
+
+				updateHTMLImageLink();
+
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * 
+	 */
+	private void updateHTMLImageLink() {
+		try {
+			Document doc = Jsoup.parse(mMaterial.getText());
+			Elements elements = doc.getElementsByTag("img");
+			for (int i = 0; i < elements.size(); i++) {
+				try {
+					Element e = elements.get(i);
+					String textContent = mMaterial.getText().replace(e.attr("src"),
+							getAbsoluteImageLink(mAttachs.get(i)));
+					mMaterial.setText(textContent);
+				} catch (Exception e) {
+				}
+			}
+		} catch (Exception e) {
+		}
+		getMainActivity().isReplaceImageLink = true;
+		setData();
+	}
+
+	/**
+	 * 
+	 * @param img
+	 * @return
+	 */
+	private String getAbsoluteImageLink(String img) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("http://voer.edu.vn/file/");
+		builder.append(img);
+		return builder.toString();
 	}
 }

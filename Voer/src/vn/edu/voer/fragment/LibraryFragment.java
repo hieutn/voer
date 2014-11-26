@@ -48,6 +48,7 @@ public class LibraryFragment extends BaseFragment {
 		lsvBook.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				getMainActivity().isReplaceImageLink = false;
 				getMainActivity().displayDetailContent(mMaterials.get(position));
 			}
 		});

@@ -49,8 +49,9 @@ public class DbConnectionHelper {
 					cur.getString(cur.getColumnIndex(MaterialSchema.DERIVED_FROM)),
 					cur.getString(cur.getColumnIndex(MaterialSchema.KEYWORD)), 
 					cur.getString(cur.getColumnIndex(MaterialSchema.LICENSE_ID)), 
-					cur.getString(cur.getColumnIndex(MaterialSchema.AUTHOR)), 
-					cur.getString(cur.getColumnIndex(MaterialSchema.CATEGORIES))));
+					cur.getString(cur.getColumnIndex(MaterialSchema.AUTHOR)),
+					cur.getString(cur.getColumnIndex(MaterialSchema.CATEGORIES)),
+					cur.getString(cur.getColumnIndex(MaterialSchema.ATTACH_FILE))));
 		}
 		cur.close();
 		mDbManager.close();

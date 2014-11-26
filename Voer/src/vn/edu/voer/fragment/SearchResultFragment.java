@@ -74,6 +74,7 @@ public class SearchResultFragment extends BaseFragment {
 					Material material = mListMaterials.get(position);
 					if (material != null) {
 						if (mMaterialDAO.isDownloadedMaterial(material.getMaterialID())) {
+							getMainActivity().isReplaceImageLink = false;
 							getMainActivity().displayDetailContent(
 									mMaterialDAO.getMaterialById(material.getMaterialID()));
 						} else {
@@ -216,11 +217,17 @@ public class SearchResultFragment extends BaseFragment {
 						} catch (NullPointerException e) {
 						}
 					}
-					mListView.removeFooterView(loading);
+					try {
+						mListView.removeFooterView(loading);
+					} catch (Exception ex) {
+					}
 				}
 			});
 		} catch (NullPointerException e) {
-			mListView.removeFooterView(loading);
+			try {
+				mListView.removeFooterView(loading);
+			} catch (Exception ex) {
+			}
 		}
 	}
 }

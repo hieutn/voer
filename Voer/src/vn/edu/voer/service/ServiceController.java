@@ -44,6 +44,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	private static final int REQUEST_MATERIALS = 1;
 	private static final int REQUEST_DOWNLOAD = 2;
 	private static final int REQUEST_PERSON = 3;
+	private static final int REQUEST_DOWNLOAD_IMAGE = 4;
 
 	public static final int CODE_OK = 0;
 	public static final int CODE_NO_INTERNET = 1;
@@ -56,6 +57,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 	private IMaterialListener mMaterialListener;
 	private IDownloadListener mDownloadListener;
 	private IPersonListener mPersonListener;
+	private IDownloadImageListener mDownloadImageListener;
 
 	private int mRequest;
 	private int mCode;
@@ -85,8 +87,6 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		if (urlBuilder.toString().indexOf("vpr_token") < 0) {
 			urlBuilder.append(params[0].indexOf("?") >= 0 ? "&" : "?");
 			urlBuilder.append(AuthUtil.getAuthToken(mCtx));
-		} else {
-			Log.i(TAG, "URL is containt token");
 		}
 
 		if (BuildConfig.DEBUG) {
@@ -141,6 +141,10 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 
 		case REQUEST_PERSON:
 			responseDownloadPerson(result);
+			break;
+			
+		case REQUEST_DOWNLOAD_IMAGE:
+			responseDownloadImage(result);
 			break;
 
 		default:
@@ -241,6 +245,11 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		downloadMaterial(materialId, listener);
 	}
 
+	/**
+	 * 
+	 * @param id
+	 * @param listener
+	 */
 	public void downloadPersonDetail(String id, IPersonListener listener) {
 		mPersonListener = listener;
 		mRequest = REQUEST_PERSON;
@@ -248,6 +257,18 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		url.append(Constant.URL_AUTHOR);
 		url.append("/");
 		url.append(id);
+		execute(url.toString());
+	}
+	
+	public void downloadMaterialImage(String id, IDownloadImageListener listener) {
+		mDownloadImageListener = listener;
+		mRequest = REQUEST_DOWNLOAD_IMAGE;
+		StringBuilder url = new StringBuilder();
+		url.append(Constant.URL_MATERIAL);
+		url.append("/");
+		url.append(id);
+		url.append("/");
+		url.append("mfiles");
 		execute(url.toString());
 	}
 
@@ -356,6 +377,10 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		}
 		mPersonListener.onLoadPersonDone(person, mCode);
 	}
+	
+	private void responseDownloadImage(String result) {
+		mDownloadImageListener.onDownloadImageDone(result);
+	}
 
 	/**
 	 * Parse material object from json content
@@ -370,7 +395,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 					obj.getString("title"), ParseUtil.getStringValue(obj, "text"), ParseUtil.getStringValue(obj,
 							"image"), ParseUtil.getIntValue(obj, "material_type"), obj.getString("modified"),
 					obj.getString("material_id"), ParseUtil.getIntValue(obj, "version"), obj.getString("editor"), "",
-					"", "", obj.getString("author"), obj.getString("categories"));
+					"", "", obj.getString("author"), obj.getString("categories"), "");
 			return m;
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -419,4 +444,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		public void onLoadPersonDone(Person person, int code);
 	}
 
+	public interface IDownloadImageListener {
+		public void onDownloadImageDone(String attach);
+	}
 }

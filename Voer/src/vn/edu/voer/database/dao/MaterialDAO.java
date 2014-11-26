@@ -23,7 +23,28 @@ public class MaterialDAO {
 	public MaterialDAO(Context ctx) {
 		mDBHelper = DbConnectionHelper.getInstance(ctx);
 	}
-	
+
+	public boolean updateAttachFile(String id, String attach) {
+		StringBuilder where = new StringBuilder();
+		where.append(MaterialSchema.ID);
+		where.append("='");
+		where.append(id);
+		where.append("'");
+		String columns[] = { MaterialSchema.ATTACH_FILE };
+		String values[] = { attach };
+		long res = mDBHelper.update(MaterialSchema.TABLE_NAME, columns, values, where.toString());
+		if (res < 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public boolean deleteMaterial(String id) {
 		StringBuilder where = new StringBuilder();
 		where.append(MaterialSchema.ID);
@@ -61,7 +82,7 @@ public class MaterialDAO {
 	public boolean insertMaterial(Material material) {
 		return insertMaterial(material, false);
 	}
-	
+
 	/**
 	 * 
 	 * @param material
@@ -70,7 +91,7 @@ public class MaterialDAO {
 	public boolean insertSubMaterial(Material material) {
 		return insertMaterial(material, true);
 	}
-	
+
 	/**
 	 * 
 	 * @param material
@@ -84,7 +105,7 @@ public class MaterialDAO {
 					material.getText(), material.getLanguage(), material.getImage(), material.getMaterialType(),
 					material.getModified(), material.getVersion(), material.getEditor(), material.getDerivedFrom(),
 					material.getKeywords(), material.getLicenseID(), material.getAuthor(), material.getCategories(),
-					DateTimeHelper.getCurrentDateTime(), isSubMaterial ? 1 : 0 };
+					DateTimeHelper.getCurrentDateTime(), isSubMaterial ? 1 : 0, "" };
 			long res = mDBHelper.insert(MaterialSchema.TABLE_NAME, columns, values);
 			if (res < 0) {
 				return false;
@@ -106,7 +127,7 @@ public class MaterialDAO {
 		condition.append(MaterialSchema.SUB_MATERIAL);
 		condition.append("=");
 		condition.append("0");
-		
+
 		StringBuilder orderBy = new StringBuilder();
 		orderBy.append(MaterialSchema.DATE_CREATED);
 		orderBy.append(" ");
