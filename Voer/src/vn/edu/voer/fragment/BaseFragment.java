@@ -36,30 +36,25 @@ public class BaseFragment extends Fragment {
 		return (MainActivity) getActivity();
 	}
 
-	public void showDialogNoNetwork() {
-		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				switch (which) {
-				case DialogInterface.BUTTON_POSITIVE:
-					Intent settings = new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS);
-					settings.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					startActivity(settings);
-					dialog.dismiss();
-					break;
-
-				case DialogInterface.BUTTON_NEGATIVE:
-					dialog.dismiss();
-					break;
-				}
-			}
-		};
-
-		// AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		// builder.setTitle(R.string.app_name).setMessage(R.string.noNetwork)
-		// .setPositiveButton(R.string.yes, dialogClickListener)
-		// .setNegativeButton(R.string.no, dialogClickListener).show();
-	}
+//	public void showDialogNoNetwork() {
+//		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+//			@Override
+//			public void onClick(DialogInterface dialog, int which) {
+//				switch (which) {
+//				case DialogInterface.BUTTON_POSITIVE:
+//					Intent settings = new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS);
+//					settings.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//					startActivity(settings);
+//					dialog.dismiss();
+//					break;
+//
+//				case DialogInterface.BUTTON_NEGATIVE:
+//					dialog.dismiss();
+//					break;
+//				}
+//			}
+//		};
+//	}
 
 	protected void showDialog(int idString, final DialogListener listener) {
 		new AlertDialog.Builder(getActivity()).setTitle(R.string.app_name).setMessage(idString)
