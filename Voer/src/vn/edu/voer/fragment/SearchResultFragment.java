@@ -32,6 +32,7 @@ public class SearchResultFragment extends BaseFragment {
 	private MaterialList mMaterialList;
 	private SearchResultAdapter mAdapter;
 	private boolean isLoading = false;
+	private boolean isDownloading = false;
 	private MaterialDAO mMaterialDAO;
 	private TextView mTvProgress;
 
@@ -69,20 +70,25 @@ public class SearchResultFragment extends BaseFragment {
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Material material = mListMaterials.get(position);
-				if (material != null) {
-					if (mMaterialDAO.isDownloadedMaterial(material.getMaterialID())) {
-						getMainActivity().displayDetailContent(mMaterialDAO.getMaterialById(material.getMaterialID()));
-					} else {
-						mTvProgress.setText(getMainActivity().getString(R.string.download));
-						mPrbLoading.setVisibility(View.VISIBLE);
-						mAdapter.downloadMaterial(material.getMaterialID(), new IDownloadMaterialListener() {
-							@Override
-							public void downloadMaterialDone() {
-								mPrbLoading.setVisibility(View.GONE);
-								mTvProgress.setText(getMainActivity().getString(R.string.loading));
-							}
-						});
+				if (!isDownloading) {
+					Material material = mListMaterials.get(position);
+					if (material != null) {
+						if (mMaterialDAO.isDownloadedMaterial(material.getMaterialID())) {
+							getMainActivity().displayDetailContent(
+									mMaterialDAO.getMaterialById(material.getMaterialID()));
+						} else {
+							isDownloading = true;
+							mTvProgress.setText(getMainActivity().getString(R.string.download));
+							mPrbLoading.setVisibility(View.VISIBLE);
+							mAdapter.downloadMaterial(material.getMaterialID(), new IDownloadMaterialListener() {
+								@Override
+								public void downloadMaterialDone() {
+									mPrbLoading.setVisibility(View.GONE);
+									mTvProgress.setText(getMainActivity().getString(R.string.loading));
+									isDownloading = false;
+								}
+							});
+						}
 					}
 				}
 			}

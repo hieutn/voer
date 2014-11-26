@@ -76,7 +76,6 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected String doInBackground(String... params) {
-
 		if (mCode == CODE_NO_INTERNET) {
 			return null;
 		}
@@ -105,6 +104,11 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 			return EntityUtils.toString(response.getEntity());
 		} catch (IOException e) {
 			mCode = CODE_CONNECTION_TIMEOUT;
+			if (BuildConfig.DEBUG) {
+				Log.i(TAG, e.toString());
+			}
+			return null;
+		} catch (IllegalStateException e) {
 			if (BuildConfig.DEBUG) {
 				Log.i(TAG, e.toString());
 			}

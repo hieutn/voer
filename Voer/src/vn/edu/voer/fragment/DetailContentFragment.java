@@ -17,6 +17,7 @@ import vn.edu.voer.utility.DialogHelper.IDialogListener;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,41 +81,45 @@ public class DetailContentFragment extends BaseFragment {
 
 	public void setData() {
 		mMaterial = getMainActivity().currentMaterial;
-		if (mMaterial.getMaterialType() == Material.TYPE_MODULE) {
-			getMainActivity().setButtonTableContent(false);
-			fillContentWebview();
-		} else {
-			getMainActivity().setButtonTableContent(true);
-			mCollectionContents = mMaterial.getCollectionContent();
-			if (mCollectionContents != null) {
-				getMainActivity().currentCollectionContent = mCollectionContents;
-				final String id = mCollectionContents.get(getMainActivity().currentModuleIndex).getId();
-				if (md.isDownloadedMaterial(id)) {
-					fillContentWebview(id);
-				} else {
-					ServiceController sc = new ServiceController(getMainActivity());
-					sc.downloadSubMaterial(id, new IDownloadListener() {
-						@Override
-						public void onDownloadMaterialDone(boolean isDownloaded, int code) {
-							if (code == ServiceController.CODE_NO_INTERNET) {
-								DialogHelper.showDialogMessage(getMainActivity(), getMainActivity().getResources()
-										.getString(R.string.msg_no_internet));
-							} else if (code == ServiceController.CODE_TOKEN_EXPIRE) {
-								setData();
-							} else if (code == ServiceController.CODE_CONNECTION_TIMEOUT) {
-								DialogHelper.showConfirmMessage(getMainActivity(),
-										getMainActivity().getString(R.string.msg_connection_timeout),
-										new IDialogListener() {
-											@Override
-											public void onOKClick() {
-												setData();
-											}
-										});
-							} else if (isDownloaded) {
-								fillContentWebview(id);
+		if (mMaterial != null) {
+			Log.i("SDD", mMaterial.getMaterialID());
+			Log.i("SDD", mMaterial.getText());
+			if (mMaterial.getMaterialType() == Material.TYPE_MODULE) {
+				getMainActivity().setButtonTableContent(false);
+				fillContentWebview();
+			} else {
+				getMainActivity().setButtonTableContent(true);
+				mCollectionContents = mMaterial.getCollectionContent();
+				if (mCollectionContents != null) {
+					getMainActivity().currentCollectionContent = mCollectionContents;
+					final String id = mCollectionContents.get(getMainActivity().currentModuleIndex).getId();
+					if (md.isDownloadedMaterial(id)) {
+						fillContentWebview(id);
+					} else {
+						ServiceController sc = new ServiceController(getMainActivity());
+						sc.downloadSubMaterial(id, new IDownloadListener() {
+							@Override
+							public void onDownloadMaterialDone(boolean isDownloaded, int code) {
+								if (code == ServiceController.CODE_NO_INTERNET) {
+									DialogHelper.showDialogMessage(getMainActivity(), getMainActivity().getResources()
+											.getString(R.string.msg_no_internet));
+								} else if (code == ServiceController.CODE_TOKEN_EXPIRE) {
+									setData();
+								} else if (code == ServiceController.CODE_CONNECTION_TIMEOUT) {
+									DialogHelper.showConfirmMessage(getMainActivity(),
+											getMainActivity().getString(R.string.msg_connection_timeout),
+											new IDialogListener() {
+												@Override
+												public void onOKClick() {
+													setData();
+												}
+											});
+								} else if (isDownloaded) {
+									fillContentWebview(id);
+								}
 							}
-						}
-					});
+						});
+					}
 				}
 			}
 		}
