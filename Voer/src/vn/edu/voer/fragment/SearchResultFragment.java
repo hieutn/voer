@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import vn.edu.voer.R;
 import vn.edu.voer.activity.MainActivity;
 import vn.edu.voer.adapter.SearchResultAdapter;
+import vn.edu.voer.adapter.SearchResultAdapter.IDownloadMaterialListener;
 import vn.edu.voer.database.dao.MaterialDAO;
 import vn.edu.voer.object.Material;
 import vn.edu.voer.object.MaterialList;
@@ -23,6 +24,7 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class SearchResultFragment extends BaseFragment {
 	private ListView mListView;
@@ -30,7 +32,9 @@ public class SearchResultFragment extends BaseFragment {
 	private MaterialList mMaterialList;
 	private SearchResultAdapter mAdapter;
 	private boolean isLoading = false;
+	private boolean isDownloading = false;
 	private MaterialDAO mMaterialDAO;
+	private TextView mTvProgress;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,6 +59,7 @@ public class SearchResultFragment extends BaseFragment {
 	private void initUI(View view) {
 		mListView = (ListView) view.findViewById(R.id.listView);
 		mPrbLoading = (View) view.findViewById(R.id.frm_category_loading);
+		mTvProgress = (TextView) mPrbLoading.findViewById(R.id.tv_loading);
 		mMaterialDAO = new MaterialDAO(getActivity());
 	}
 
@@ -65,11 +70,27 @@ public class SearchResultFragment extends BaseFragment {
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Material material = mListMaterials.get(position);
-				if (mMaterialDAO.isDownloadedMaterial(material.getMaterialID())) {
-					getMainActivity().displayDetailContent(mMaterialDAO.getMaterialById(material.getMaterialID()));
-				} else {
-					mAdapter.downloadMaterial(material.getMaterialID());
+				if (!isDownloading) {
+					Material material = mListMaterials.get(position);
+					if (material != null) {
+						if (mMaterialDAO.isDownloadedMaterial(material.getMaterialID())) {
+							getMainActivity().isReplaceImageLink = false;
+							getMainActivity().displayDetailContent(
+									mMaterialDAO.getMaterialById(material.getMaterialID()));
+						} else {
+							isDownloading = true;
+							mTvProgress.setText(getMainActivity().getString(R.string.download));
+							mPrbLoading.setVisibility(View.VISIBLE);
+							mAdapter.downloadMaterial(material.getMaterialID(), new IDownloadMaterialListener() {
+								@Override
+								public void downloadMaterialDone() {
+									mPrbLoading.setVisibility(View.GONE);
+									mTvProgress.setText(getMainActivity().getString(R.string.loading));
+									isDownloading = false;
+								}
+							});
+						}
+					}
 				}
 			}
 		});
@@ -192,15 +213,21 @@ public class SearchResultFragment extends BaseFragment {
 							mMaterialList = materialList;
 							mListMaterials.addAll(mMaterialList.getMaterials());
 							mAdapter.notifyDataSetChanged();
+							isLoading = false;
 						} catch (NullPointerException e) {
 						}
 					}
-					isLoading = false;
-					mListView.removeFooterView(loading);
+					try {
+						mListView.removeFooterView(loading);
+					} catch (Exception ex) {
+					}
 				}
 			});
 		} catch (NullPointerException e) {
-			mListView.removeFooterView(loading);
+			try {
+				mListView.removeFooterView(loading);
+			} catch (Exception ex) {
+			}
 		}
 	}
 }

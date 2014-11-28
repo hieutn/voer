@@ -14,7 +14,6 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -35,7 +34,7 @@ public class SearchResultAdapter extends BaseAdapter {
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mMaterialDAO = new MaterialDAO(context);
 	}
-
+	
 	@Override
 	public int getCount() {
 		return listMaterials.size();
@@ -86,18 +85,6 @@ public class SearchResultAdapter extends BaseAdapter {
 			} else {
 				holder.lblTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_book, 0, 0, 0);
 			}
-
-			if (mMaterialDAO.isDownloadedMaterial(material.getMaterialID())) {
-				holder.imgDownload.setClickable(false);
-			} else {
-				holder.imgDownload.setClickable(true);
-				holder.imgDownload.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						downloadMaterial(material.getMaterialID());
-					}
-				});
-			}
 		}
 
 		return convertView;
@@ -113,7 +100,7 @@ public class SearchResultAdapter extends BaseAdapter {
 	 * 
 	 * @param id
 	 */
-	public void downloadMaterial(final String id) {
+	public void downloadMaterial(final String id, final IDownloadMaterialListener listener) {
 		if (!mMaterialDAO.isDownloadedMaterial(id)) {
 			ServiceController sc = new ServiceController(mCtx);
 			sc.downloadMaterial(id, new IDownloadListener() {
@@ -122,20 +109,25 @@ public class SearchResultAdapter extends BaseAdapter {
 					if (code == ServiceController.CODE_NO_INTERNET) {
 						DialogHelper.showDialogMessage(mCtx, mCtx.getResources().getString(R.string.msg_no_internet));
 					} else if (code == ServiceController.CODE_TOKEN_EXPIRE) {
-						downloadMaterial(id);
+						downloadMaterial(id, listener);
 					} else if (code == ServiceController.CODE_CONNECTION_TIMEOUT) {
 						DialogHelper.showConfirmMessage(mCtx,
 								mCtx.getString(R.string.msg_connection_timeout), new IDialogListener() {
 									@Override
 									public void onOKClick() {
-										downloadMaterial(id);
+										downloadMaterial(id, listener);
 									}
 								});
 					} else {
 						notifyDataSetChanged();
 					}
+					listener.downloadMaterialDone();
 				}
 			});
 		}
+	}
+	
+	public interface IDownloadMaterialListener {
+		public void downloadMaterialDone();
 	}
 }

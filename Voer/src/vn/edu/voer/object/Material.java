@@ -33,10 +33,11 @@ public class Material {
 	private String license_id;
 	private String author;
 	private String categories;
+	private String attach_file;
 
 	public Material(String des, String lan, String title, String text, String image, int type, String modified,
 			String id, int version, String editor, String derived, String keyword, String license, String author,
-			String cat) {
+			String cat, String attach) {
 		this.description = des;
 		this.language = lan;
 		this.title = title;
@@ -52,6 +53,7 @@ public class Material {
 		this.license_id = license;
 		this.author = author;
 		this.categories = cat;
+		this.attach_file = attach;
 	}
 
 	/**
@@ -80,6 +82,10 @@ public class Material {
 	 */
 	public String getText() {
 		return text;
+	}
+	
+	public void setText(String content) {
+		this.text = content;
 	}
 
 	/**
@@ -157,6 +163,10 @@ public class Material {
 	 */
 	public String getCategories() {
 		return categories;
+	}
+	
+	public String getAttachFile() {
+		return attach_file;
 	}
 
 	/**

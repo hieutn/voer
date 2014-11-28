@@ -56,6 +56,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	public String currentSearchKeyword;
 	public int currentResultType;
 	public boolean isSearching;
+	public boolean isReplaceImageLink;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

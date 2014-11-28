@@ -2,6 +2,7 @@ package vn.edu.voer.fragment;
 
 import vn.edu.voer.R;
 import vn.edu.voer.activity.MainActivity;
+import vn.edu.voer.utility.DialogHelper;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -61,7 +62,12 @@ public class SearchFragment extends BaseFragment {
 		if (!getMainActivity().isSearching) {
 			getMainActivity().isSearching = true;
 			hideKeyBoard();
-			String keyword = txtKeyword.getText().toString();
+			String keyword = txtKeyword.getText().toString().replaceAll("\\s+$", "");
+			if (keyword == "" || keyword == null) {
+				DialogHelper.showDialogMessage(getMainActivity(), getMainActivity().getString(R.string.msg_no_search_text));
+				getMainActivity().isSearching = false;
+				return;
+			}
 			keyword = keyword.replace(" ", "%20");
 			getMainActivity().currentResultType = MainActivity.RESULT_TYPE_SEARCH;
 			getMainActivity().currentSearchKeyword = keyword;
