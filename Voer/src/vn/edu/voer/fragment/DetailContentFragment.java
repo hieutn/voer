@@ -25,7 +25,6 @@ import vn.edu.voer.utility.DialogHelper.IDialogListener;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,10 +88,9 @@ public class DetailContentFragment extends BaseFragment {
 	}
 
 	public void setData() {
+		clearData();
 		mMaterial = getMainActivity().currentMaterial;
-
 		downloadMaterialImage();
-
 		if (mMaterial != null) {
 			if (mMaterial.getMaterialType() == Material.TYPE_MODULE) {
 				getMainActivity().setButtonTableContent(false);
@@ -137,9 +135,7 @@ public class DetailContentFragment extends BaseFragment {
 
 	private void fillContentWebview(String materialId) {
 		mMaterial = md.getMaterialById(materialId);
-
 		downloadImage(materialId);
-
 		fillContentWebview();
 	}
 
@@ -163,12 +159,8 @@ public class DetailContentFragment extends BaseFragment {
 				}
 			});
 		}
-		try {
-			mWebViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");
-			mWebViewContent.reload();
-		} catch (Exception e) {
-			Log.i("SDD", e.toString());
-		}
+		mWebViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");
+		mWebViewContent.reload();
 	}
 
 	private void downloadMaterialImage() {
