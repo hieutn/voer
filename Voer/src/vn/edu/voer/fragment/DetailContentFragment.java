@@ -90,13 +90,10 @@ public class DetailContentFragment extends BaseFragment {
 
 	public void setData() {
 		mMaterial = getMainActivity().currentMaterial;
+
+		downloadMaterialImage();
+
 		if (mMaterial != null) {
-			// Download image for material from service
-			if (mMaterial.getAttachFile().length() == 0) {
-				downloadImage(mMaterial.getMaterialID());
-			} else if (!getMainActivity().isReplaceImageLink) {
-				parseImageAttach(mMaterial.getAttachFile());
-			}
 			if (mMaterial.getMaterialType() == Material.TYPE_MODULE) {
 				getMainActivity().setButtonTableContent(false);
 				fillContentWebview();
@@ -140,6 +137,9 @@ public class DetailContentFragment extends BaseFragment {
 
 	private void fillContentWebview(String materialId) {
 		mMaterial = md.getMaterialById(materialId);
+
+		downloadImage(materialId);
+
 		fillContentWebview();
 	}
 
@@ -163,9 +163,21 @@ public class DetailContentFragment extends BaseFragment {
 				}
 			});
 		}
+		try {
+			mWebViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");
+			mWebViewContent.reload();
+		} catch (Exception e) {
+			Log.i("SDD", e.toString());
+		}
+	}
 
-		mWebViewContent.loadData(mMaterial.getText(), "text/html", "UTF-8");
-		mWebViewContent.reload();
+	private void downloadMaterialImage() {
+		// Download image for material from service
+		if (mMaterial.getAttachFile().length() == 0) {
+			downloadImage(mMaterial.getMaterialID());
+		} else if (!getMainActivity().isReplaceImageLink) {
+			parseImageAttach(mMaterial.getAttachFile());
+		}
 	}
 
 	private void downloadImage(final String materialId) {
@@ -173,11 +185,10 @@ public class DetailContentFragment extends BaseFragment {
 		sc.downloadMaterialImage(materialId, new IDownloadImageListener() {
 			@Override
 			public void onDownloadImageDone(String attach) {
-				Log.i("SDD", attach);
 				MaterialDAO md = new MaterialDAO(getMainActivity());
 				md.updateAttachFile(materialId, attach);
-				getMainActivity().currentMaterial = md.getMaterialById(materialId);
-				setData();
+				Material m = md.getMaterialById(materialId);
+				parseImageAttach(m.getAttachFile());
 			}
 		});
 	}
@@ -221,7 +232,7 @@ public class DetailContentFragment extends BaseFragment {
 		} catch (Exception e) {
 		}
 		getMainActivity().isReplaceImageLink = true;
-		setData();
+		fillContentWebview();
 	}
 
 	/**

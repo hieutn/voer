@@ -18,6 +18,8 @@ public class Material {
 	public static final int TYPE_MODULE = 1;
 	public static final int TYPE_COLLECTION = 2;
 
+	private static final String SUB_COLLECTION = "subcollection";
+
 	private String description;
 	private String language;
 	private String title;
@@ -83,7 +85,7 @@ public class Material {
 	public String getText() {
 		return text;
 	}
-	
+
 	public void setText(String content) {
 		this.text = content;
 	}
@@ -164,7 +166,7 @@ public class Material {
 	public String getCategories() {
 		return categories;
 	}
-	
+
 	public String getAttachFile() {
 		return attach_file;
 	}
@@ -178,24 +180,48 @@ public class Material {
 			cc = new ArrayList<CollectionContent>();
 			try {
 				JSONObject obj = new JSONObject(text);
-				JSONArray arr = obj.getJSONArray("content");
-				for (int i = 0; i < arr.length(); i++) {
-					obj = arr.getJSONObject(i);
-					CollectionContent collectionContent = new CollectionContent(
-							obj.getString("id"), 
-							null,
-							obj.getString("title"),
-							obj.getString("type"),
-							obj.getString("license"),
-							obj.getString("url"), 
-							obj.getInt("version"));
-					cc.add(collectionContent);
-				}
-			} catch (JSONException e) {
+				cc.addAll(getCollections(obj.getString("content")));
+			} catch (Exception e) {
 				cc = null;
 			}
 		}
-		
+		return cc;
+	}
+	
+	private ArrayList<CollectionContent> getCollections(String content) {
+		ArrayList<CollectionContent> cc = new ArrayList<CollectionContent>();
+		try {
+			JSONArray arr = new JSONArray(content);
+			for (int i = 0; i < arr.length(); i++) {
+				JSONObject obj = arr.getJSONObject(i);
+				String type = null;
+				try {
+					type = obj.getString("type");
+				} catch (JSONException e) {
+					type = null;
+				}
+				
+				if (type.equals(SUB_COLLECTION)) {
+					cc.addAll(getCollections(obj.getString("content")));
+				} else {
+					cc.add(getModule(obj.toString()));
+				}
+			}
+		} catch (JSONException e) {
+			cc = null;
+		}
+		return cc;
+	}
+
+	private CollectionContent getModule(String content) {
+		CollectionContent cc = null;
+		try {
+			JSONObject obj = new JSONObject(content);
+			cc = new CollectionContent(obj.getString("id"), null, obj.getString("title"), obj.getString("type"),
+					obj.getString("license"), obj.getString("url"), obj.getInt("version"));
+		} catch (JSONException e) {
+			cc = null;
+		}
 		return cc;
 	}
 
