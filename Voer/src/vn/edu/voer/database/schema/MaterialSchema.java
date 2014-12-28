@@ -35,6 +35,7 @@ public class MaterialSchema {
 	public static final String DATE_CREATED = "date_created";
 	public static final String SUB_MATERIAL = "is_sub_material";
 	public static final String ATTACH_FILE = "attach_file";
+	public static final String IS_READ = "is_read";
 
 	public static final String[] columns = { ID, TITLE, DESCRIPTION, TEXT, LANGUAGE, IMAGE, TYPE, MODIFIED, VERSION,
 			EDITOR, DERIVED_FROM, KEYWORD, LICENSE_ID, AUTHOR, CATEGORIES, DATE_CREATED, SUB_MATERIAL, ATTACH_FILE };

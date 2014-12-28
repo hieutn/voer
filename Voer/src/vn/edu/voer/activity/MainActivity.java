@@ -57,6 +57,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	public int currentResultType;
 	public boolean isSearching;
 	public boolean isReplaceImageLink;
+	
+	public int numberNotRead;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

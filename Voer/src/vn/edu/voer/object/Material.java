@@ -36,10 +36,11 @@ public class Material {
 	private String author;
 	private String categories;
 	private String attach_file;
+	private boolean isRead;
 
 	public Material(String des, String lan, String title, String text, String image, int type, String modified,
 			String id, int version, String editor, String derived, String keyword, String license, String author,
-			String cat, String attach) {
+			String cat, String attach, String isRead) {
 		this.description = des;
 		this.language = lan;
 		this.title = title;
@@ -56,6 +57,11 @@ public class Material {
 		this.author = author;
 		this.categories = cat;
 		this.attach_file = attach;
+		if (isRead == "0") {
+			this.isRead = false;
+		} else {
+			this.isRead = true;
+		}
 	}
 
 	/**
@@ -171,6 +177,14 @@ public class Material {
 		return attach_file;
 	}
 
+	public boolean isRead() {
+		return isRead;
+	}
+
+	public void setRead(boolean isRead) {
+		this.isRead = isRead;
+	}
+
 	/**
 	 * Get list modules of Collection Type
 	 */
@@ -187,7 +201,7 @@ public class Material {
 		}
 		return cc;
 	}
-	
+
 	private ArrayList<CollectionContent> getCollections(String content) {
 		ArrayList<CollectionContent> cc = new ArrayList<CollectionContent>();
 		try {
@@ -200,7 +214,7 @@ public class Material {
 				} catch (JSONException e) {
 					type = null;
 				}
-				
+
 				if (type.equals(SUB_COLLECTION)) {
 					cc.addAll(getCollections(obj.getString("content")));
 				} else {

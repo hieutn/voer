@@ -142,7 +142,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		case REQUEST_PERSON:
 			responseDownloadPerson(result);
 			break;
-			
+
 		case REQUEST_DOWNLOAD_IMAGE:
 			responseDownloadImage(result);
 			break;
@@ -259,7 +259,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		url.append(id);
 		execute(url.toString());
 	}
-	
+
 	public void downloadMaterialImage(String id, IDownloadImageListener listener) {
 		mDownloadImageListener = listener;
 		mRequest = REQUEST_DOWNLOAD_IMAGE;
@@ -377,7 +377,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 		}
 		mPersonListener.onLoadPersonDone(person, mCode);
 	}
-	
+
 	private void responseDownloadImage(String result) {
 		mDownloadImageListener.onDownloadImageDone(result);
 	}
@@ -395,7 +395,7 @@ public class ServiceController extends AsyncTask<String, Void, String> {
 					obj.getString("title"), ParseUtil.getStringValue(obj, "text"), ParseUtil.getStringValue(obj,
 							"image"), ParseUtil.getIntValue(obj, "material_type"), obj.getString("modified"),
 					obj.getString("material_id"), ParseUtil.getIntValue(obj, "version"), obj.getString("editor"), "",
-					"", "", obj.getString("author"), obj.getString("categories"), "");
+					"", "", obj.getString("author"), obj.getString("categories"), "", "0");
 			return m;
 		} catch (JSONException e) {
 			e.printStackTrace();
