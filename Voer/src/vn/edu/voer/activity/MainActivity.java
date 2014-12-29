@@ -181,6 +181,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	}
 
 	public void displayDetailContent(Material material) {
+		// Update material is read in database
+		new MaterialDAO(MainActivity.this).updateReaded(material.getMaterialID());
+		
 		material.setRead(true);
 		refreshNumberNotRead();
 		fragmentBeforeDetail = currentFragment;

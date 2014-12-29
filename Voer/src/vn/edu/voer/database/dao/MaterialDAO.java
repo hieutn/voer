@@ -23,7 +23,23 @@ public class MaterialDAO {
 	public MaterialDAO(Context ctx) {
 		mDBHelper = DbConnectionHelper.getInstance(ctx);
 	}
-
+	
+	public boolean updateReaded(String id) {
+		StringBuilder where = new StringBuilder();
+		where.append(MaterialSchema.ID);
+		where.append("='");
+		where.append(id);
+		where.append("'");
+		String columns[] = { MaterialSchema.IS_READ };
+		String values[] = { "1" };
+		long res = mDBHelper.update(MaterialSchema.TABLE_NAME, columns, values, where.toString());
+		if (res < 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
 	public boolean updateAttachFile(String id, String attach) {
 		StringBuilder where = new StringBuilder();
 		where.append(MaterialSchema.ID);
@@ -105,7 +121,7 @@ public class MaterialDAO {
 					material.getText(), material.getLanguage(), material.getImage(), material.getMaterialType(),
 					material.getModified(), material.getVersion(), material.getEditor(), material.getDerivedFrom(),
 					material.getKeywords(), material.getLicenseID(), material.getAuthor(), material.getCategories(),
-					DateTimeHelper.getCurrentDateTime(), isSubMaterial ? 1 : 0, "" };
+					DateTimeHelper.getCurrentDateTime(), isSubMaterial ? 1 : 0, "", 0 };
 			long res = mDBHelper.insert(MaterialSchema.TABLE_NAME, columns, values);
 			if (res < 0) {
 				return false;
