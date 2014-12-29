@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vn.edu.voer.R;
+import vn.edu.voer.database.dao.MaterialDAO;
 import vn.edu.voer.fragment.DetailContentFragment;
 import vn.edu.voer.fragment.NavigationDrawerFragment;
 import vn.edu.voer.fragment.NavigationDrawerFragment.NavigationDrawerCallbacks;
 import vn.edu.voer.object.Category;
 import vn.edu.voer.object.CollectionContent;
 import vn.edu.voer.object.Material;
+import vn.edu.voer.utility.Logger;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -40,7 +42,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	private DrawerLayout mDrawerLayout;
 	public NavigationDrawerFragment navigationDrawerFragment;
 
-	private TextView lblHeader, lblTabLibrary, lblTabCategory, lblTabSearch;
+	private TextView lblHeader, lblTabLibrary, lblTabCategory, lblTabSearch, lblNumberNotRead;
 	private View btnTableContent;
 
 	private FragmentManager fm;
@@ -57,8 +59,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	public int currentResultType;
 	public boolean isSearching;
 	public boolean isReplaceImageLink;
-	
-	public int numberNotRead;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +84,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 		lblTabLibrary = (TextView) findViewById(R.id.lblTabLibrary);
 		lblTabCategory = (TextView) findViewById(R.id.lblTabCategory);
 		lblTabSearch = (TextView) findViewById(R.id.lblTabSearch);
+		lblNumberNotRead = (TextView) findViewById(R.id.lblNumberNotRead);
 		btnTableContent = findViewById(R.id.btnTableContent);
 	}
 
@@ -180,6 +181,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	}
 
 	public void displayDetailContent(Material material) {
+		material.setRead(true);
+		refreshNumberNotRead();
 		fragmentBeforeDetail = currentFragment;
 		currentMaterial = material;
 		gotoFragment(DETAIL_CONTENT);
@@ -221,6 +224,34 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 			lblTabSearch.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.tab_search_orange, 0, 0);
 			lblHeader.setText(R.string.search);
 			break;
+		}
+	}
+
+	private int getNumberNotRead() {
+		MaterialDAO md = new MaterialDAO(this);
+		List<Material> mMaterials = md.getAllMaterial();
+		if (mMaterials == null) {
+			return 0;
+		}
+		int numberNotRead = 0;
+		for (Material material : mMaterials) {
+			if (!material.isRead()) {
+				numberNotRead++;
+			}
+		}
+
+		Logger.d("size: " + mMaterials.size());
+		Logger.d("numberNotRead: " + numberNotRead);
+		return numberNotRead;
+	}
+
+	public void refreshNumberNotRead() {
+		int numberNotRead = getNumberNotRead();
+		if (numberNotRead == 0) {
+			lblNumberNotRead.setVisibility(View.GONE);
+		} else {
+			lblNumberNotRead.setVisibility(View.VISIBLE);
+			lblNumberNotRead.setText(String.valueOf(numberNotRead));
 		}
 	}
 

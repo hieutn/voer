@@ -9,6 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import vn.edu.voer.utility.Logger;
+
 /**
  * @author sidd
  *
@@ -57,7 +59,8 @@ public class Material {
 		this.author = author;
 		this.categories = cat;
 		this.attach_file = attach;
-		if (isRead == "0") {
+
+		if ("0".equals(isRead) || isRead == null) {
 			this.isRead = false;
 		} else {
 			this.isRead = true;

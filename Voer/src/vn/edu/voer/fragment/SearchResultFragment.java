@@ -87,11 +87,14 @@ public class SearchResultFragment extends BaseFragment {
 									mPrbLoading.setVisibility(View.GONE);
 									mTvProgress.setText(getMainActivity().getString(R.string.loading));
 									isDownloading = false;
+									getMainActivity().refreshNumberNotRead();
 								}
 							});
 						}
 					}
 				}
+
+				getMainActivity().refreshNumberNotRead();
 			}
 		});
 

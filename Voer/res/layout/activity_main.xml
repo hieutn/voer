@@ -73,15 +73,27 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="55dp" >
-                
-                <RelativeLayout style="@st"></RelativeLayout>
 
-                <TextView
-                    android:id="@+id/lblTabLibrary"
-                    style="@style/Tabbar"
-                    android:drawableTop="@drawable/tab_library_orange"
-                    android:text="@string/library"
-                    android:textColor="@color/orange" />
+                <RelativeLayout style="@style/Layout.WrapWidthHeight" >
+
+                    <TextView
+                        android:id="@+id/lblTabLibrary"
+                        style="@style/Tabbar"
+                        android:drawableTop="@drawable/tab_library_orange"
+                        android:text="@string/library"
+                        android:textColor="@color/orange" />
+
+                    <TextView
+                        android:id="@+id/lblNumberNotRead"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginLeft="30dp"
+                        android:background="@drawable/badge"
+                        android:gravity="center"
+                        android:text="@string/no"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp" />
+                </RelativeLayout>
 
                 <View style="@style/Layout.Weight.WidthFillHeight" />
 

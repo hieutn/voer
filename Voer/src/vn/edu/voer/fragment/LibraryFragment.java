@@ -59,6 +59,7 @@ public class LibraryFragment extends BaseFragment {
 		mMaterials = md.getAllMaterial();
 		try {
 			mAdapter.setMaterials(mMaterials);
+			getMainActivity().refreshNumberNotRead();
 		} catch (NullPointerException e) {
 			if (BuildConfig.DEBUG) {
 				Log.e("SDD", e.toString());
