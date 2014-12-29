@@ -10,6 +10,7 @@ import vn.edu.voer.R;
 import vn.edu.voer.database.dao.MaterialDAO;
 import vn.edu.voer.object.Material;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -84,7 +85,13 @@ public class LibraryAdapter extends ArrayAdapter<Material> {
 		} else {
 			holder.title.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_book, 0, 0, 0);
 		}
-		
+
+		if (material.isRead()) {
+			holder.title.setTypeface(null, Typeface.NORMAL);
+		} else {
+			holder.title.setTypeface(null, Typeface.BOLD);
+		}
+
 		holder.btnRemove.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -104,6 +111,6 @@ public class LibraryAdapter extends ArrayAdapter<Material> {
 	private static class ViewHolder {
 		TextView title;
 		ImageView btnRemove;
-//		TextView lblAuthorAndYear;
+		// TextView lblAuthorAndYear;
 	}
 }
